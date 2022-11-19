@@ -20,7 +20,7 @@
       </div>
       <v-img
         class="white--text align-end"
-        height="180px"
+        height="150px"
         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       />
       <div class="card-footer primary rounded-b text-h4 white--text">
