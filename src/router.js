@@ -37,6 +37,11 @@ export default new Router({
           component: () => import('@/views/marketplace'),
         },
         {
+          name: 'Marketplace History',
+          path: 'marketplace-history',
+          component: () => import('@/views/marketplaceHistory'),
+        },
+        {
           name: 'Liquidity',
           path: 'liquidity',
           component: () => import('@/views/liquidity'),

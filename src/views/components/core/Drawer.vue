@@ -141,6 +141,11 @@
           to: '/marketplace',
         },
         {
+          icon: 'mdi-table',
+          title: 'Marketplace History',
+          to: '/marketplace-history',
+        },
+        {
           icon: 'mdi-chart-bubble',
           title: 'Liquidity',
           to: '/liquidity',

@@ -158,6 +158,7 @@
         if (method === 'Disconnect') {
           this.setConnected(false)
         } else {
+          this.$router.push('/launchpad')
         }
       },
       openClaimModal () {
