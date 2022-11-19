@@ -101,34 +101,29 @@
           to: '/',
         },
         {
-          icon: '',
-          title: 'Launchpad',
-          to: '/launchpad',
-        },
-        {
-          icon: '',
+          icon: 'mdi-store',
           title: 'Propeties',
           to: '/propeties',
         },
         {
-          icon: '',
+          icon: 'mdi-dialpad',
+          title: 'Launchpad',
+          to: '/launchpad',
+        },
+        {
+          icon: 'mdi-account',
           title: 'MyAccount',
           to: '/myAccount',
         },
         {
-          icon: '',
+          icon: 'mdi-domain',
           title: 'Marketplace',
           to: '/marketplace',
         },
         {
-          icon: '',
+          icon: 'mdi-chart-bubble',
           title: 'Liquidity',
           to: '/liquidity',
-        },
-        {
-          icon: '',
-          title: 'Boardroom',
-          to: '/boardroom',
         },
       ],
     }),

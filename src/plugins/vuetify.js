@@ -7,8 +7,8 @@ Vue.use(Vuetify)
 
 const theme = {
   primary: '#4CAF50',
-  secondary: '#9C27b0',
-  accent: '#9C27b0',
+  secondary: '#6750A4',
+  accent: '#6750A4',
   info: '#00CAE3',
 }
 

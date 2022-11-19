@@ -38,7 +38,7 @@
         v-else
         :key="`item-${i}`"
         :item="child"
-        text
+        :text="text"
       />
     </template>
   </v-list-group>
@@ -109,7 +109,6 @@
             if (item.children) {
               group = `${group}|${this.genGroup(item.children)}`
             }
-
             return group
           }).join('|')
       },

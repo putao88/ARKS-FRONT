@@ -17,18 +17,18 @@ export default new Router({
           component: () => import('@/views/home'),
         },
         {
-          name: 'Launchpad',
-          path: 'launchpad',
-          component: () => import('@/views/launchpad'),
-        },
-        {
           name: 'Propeties',
-          path: 'propeties',
+          path: '/propeties',
           component: () => import('@/views/propeties'),
         },
         {
+          name: 'Launchpad',
+          path: '/launchpad',
+          component: () => import('@/views/launchpad'),
+        },
+        {
           name: 'myAccount',
-          path: 'myAccount',
+          path: 'MyAccount',
           component: () => import('@/views/myAccount'),
         },
         {
@@ -40,11 +40,6 @@ export default new Router({
           name: 'Liquidity',
           path: 'liquidity',
           component: () => import('@/views/liquidity'),
-        },
-        {
-          name: 'Boardroom',
-          path: 'boardroom',
-          component: () => import('@/views/boardroom'),
         },
       ],
     },
