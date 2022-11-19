@@ -41,7 +41,19 @@
       Claim
     </v-btn>
 
+    <v-btn
+      v-if="!connected"
+      class="ml-2"
+      min-width="0"
+      text
+      @click="setConnected(!connected)"
+    >
+      <v-icon>mdi-wallet</v-icon>
+      Connect
+    </v-btn>
+
     <v-menu
+      v-else
       bottom
       left
       offset-y
@@ -56,7 +68,8 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon>mdi-bell</v-icon>
+          <v-icon>mdi-wallet</v-icon>
+          {{ address }}
         </v-btn>
       </template>
 
@@ -64,54 +77,29 @@
         :tile="false"
         nav
       >
-        <div>
-          <app-bar-item
-            v-for="(n, i) in notifications"
-            :key="`item-${i}`"
-          >
-            <v-list-item-title v-text="n" />
-          </app-bar-item>
-        </div>
+        <v-list-item
+          v-for="(item, i) in subMenus"
+          :key="i"
+          @click="menuHandle(item.text)"
+        >
+          <v-list-item-icon>
+            <v-icon v-text="item.icon" />
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.text" />
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
 </template>
 
 <script>
-  // Components
-  import { VHover, VListItem } from 'vuetify/lib'
-
   // Utilities
   import { mapState, mapMutations } from 'vuex'
 
   export default {
     name: 'DashboardCoreAppBar',
-
-    components: {
-      AppBarItem: {
-        render (h) {
-          return h(VHover, {
-            scopedSlots: {
-              default: ({ hover }) => {
-                return h(VListItem, {
-                  attrs: this.$attrs,
-                  class: {
-                    'black--text': !hover,
-                    'white--text secondary elevation-12': hover,
-                  },
-                  props: {
-                    activeClass: '',
-                    dark: hover,
-                    link: true,
-                    ...this.$attrs,
-                  },
-                }, this.$slots.default)
-              },
-            },
-          })
-        },
-      },
-    },
 
     props: {
       value: {
@@ -121,23 +109,34 @@
     },
 
     data: () => ({
-      notifications: [
-        'Mike John Responded to your email',
-        'You have 5 new tasks',
-        'You\'re now friends with Andrew',
-        'Another Notification',
-        'Another one',
+      subMenus: [
+        {
+          icon: 'mdi-store',
+          text: 'Deposite',
+        },
+        {
+          icon: 'mdi-logout',
+          text: 'Disconnect',
+        },
       ],
     }),
 
     computed: {
-      ...mapState(['drawer']),
+      ...mapState(['drawer', 'connected', 'address']),
     },
 
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
+        setConnected: 'SET_CONNECTED',
       }),
+      menuHandle (method) {
+        if (method === 'Disconnect') {
+          this.setConnected(false)
+        } else {
+          alert(method)
+        }
+      },
     },
   }
 </script>

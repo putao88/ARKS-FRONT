@@ -9,6 +9,8 @@ export default new Vuex.Store({
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: sidebar1,
     drawer: null,
+    connected: false,
+    address: 'xxxx',
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -16,6 +18,12 @@ export default new Vuex.Store({
     },
     SET_DRAWER (state, payload) {
       state.drawer = payload
+    },
+    SET_CONNECTED (state, payload) {
+      state.connected = payload
+    },
+    SET_ADDRESS (state, payload) {
+      state.address = payload
     },
   },
   actions: {
