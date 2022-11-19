@@ -30,36 +30,15 @@
 
     <v-spacer />
 
-    <v-text-field
-      :label="$t('search')"
-      color="secondary"
-      hide-details
-      style="max-width: 165px;"
-    >
-      <template
-        v-if="$vuetify.breakpoint.mdAndUp"
-        v-slot:append-outer
-      >
-        <v-btn
-          class="mt-n2"
-          elevation="1"
-          fab
-          small
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </template>
-    </v-text-field>
-
     <div class="mx-3" />
 
     <v-btn
       class="ml-2"
       min-width="0"
       text
-      to="/"
     >
-      <v-icon>mdi-view-dashboard</v-icon>
+      <v-icon>mdi-trophy-award</v-icon>
+      Claim
     </v-btn>
 
     <v-menu
@@ -77,17 +56,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-badge
-            color="red"
-            overlap
-            bordered
-          >
-            <template v-slot:badge>
-              <span>5</span>
-            </template>
-
-            <v-icon>mdi-bell</v-icon>
-          </v-badge>
+          <v-icon>mdi-bell</v-icon>
         </v-btn>
       </template>
 
@@ -105,15 +74,6 @@
         </div>
       </v-list>
     </v-menu>
-
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/pages/user"
-    >
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
   </v-app-bar>
 </template>
 
