@@ -35,21 +35,30 @@
     <v-btn
       class="ml-2"
       min-width="0"
+      large
       text
+      color="primary"
+      @click="openClaimModal"
     >
-      <v-icon>mdi-trophy-award</v-icon>
-      Claim
+      <v-icon large>
+        mdi-bitcoin
+      </v-icon>
+      <span class="primary--text font-weight-bold">Claim</span>
     </v-btn>
 
     <v-btn
       v-if="!connected"
       class="ml-2"
       min-width="0"
+      large
       text
+      color="primary"
       @click="setConnected(!connected)"
     >
-      <v-icon>mdi-wallet</v-icon>
-      Connect
+      <v-icon large>
+        mdi-wallet
+      </v-icon>
+      <span class="primary--text font-weight-bold">Connect</span>
     </v-btn>
 
     <v-menu
@@ -63,13 +72,20 @@
       <template v-slot:activator="{ attrs, on }">
         <v-btn
           class="ml-2"
-          min-width="0"
           text
+          large
+          color="primary"
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon>mdi-wallet</v-icon>
-          {{ address }}
+          <v-icon large>
+            mdi-wallet
+          </v-icon>
+          <div
+            class="primary--text font-weight-bold overflow-text address-div"
+          >
+            {{ address }}
+          </div>
         </v-btn>
       </template>
 
@@ -91,16 +107,23 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <claim-modal
+      :show-modal="showClaimModal"
+      @close-claim-dailog="closeClaimDailog"
+    />
   </v-app-bar>
 </template>
 
 <script>
   // Utilities
   import { mapState, mapMutations } from 'vuex'
+  import ClaimModal from '@/components/ClaimModal'
 
   export default {
     name: 'DashboardCoreAppBar',
-
+    components: {
+      ClaimModal,
+    },
     props: {
       value: {
         type: Boolean,
@@ -119,6 +142,7 @@
           text: 'Disconnect',
         },
       ],
+      showClaimModal: false,
     }),
 
     computed: {
@@ -134,9 +158,19 @@
         if (method === 'Disconnect') {
           this.setConnected(false)
         } else {
-          alert(method)
         }
+      },
+      openClaimModal () {
+        this.showClaimModal = true
+      },
+      closeClaimDailog () {
+        this.showClaimModal = false
       },
     },
   }
 </script>
+<style lang="scss" scoped>
+.address-div {
+  max-width: 80px;
+}
+</style>

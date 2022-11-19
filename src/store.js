@@ -10,7 +10,7 @@ export default new Vuex.Store({
     barImage: sidebar1,
     drawer: null,
     connected: false,
-    address: 'xxxx',
+    address: '0xF8b800376b959B3BBD546B75E56EA672d10744B9',
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {

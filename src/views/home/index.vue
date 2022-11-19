@@ -20,7 +20,10 @@
         >
           Learn More
         </v-btn>
-        <v-btn color="primary">
+        <v-btn
+          color="primary"
+          to="/launchpad"
+        >
           Buy Now
         </v-btn>
       </div>
@@ -129,7 +132,7 @@
 </template>
 
 <script>
-  import Card from '../../components/Card.vue'
+  import Card from '@/components/Card.vue'
   export default {
     name: 'Home',
     components: {

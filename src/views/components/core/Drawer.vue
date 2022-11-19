@@ -74,6 +74,26 @@
       <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
       <div />
     </v-list>
+    <template v-slot:append>
+      <v-bottom-navigation
+        grow
+      >
+        <v-btn href="https://www.baidu.com/">
+          <span>Recent</span>
+          <v-icon>mdi-history</v-icon>
+        </v-btn>
+
+        <v-btn href="https://www.baidu.com/">
+          <span>Favorites</span>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+
+        <v-btn href="https://www.baidu.com/">
+          <span>Nearby</span>
+          <v-icon>mdi-map-marker</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </template>
   </v-navigation-drawer>
 </template>
 

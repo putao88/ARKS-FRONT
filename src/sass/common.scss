@@ -1,8 +1,11 @@
 :root {
   --color-white: white;
-
-
   .pointer {
     cursor: pointer;
+  }
+  .overflow-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
   }
 }
