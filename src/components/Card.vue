@@ -9,7 +9,7 @@
       <v-icon>mdi-alert-circle-outline</v-icon>
     </div>
     <div class="rounded elevation-10">
-      <div class="pa-2">
+      <div class="pa-4">
         <div class="d-flex justify-space-between my-1">
           <span>EXPECTED INCOME</span>
           <span class="d-flex align-center">
@@ -21,7 +21,9 @@
           <span>CAPITAL ROI</span>
           <div class="d-flex align-center">
             <span class="mr-1">+13.33%</span>
-            <v-icon size="16">mdi-alert-circle-outline</v-icon>
+            <v-icon size="16">
+              mdi-alert-circle-outline
+            </v-icon>
           </div>
         </div>
       </div>

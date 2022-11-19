@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="account"
+    id="MyAccount"
     fluid
     tag="section"
   >
@@ -38,6 +38,7 @@
             <v-col
               cols="12"
               sm="6"
+              md="4"
               lg="4"
               class="text-center"
             >
@@ -51,6 +52,7 @@
             <v-col
               cols="12"
               sm="6"
+              md="4"
               lg="4"
               class="text-center"
             >
@@ -73,26 +75,28 @@
               sm="12"
               lg="12"
             >
-              <p class="text-h3 font-weight-bold text-center mb-8">
+              <p class="text-h3 primary--text font-weight-bold text-center mb-8">
                 My Account
               </p>
             </v-col>
             <v-col
               cols="12"
               sm="12"
+              md="4"
               lg="4"
               class="text-center"
             >
               <p class="text-h2 mb-1">
                 $9,346
               </p>
-              <p class="text-h4">
+              <p class="text-h4 grey--text">
                 Assets Value
               </p>
             </v-col>
             <v-col
               cols="12"
               sm="12"
+              md="4"
               lg="4"
               class="text-center"
               :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
@@ -100,20 +104,21 @@
               <p class="text-h2 mb-1">
                 7.36%
               </p>
-              <p class="text-h4">
+              <p class="text-h4 grey--text">
                 APR
               </p>
             </v-col>
             <v-col
               cols="12"
               sm="12"
+              md="4"
               lg="4"
               class="text-center"
             >
               <p class="text-h2 mb-1">
                 $1.95/d
               </p>
-              <p class="text-h4">
+              <p class="text-h4 grey--text">
                 Daily Return
               </p>
             </v-col>
@@ -149,7 +154,7 @@
 
 <script>
   export default {
-    name: 'Account',
+    name: 'MyAccount',
     data () {
       return {
         tab: null,
@@ -160,11 +165,11 @@
 
 <style lang="scss" scoped>
 .border-lg-lr {
-  border-right: 1px solid var(--color-primary);
-  border-left: 1px solid var(--color-primary);
+  border-right: 1px solid var(--color-grey-light);
+  border-left: 1px solid var(--color-grey-light);
 }
 .border-col-bt {
-  border-top: 1px solid var(--color-primary);
-  border-bottom: 1px solid var(--color-primary);
+  border-top: 1px solid var(--color-grey-light);
+  border-bottom: 1px solid var(--color-grey-light);
 }
 </style>

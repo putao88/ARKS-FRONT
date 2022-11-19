@@ -27,8 +27,8 @@ export default new Router({
           component: () => import('@/views/launchpad'),
         },
         {
-          name: 'myAccount',
-          path: 'MyAccount',
+          name: 'MyAccount',
+          path: 'myAccount',
           component: () => import('@/views/myAccount'),
         },
         {

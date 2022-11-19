@@ -63,7 +63,7 @@
     },
     methods: {
       closeDailog () {
-        this.$emit('close-claim-dailog')
+        this.$emit('close-claim-modal')
       },
     },
   }

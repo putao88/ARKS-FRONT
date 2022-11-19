@@ -109,7 +109,7 @@
     </v-menu>
     <claim-modal
       :show-modal="showClaimModal"
-      @close-claim-dailog="closeClaimDailog"
+      @close-claim-modal="closeClaimModal"
     />
   </v-app-bar>
 </template>
@@ -164,7 +164,7 @@
       openClaimModal () {
         this.showClaimModal = true
       },
-      closeClaimDailog () {
+      closeClaimModal () {
         this.showClaimModal = false
       },
     },
