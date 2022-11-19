@@ -4,7 +4,7 @@
     class="card-container pointer"
     @click="toDetail"
   >
-    <div class="purple--text text-h3 font-weight-bold py-1 d-flex align-center justify-center">
+    <div class="primary--text text-h3 font-weight-bold py-1 d-flex align-center justify-center">
       <span class="mr-1">+23.58%</span>
       <v-icon>mdi-alert-circle-outline</v-icon>
     </div>
