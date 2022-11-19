@@ -41,6 +41,11 @@ export default new Router({
           path: 'liquidity',
           component: () => import('@/views/liquidity'),
         },
+        {
+          name: 'Demo',
+          path: 'demo',
+          component: () => import('@/components/Card'),
+        },
       ],
     },
   ],
