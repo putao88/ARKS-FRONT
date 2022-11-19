@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-content class="content-wrap">
     <router-view />
 
     <dashboard-core-footer />
@@ -15,3 +15,23 @@
     },
   }
 </script>
+<style>
+.content-wrap {
+  /* background: linear-gradient(135deg, #DFD5EC, #eee);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite; */
+}
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  50% {
+      background-position: 100% 50%;
+  }
+
+  100% {
+      background-position: 0% 50%;
+  }
+}
+</style>

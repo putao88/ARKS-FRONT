@@ -4,18 +4,25 @@
     class="card-container pointer"
     @click="toDetail"
   >
-    <div class="deep-purple--text text-center text-h3 font-weight-bold pt-1 pb-1">
-      +23.58%
+    <div class="deep-purple--text text-h3 font-weight-bold py-1 d-flex align-center justify-center">
+      <span class="mr-1">+23.58%</span>
+      <v-icon>mdi-alert-circle-outline</v-icon>
     </div>
-    <div class="rounded elevation-6">
+    <div class="rounded elevation-10">
       <div class="sub-title pa-2 black--text">
-        <div class="lh-24 d-flex justify-space-between text-subtitle-2">
+        <div class="d-flex justify-space-between text-subtitle-1 my-1">
           <span>EXPECTED INCOME</span>
-          <span class="font-weight-bold">10.25%</span>
+          <span class="font-weight-bold d-flex align-center">
+            <span class="mr-1">10.25%</span>
+            <v-icon size="16">mdi-alert-circle-outline</v-icon>
+          </span>
         </div>
-        <div class="lh-24 d-flex justify-space-between text-subtitle-2">
+        <div class="d-flex justify-space-between text-subtitle-1 my-1">
           <span>CAPITAL ROI</span>
-          <span class="font-weight-bold">+13.33%</span>
+          <div class="font-weight-bold d-flex align-center">
+            <span class="mr-1">+13.33%</span>
+            <v-icon size="16">mdi-alert-circle-outline</v-icon>
+          </div>
         </div>
       </div>
       <v-img
