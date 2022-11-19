@@ -9,17 +9,17 @@
       <v-icon>mdi-alert-circle-outline</v-icon>
     </div>
     <div class="rounded elevation-10">
-      <div class="sub-title pa-2 black--text">
-        <div class="d-flex justify-space-between text-subtitle-1 my-1">
+      <div class="pa-2">
+        <div class="d-flex justify-space-between my-1">
           <span>EXPECTED INCOME</span>
-          <span class="font-weight-bold d-flex align-center">
+          <span class="d-flex align-center">
             <span class="mr-1">10.25%</span>
             <v-icon size="16">mdi-alert-circle-outline</v-icon>
           </span>
         </div>
-        <div class="d-flex justify-space-between text-subtitle-1 my-1">
+        <div class="d-flex justify-space-between my-1">
           <span>CAPITAL ROI</span>
-          <div class="font-weight-bold d-flex align-center">
+          <div class="d-flex align-center">
             <span class="mr-1">+13.33%</span>
             <v-icon size="16">mdi-alert-circle-outline</v-icon>
           </div>
