@@ -47,6 +47,11 @@ export default new Router({
           component: () => import('@/views/liquidity'),
         },
         {
+          name: 'LaunchpadDetail',
+          path: 'launchpad-detail',
+          component: () => import('@/views/launchpad/LaunchpadDetail'),
+        },
+        {
           name: 'Detail',
           path: 'detail',
           component: () => import('@/views/propeties/Detail.vue'),
