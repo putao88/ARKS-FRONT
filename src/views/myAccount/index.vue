@@ -8,7 +8,7 @@
       <v-tabs
         v-model="tab"
         centered
-        dark
+        light
         icons-and-text
       >
         <v-tabs-slider />
@@ -174,7 +174,6 @@
                 width="200px"
                 class="rounded-lg"
                 color="primary"
-                dark
               >
                 Claim
               </v-btn>
@@ -209,7 +208,6 @@
                 width="100px"
                 class="rounded-lg"
                 color="primary"
-                dark
               >
                 COPY
               </v-btn>
@@ -344,25 +342,17 @@
               <div class="wp-50 mr-8">
                 <v-text-field
                   v-model="referralsValue"
-                  disabled="true"
+                  class="mb-4 mt-4"
+                  :hint="hint"
+                  persistent-hint
                 />
               </div>
-              <!-- width="100px" -->
               <v-btn
-                class="rounded-lg"
+                class="rounded-lg mt-4"
                 color="primary"
-                dark
               >
                 deposite
               </v-btn>
-            </v-col>
-            <v-col
-              cols="12"
-              sm="12"
-              lg="12"
-              class="text-center mt-n8"
-            >
-              Balance: 17.95
             </v-col>
             <template
               v-for="i in 8"
@@ -396,6 +386,7 @@
       return {
         tab: null,
         referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
+        hint: 'Balance',
         headers: [
           { text: 'Address', align: 'start', sortable: false, value: 'Address', class: 'primary--text' },
           { text: 'Date', value: 'Date', class: 'primary--text' },
@@ -434,6 +425,14 @@
           },
         ],
       }
+    },
+    mounted () {
+      this.init()
+    },
+    methods: {
+      init () {
+        this.hint = `Balance: ${97}`
+      },
     },
   }
 </script>

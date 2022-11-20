@@ -5,7 +5,7 @@
     tag="section"
   >
     <v-row
-      class="elevation-10 my-4 rounded-lg rounded-xl pa-4"
+      class="elevation-10 my-4 rounded-lg rounded-xl pa-4 white"
     >
       <v-col
         cols="12"
@@ -90,20 +90,69 @@
         />
       </v-col>
     </v-row>
+    <v-row>
+      <template v-for="(item, index) in cardInfo">
+        <v-col
+          :key="index"
+          cols="12"
+          md="3"
+          lg="3"
+        >
+          <div
+            v-if="index === 0"
+            class="add-btn-wrap elevation-10"
+          >
+            <v-btn
+              width="100%"
+              height="100%"
+              min-height="200"
+              elevation="2"
+              rounded-lg
+              dark
+              color="primary"
+              @click="openItemModal"
+            >
+              <v-icon large>
+                mdi-plus
+              </v-icon>
+            </v-btn>
+          </div>
+          <div
+            v-else
+            class="pointer rounded-lg overflow-hidden elevation-10"
+          >
+            <v-img
+              class="white--text align-end"
+              height="200px"
+              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            />
+            <div class="card-bottom-div">
+              <span>Price:</span>
+              <span>98.00</span>
+            </div>
+          </div>
+        </v-col>
+      </template>
+    </v-row>
+    <my-item-modal
+      :show-modal="showItemModal"
+      @close-item-modal="closeItemModal"
+    />
   </v-container>
 </template>
 <script>
-  // import MyPositionModal from './components/MyPositionModal'
+  import MyItemModal from '@/components/MyItemModal'
   export default {
     name: 'Marketplace',
-    // components: {
-    //   MyPositionModal,
-    // },
+    components: {
+      MyItemModal,
+    },
     data () {
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Discount Rate', 'Lowest Discount Rate'],
-        showPositionModal: false,
+        showItemModal: false,
+        cardInfo: new Array(8),
       }
     },
     mounted () {
@@ -112,11 +161,11 @@
       filterData (tab) {
         this.active = tab
       },
-      openPositionModal () {
-        this.showPositionModal = true
+      openItemModal () {
+        this.showItemModal = true
       },
-      closePositionModal () {
-        this.showPositionModal = false
+      closeItemModal () {
+        this.showItemModal = false
       },
     },
   }
@@ -132,5 +181,17 @@
 }
 .sort-select-wrap {
   max-width: 250px;
+}
+.card-bottom-div {
+  height: 50px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  background-color: var(--color-primary)
+}
+.add-btn-wrap {
+  height: 100%;
 }
 </style>

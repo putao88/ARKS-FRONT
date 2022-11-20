@@ -182,7 +182,6 @@
   border-radius: 50%;
   padding: 5px;
   margin-right: 5px;
-  background-color: #000;
   border: 2px solid var(--color-primary);
 }
 </style>

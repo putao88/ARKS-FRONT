@@ -5,7 +5,7 @@
     tag="section"
   >
     <v-row
-      class="elevation-10 my-4 rounded-lg rounded-xl pa-4"
+      class="elevation-10 my-4 rounded-lg rounded-xl pa-4 white"
     >
       <v-col
         cols="12"
@@ -53,7 +53,7 @@
     </v-row>
 
     <v-row
-      class="elevation-10 my-10 rounded-lg rounded-xl pa-4"
+      class="elevation-10 my-10 rounded-lg rounded-xl pa-4 white"
     >
       <v-col
         cols="12"
@@ -86,6 +86,7 @@
           elevation="2"
           dark
           color="primary"
+          @click="openItemModal"
         >
           <v-icon large>
             mdi-plus
@@ -132,18 +133,26 @@
       :show-modal="showPositionModal"
       @close-position-modal="closePositionModal"
     />
+    <my-item-modal
+      :show-modal="showItemModal"
+      @close-item-modal="closeItemModal"
+    />
   </v-container>
 </template>
 <script>
   import MyPositionModal from './components/MyPositionModal'
+  import MyItemModal from '@/components/MyItemModal'
+
   export default {
     name: 'Liquidity',
     components: {
       MyPositionModal,
+      MyItemModal,
     },
     data () {
       return {
         showPositionModal: false,
+        showItemModal: false,
       }
     },
     methods: {
@@ -152,6 +161,12 @@
       },
       closePositionModal () {
         this.showPositionModal = false
+      },
+      openItemModal () {
+        this.showItemModal = true
+      },
+      closeItemModal () {
+        this.showItemModal = false
       },
     },
   }
