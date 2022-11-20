@@ -5,7 +5,7 @@
     tag="section"
   >
     <v-row
-      class="elevation-10 my-4 rounded-lg rounded-xl pa-4 white"
+      class="elevation-10 my-4 rounded-lg rounded-xl pa-4"
     >
       <v-col
         cols="12"
@@ -53,7 +53,7 @@
     </v-row>
 
     <v-row
-      class="elevation-10 my-10 rounded-lg rounded-xl pa-4 white"
+      class="elevation-10 my-10 rounded-lg rounded-xl pa-4"
     >
       <v-col
         cols="12"
