@@ -47,9 +47,9 @@ export default new Router({
           component: () => import('@/views/liquidity'),
         },
         {
-          name: 'Demo',
-          path: 'demo',
-          component: () => import('@/components/Card'),
+          name: 'Detail',
+          path: 'detail',
+          component: () => import('@/views/propeties/Detail.vue'),
         },
       ],
     },

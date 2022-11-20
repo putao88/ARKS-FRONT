@@ -145,7 +145,268 @@
         <v-tab-item
           value="tab-2"
         >
-          <div>123</div>
+          <v-row
+            class="elevation-3 my-8 rounded-lg"
+            justify="center"
+            align="center"
+          >
+            <v-col
+              cols="12"
+              sm="6"
+              lg="4"
+              class="text-center"
+            >
+              <p class="text-h4 font-weight-bold">
+                Rewards
+              </p>
+              <p class="text-h2">
+                $9,346.95
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+              lg="4"
+              class="text-center"
+            >
+              <v-btn
+                large
+                width="200px"
+                class="rounded-lg"
+                color="primary"
+                dark
+              >
+                Claim
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row
+            class="elevation-3"
+            justify="center"
+          >
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+            >
+              <p class="text-h3 font-weight-bold text-center mb-8">
+                My Referrals
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+              class="d-flex justify-center text-center px-10"
+            >
+              <div class="wp-50 mr-8">
+                <v-text-field
+                  v-model="referralsValue"
+                  disabled="true"
+                />
+              </div>
+              <v-btn
+                width="100px"
+                class="rounded-lg"
+                color="primary"
+                dark
+              >
+                COPY
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="3"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                $9,346
+              </p>
+              <p class="text-h4">
+                Total Referrals Value
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="3"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                Lv 3
+              </p>
+              <p class="text-h4">
+                Referral Level
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="3"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                10%
+              </p>
+              <p class="text-h4">
+                Current Rate
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="3"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                $146
+              </p>
+              <p class="text-h4">
+                Claimed Rewards
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+            >
+              <v-simple-table
+                fixed-header
+                height="300px"
+              >
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th
+                        v-for="ite in tableKey"
+                        :key="ite"
+                        class="text-left"
+                      >
+                        {{ ite }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="i in 20"
+                      :key="i"
+                    >
+                      <td>{{ item.Address }}</td>
+                      <td>{{ item.Date }}</td>
+                      <td>{{ item.Value }}</td>
+                      <td>{{ item.Rate }}</td>
+                      <td>{{ item.Rewards }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-tab-item>
+        <v-tab-item
+          value="tab-3"
+        >
+          <v-row
+            class="elevation-10 my-8 rounded-lg rounded-xl pa-10"
+          >
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+            >
+              <p class="text-h3 font-weight-bold text-center mb-8">
+                My Liquidity
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="4"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                17.95
+              </p>
+              <p class="text-h4">
+                My Liquidity Token
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="4"
+              class="text-center"
+              :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
+            >
+              <p class="text-h2 mb-1">
+                $91,346
+              </p>
+              <p class="text-h4">
+                My Liquidity Value
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="4"
+              class="text-center"
+            >
+              <p class="text-h2 mb-1">
+                7.12%
+              </p>
+              <p class="text-h4">
+                Estimated Yield
+              </p>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+              class="d-flex justify-center text-center px-10"
+            >
+              <div class="wp-50 mr-8">
+                <v-text-field
+                  v-model="referralsValue"
+                  disabled="true"
+                />
+              </div>
+              <!-- width="100px" -->
+              <v-btn
+                class="rounded-lg"
+                color="primary"
+                dark
+              >
+                deposite
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              lg="12"
+              class="text-center mt-n8"
+            >
+              Balance: 17.95
+            </v-col>
+            <template
+              v-for="i in 8"
+            >
+              <v-col
+                :key="i"
+                cols="12"
+                sm="12"
+                lg="3"
+              >
+                <v-card class="rounded-xl pointer">
+                  <v-img
+                    class="white--text align-end"
+                    height="220px"
+                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  />
+                </v-card>
+              </v-col>
+            </template>
+          </v-row>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -158,6 +419,15 @@
     data () {
       return {
         tab: null,
+        referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
+        tableKey: ['Address', 'Date', 'Value', 'Rate', 'Rewards'],
+        item: {
+          Address: 'Frozen Yogurt',
+          Date: '2022-09-11',
+          Value: '159 USDT',
+          Rate: '10%',
+          Rewards: '6 USDT',
+        },
       }
     },
   }
@@ -171,5 +441,11 @@
 .border-col-bt {
   border-top: 1px solid var(--color-grey-light);
   border-bottom: 1px solid var(--color-grey-light);
+}
+.wp-80 {
+  width: 100%;
+}
+.wp-50 {
+  width: 50%;
 }
 </style>
