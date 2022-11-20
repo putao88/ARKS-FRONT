@@ -158,12 +158,12 @@
 </script>
 <style lang="scss" scoped>
 .border-lg-lr {
-  border-right: 1px solid var(--color-grey-light);
-  border-left: 1px solid var(--color-grey-light);
+  border-right: 1px solid var(--color-border-grey);
+  border-left: 1px solid var(--color-border-grey);
 }
 .border-col-bt {
-  border-top: 1px solid var(--color-grey-light);
-  border-bottom: 1px solid var(--color-grey-light);
+  border-top: 1px solid var(--color-border-grey);
+  border-bottom: 1px solid var(--color-border-grey);
 }
 .data-item {
   height: 40px;
