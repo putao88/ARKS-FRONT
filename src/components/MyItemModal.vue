@@ -68,7 +68,7 @@
               >
                 <div
                   class="pointer rounded-lg overflow-hidden elevation-10"
-                  @click="sell"
+                  @click="openSellModal"
                 >
                   <v-img
                     class="white--text align-end"
@@ -122,7 +122,7 @@
       closeDailog () {
         this.$emit('close-item-modal')
       },
-      sell () {
+      openSellModal () {
         this.showSellModall = true
       },
       closeSellModal () {

@@ -59,16 +59,16 @@
               <v-btn
                 large
                 width="200px"
-                class="rounded-lg"
                 color="primary"
                 dark
+                rounded
               >
                 Claim
               </v-btn>
             </v-col>
           </v-row>
           <v-row
-            class="elevation-10 my-8 rounded-lg rounded-xl pa-10"
+            class="my-8 rounded-lg rounded-xl pa-10"
           >
             <v-col
               cols="12"
@@ -172,8 +172,8 @@
               <v-btn
                 large
                 width="200px"
-                class="rounded-lg"
                 color="primary"
+                rounded
               >
                 Claim
               </v-btn>
@@ -206,8 +206,8 @@
               </div>
               <v-btn
                 width="100px"
-                class="rounded-lg"
                 color="primary"
+                rounded
               >
                 COPY
               </v-btn>
@@ -348,8 +348,9 @@
                 />
               </div>
               <v-btn
-                class="rounded-lg mt-4"
+                class="mt-4"
                 color="primary"
+                rounded
               >
                 deposite
               </v-btn>

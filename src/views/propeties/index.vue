@@ -18,7 +18,7 @@
             cols="12"
             lg="3"
           >
-            <card />
+            <card @to-detail="toDetail" />
           </v-col>
         </template>
       </v-row>
@@ -37,6 +37,11 @@
       return {
         cardInfo: new Array(8),
       }
+    },
+    methods: {
+      toDetail () {
+        this.$router.push('/propeties-detail')
+      },
     },
   }
 </script>

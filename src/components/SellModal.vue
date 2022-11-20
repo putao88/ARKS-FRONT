@@ -8,7 +8,7 @@
       <v-card>
         <v-card-title class="text-left white--text primary pb-4">
           <span class="text-h3">
-            Sell
+            SELL
           </span>
           <v-icon
             size="20"
@@ -25,7 +25,7 @@
             src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
           />
           <v-text-field
-            label="Append"
+            label="Amount"
             suffix="USDT"
             class="mb-4 mt-4"
             :hint="hint"
@@ -38,6 +38,7 @@
           <v-btn
             width="100%"
             color="primary"
+            rounded
           >
             SELL
           </v-btn>
@@ -63,16 +64,17 @@
     },
     data () {
       return {
-        hint: 'Balance',
+        balance: 97,
       }
     },
+    computed: {
+      hint () {
+        return `Balance: ${this.balance}`
+      },
+    },
     mounted () {
-      this.init()
     },
     methods: {
-      init () {
-        this.hint = `Balance: ${97}`
-      },
       closeDailog () {
         this.$emit('close-sell-modal')
       },

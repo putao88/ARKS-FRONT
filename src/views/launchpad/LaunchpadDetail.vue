@@ -1,20 +1,20 @@
 <template>
   <v-container
-    id="launchpad-detail"
+    id="LaunchpadDetail"
     fluid
     tag="section"
   >
     <v-row justify="space-between">
       <v-col
-        class="elevation-4 rounded-xl white pa-0"
+        class="elevation-4 rounded-xl white pa-0 overflow-hidden"
         cols="12"
         sm="12"
         md="4"
         lg="4"
       >
         <v-img
-          class="white--text align-end rounded-xl"
-          height="300px"
+          width="100%"
+          height="100%"
           src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
         />
       </v-col>
@@ -25,20 +25,51 @@
         md="4"
         lg="6"
       >
-        <div class="d-flex">
-          <span>BNB</span>
-          <v-select
-            :items="items"
-            full-width
-            label="Outlined style"
-            dense
-            outlined
-          />
+        <div class="amount-wrap primary rounded-lg">
+          <div class="mr-10 d-flex align-center">
+            <v-img
+              width="30"
+              height="30"
+              class="mr-2"
+              src="@/assets/img/bnb.png"
+            />
+            <span class="white--text font-weight-bold">BNB</span>
+          </div>
+          <div class="select-wrap">
+            <v-select
+              v-model="amount"
+              :items="amountItems"
+              label="Amount"
+              color="white"
+            />
+          </div>
         </div>
         <div>
-          <p class="text-h4 my-2 d-flex justify-space-between">
-            <span>Amount</span><span />
-          </p>
+          <div class="text-h4 my-2 d-flex justify-space-between">
+            <span>Amount</span>
+            <div class="number-wrap">
+              <v-btn
+                small
+                color="primary"
+                class="mr-0"
+                @click="reduce"
+              >
+                <v-icon>mdi-minus</v-icon>
+              </v-btn>
+              <div class="number-div">
+                {{ number }}
+              </div>
+              <v-btn
+                small
+                color="primary"
+                class="mr-0"
+                @click="add"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </div>
+          </div>
+
           <p class="text-h4 my-2 d-flex justify-space-between">
             <span>Blockchain</span><span>Polygon</span>
           </p>
@@ -55,7 +86,7 @@
         <v-btn
           class="primary rounded-pill"
           width="100%"
-          @click="toDetail"
+          @click="openBuyModal"
         >
           Buy
         </v-btn>
@@ -127,25 +158,67 @@
         </v-btn>
       </v-col>
     </v-row>
+    <buy-modal
+      :show-modal="showBuyModall"
+      @close-sell-modal="closeSellModal"
+    />
   </v-container>
 </template>
 
 <script>
+  import BuyModal from './components/BuyModal'
 
   export default {
     name: 'LaunchpadDetail',
+    components: {
+      BuyModal,
+    },
     data () {
       return {
+        amountItems: [1, 2, 3],
+        amount: 1,
+        showBuyModall: false,
+        number: 1,
       }
     },
     methods: {
       toAccount () {
         this.$router.push('/myAccount')
       },
+      openBuyModal () {
+        this.showBuyModall = true
+      },
+      closeSellModal () {
+        this.showBuyModall = false
+      },
+      reduce () {
+        if (this.number > 1) {
+          this.number--
+        }
+      },
+      add () {
+        this.number++
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
-
+.amount-wrap {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+.number-wrap {
+  display: flex;
+  align-items: center;
+}
+.number-div {
+  margin: 0 16px;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+}
+.select-wrap {
+  max-width: 200px;
+}
 </style>

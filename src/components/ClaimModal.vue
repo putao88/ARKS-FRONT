@@ -26,7 +26,10 @@
             </div>
             <div class="d-flex justify-space-between">
               <span class="text-h3 font-weight-bold">$9,346.95</span>
-              <v-btn color="primary">
+              <v-btn
+                color="primary"
+                rounded
+              >
                 Claim
               </v-btn>
             </div>
@@ -37,7 +40,10 @@
             </div>
             <div class="d-flex justify-space-between">
               <span class="text-h3 font-weight-bold">$9,346.95</span>
-              <v-btn color="primary">
+              <v-btn
+                color="primary"
+                rounded
+              >
                 Claim
               </v-btn>
             </div>

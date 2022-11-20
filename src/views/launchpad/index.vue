@@ -116,6 +116,7 @@
             <v-btn
               class="primary mx-auto"
               width="100%"
+              rounded
               @click="toDetail"
             >
               Buy
@@ -166,6 +167,7 @@
 
           <v-card-actions>
             <v-btn
+              rounded
               class="primary mx-auto"
               width="100%"
               @click="toDetail"

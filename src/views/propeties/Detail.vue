@@ -123,11 +123,12 @@
         </div>
       </v-col>
     </v-row>
-    <v-row justify="space-between">
+    <!-- <v-row justify="space-between">
       <v-icon
         class="pointer ma-auto"
-        size="20"
-        @click="closeDailog"
+        size="30"
+        color="primary"
+        @click="previous"
       >
         {{ ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'mdi-arrow-up-circle-outline' : 'mdi-arrow-left-circle-outline' }}
       </v-icon>
@@ -142,12 +143,24 @@
       </template>
       <v-icon
         class="pointer ma-auto"
-        size="20"
-        @click="closeDailog"
+        size="30"
+        color="primary"
+        @click="next"
       >
         {{ ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'mdi-arrow-down-circle-outline' : 'mdi-arrow-right-circle-outline' }}
       </v-icon>
-    </v-row>
+    </v-row> -->
+    <v-carousel
+      v-model="curCard"
+      height="350"
+    >
+      <v-carousel-item
+        v-for="i in 3"
+        :key="i"
+      >
+        <card />
+      </v-carousel-item>
+    </v-carousel>
   </v-container>
 </template>
 
@@ -160,7 +173,12 @@
     },
     data () {
       return {
+        curCard: 1,
       }
+    },
+    methods: {
+      previous () {},
+      next () {},
     },
   }
 </script>

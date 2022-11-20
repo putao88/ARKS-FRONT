@@ -18,13 +18,23 @@ export default new Router({
         },
         {
           name: 'Propeties',
-          path: '/propeties',
+          path: 'propeties',
           component: () => import('@/views/propeties'),
+        },
+        {
+          name: 'Propeties Detail',
+          path: 'propeties-detail',
+          component: () => import('@/views/propeties/Detail.vue'),
         },
         {
           name: 'Launchpad',
           path: '/launchpad',
           component: () => import('@/views/launchpad'),
+        },
+        {
+          name: 'Launchpad Detail',
+          path: 'launchpad-detail',
+          component: () => import('@/views/launchpad/LaunchpadDetail'),
         },
         {
           name: 'MyAccount',
@@ -45,16 +55,6 @@ export default new Router({
           name: 'Liquidity',
           path: 'liquidity',
           component: () => import('@/views/liquidity'),
-        },
-        {
-          name: 'LaunchpadDetail',
-          path: 'launchpad-detail',
-          component: () => import('@/views/launchpad/LaunchpadDetail'),
-        },
-        {
-          name: 'Detail',
-          path: 'detail',
-          component: () => import('@/views/propeties/Detail.vue'),
         },
       ],
     },

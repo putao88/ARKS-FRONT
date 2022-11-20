@@ -120,6 +120,7 @@
           <span class="text-h4 font-weight-bold">32.5</span>
         </div>
         <v-btn
+          rounded
           width="100%"
           height="60"
           color="primary"
