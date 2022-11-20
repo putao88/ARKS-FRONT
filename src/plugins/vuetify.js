@@ -17,6 +17,7 @@ export default new Vuetify({
     t: (key, ...params) => i18n.t(key, params),
   },
   theme: {
+    dark: true,
     themes: {
       dark: theme,
       light: theme,

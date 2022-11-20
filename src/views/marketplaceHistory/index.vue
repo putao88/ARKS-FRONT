@@ -13,38 +13,6 @@
       title="Marketplace History"
       class="px-5 py-3"
     >
-      <!-- <v-simple-table>
-        <thead>
-          <tr>
-            <th class="primary--text">
-              NO.
-            </th>
-            <th class="primary--text">
-              Time
-            </th>
-            <th class="primary--text">
-              TokenId
-            </th>
-            <th class="primary--text">
-              Value
-            </th>
-            <th class="text-right primary--text">
-              Buy/Sell
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table> -->
       <v-data-table
         :headers="headers"
         :items="desserts"

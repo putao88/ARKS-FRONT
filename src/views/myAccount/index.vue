@@ -8,7 +8,7 @@
       <v-tabs
         v-model="tab"
         centered
-        light
+        dark
         icons-and-text
       >
         <v-tabs-slider />
@@ -270,37 +270,13 @@
               cols="12"
               sm="12"
               lg="12"
+              class="pa-10"
             >
-              <v-simple-table
-                fixed-header
-                height="300px"
-              >
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th
-                        v-for="ite in tableKey"
-                        :key="ite"
-                        class="text-left"
-                      >
-                        {{ ite }}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="i in 20"
-                      :key="i"
-                    >
-                      <td>{{ item.Address }}</td>
-                      <td>{{ item.Date }}</td>
-                      <td>{{ item.Value }}</td>
-                      <td>{{ item.Rate }}</td>
-                      <td>{{ item.Rewards }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
+              <v-data-table
+                :headers="headers"
+                :items="desserts"
+                :items-per-page="5"
+              />
             </v-col>
           </v-row>
         </v-tab-item>
@@ -420,14 +396,43 @@
       return {
         tab: null,
         referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
-        tableKey: ['Address', 'Date', 'Value', 'Rate', 'Rewards'],
-        item: {
-          Address: 'Frozen Yogurt',
-          Date: '2022-09-11',
-          Value: '159 USDT',
-          Rate: '10%',
-          Rewards: '6 USDT',
-        },
+        headers: [
+          { text: 'Address', align: 'start', sortable: false, value: 'Address', class: 'primary--text' },
+          { text: 'Date', value: 'Date', class: 'primary--text' },
+          { text: 'Value', value: 'Value', class: 'primary--text' },
+          { text: 'Rate', value: 'Rate', class: 'primary--text' },
+          { text: 'Rewards', value: 'Rewards', class: 'primary--text' },
+        ],
+        desserts: [
+          {
+            Address: 'Frozen Yogurt',
+            Date: '2022-09-11',
+            Value: '159 USDT',
+            Rate: '10%',
+            Rewards: '6 USDT',
+          },
+          {
+            Address: 'Frozen Yogurt',
+            Date: '2022-09-11',
+            Value: '159 USDT',
+            Rate: '10%',
+            Rewards: '6 USDT',
+          },
+          {
+            Address: 'Frozen Yogurt',
+            Date: '2022-09-11',
+            Value: '159 USDT',
+            Rate: '10%',
+            Rewards: '6 USDT',
+          },
+          {
+            Address: 'Frozen Yogurt',
+            Date: '2022-09-11',
+            Value: '159 USDT',
+            Rate: '10%',
+            Rewards: '6 USDT',
+          },
+        ],
       }
     },
   }

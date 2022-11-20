@@ -35,8 +35,8 @@
     <v-btn
       class="ml-2"
       min-width="0"
-      large
       text
+      rounded
       color="primary"
       @click="openClaimModal"
     >
@@ -50,14 +50,16 @@
       v-if="!connected"
       class="ml-2"
       min-width="0"
-      large
       text
+      rounded
       color="primary"
       @click="setConnected(!connected)"
     >
-      <v-icon large>
-        mdi-wallet
-      </v-icon>
+      <div class="wallet-icon-wrap">
+        <v-icon size="20">
+          mdi-wallet
+        </v-icon>
+      </div>
       <span class="primary--text font-weight-bold">Connect</span>
     </v-btn>
 
@@ -73,14 +75,16 @@
         <v-btn
           class="ml-2"
           text
-          large
+          rounded
           color="primary"
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon large>
-            mdi-wallet
-          </v-icon>
+          <div class="wallet-icon-wrap">
+            <v-icon size="20">
+              mdi-wallet
+            </v-icon>
+          </div>
           <div
             class="primary--text font-weight-bold overflow-text address-div"
           >
@@ -173,5 +177,12 @@
 <style lang="scss" scoped>
 .address-div {
   max-width: 80px;
+}
+.wallet-icon-wrap {
+  border-radius: 50%;
+  padding: 5px;
+  margin-right: 5px;
+  background-color: #000;
+  border: 2px solid var(--color-primary);
 }
 </style>

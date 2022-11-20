@@ -81,6 +81,7 @@
         <v-btn
           width="100%"
           height="100%"
+          max-width="250"
           min-height="150"
           elevation="2"
           dark
