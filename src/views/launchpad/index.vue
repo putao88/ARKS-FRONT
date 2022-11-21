@@ -87,9 +87,10 @@
             <v-list-item-avatar
               tile
               size="80"
-              color="primary"
               class="rounded"
-            />
+            >
+              <v-img src="@/assets/img/rwa.png" />
+            </v-list-item-avatar>
           </v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h2 font-weight-bold">
@@ -140,9 +141,10 @@
             <v-list-item-avatar
               tile
               size="80"
-              color="primary"
               class="rounded"
-            />
+            >
+              <v-img src="@/assets/img/nd.png" />
+            </v-list-item-avatar>
           </v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h2 font-weight-bold">
