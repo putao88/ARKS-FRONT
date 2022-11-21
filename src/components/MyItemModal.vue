@@ -73,7 +73,7 @@
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    src="@/assets/img/nft.png"
                   />
                   <div class="card-bottom-div">
                     <span>Price:</span>

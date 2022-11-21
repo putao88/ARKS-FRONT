@@ -135,7 +135,7 @@
                   <v-img
                     class="white--text align-end"
                     height="220px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    src="@/assets/img/nft.png"
                   />
                 </v-card>
               </v-col>
@@ -368,7 +368,7 @@
                   <v-img
                     class="white--text align-end"
                     height="220px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    src="@/assets/img/nft.png"
                   />
                 </v-card>
               </v-col>

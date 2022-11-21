@@ -15,7 +15,7 @@
       >
         <v-img
           height="300px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
       </v-col>
       <v-col
@@ -29,24 +29,24 @@
           class="mr-2 mb-1"
           width="48%"
           height="140px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
         <v-img
           class="mb-1"
           width="48%"
           height="140px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
         <v-img
           class="mr-2"
           width="48%"
           height="140px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
         <v-img
           width="48%"
           height="140px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
       </v-col>
       <v-col
@@ -152,13 +152,31 @@
     </v-row> -->
     <v-carousel
       v-model="curCard"
+      hide-delimiters
       height="350"
     >
       <v-carousel-item
-        v-for="i in 3"
+        v-for="(item,i) in carouselItems"
         :key="i"
       >
-        <card />
+        <v-row
+          justify="space-around"
+        >
+          <template v-for="(n,index) in item">
+            <v-col
+              :key="index"
+              cols="12"
+              sm="12"
+              md="4"
+              lg="3"
+              xl="3"
+            >
+              <div class="card-wrap">
+                <card :key="index" />
+              </div>
+            </v-col>
+          </template>
+        </v-row>
       </v-carousel-item>
     </v-carousel>
   </v-container>
@@ -173,16 +191,44 @@
     },
     data () {
       return {
-        curCard: 1,
+        curCard: 0,
+        allCardsData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        carouselItems: [],
       }
     },
+    mounted () {
+      this.init()
+    },
     methods: {
+      init () {
+        var screenModel = this.$vuetify.breakpoint.name
+        console.log(screenModel)
+        if (['lg', 'xl'].includes(screenModel)) {
+          this.carouselItems = this.formatArray(this.allCardsData, 4)
+        } else if (['md'].includes(screenModel)) {
+          this.carouselItems = this.formatArray(this.allCardsData, 3)
+        } else {
+          this.carouselItems = this.formatArray(this.allCardsData, 1)
+        }
+      },
       previous () {},
       next () {},
+      formatArray (data, num) {
+        const carouseArray = []
+        for (var i = 0, len = data.length; i < len; i += num) {
+          carouseArray.push(data.slice(i, i + num))
+        }
+        return carouseArray
+      },
+
     },
   }
 </script>
 
 <style lang="scss" scoped>
-
+.card-wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 </style>

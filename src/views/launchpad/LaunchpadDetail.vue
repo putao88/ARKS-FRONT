@@ -15,7 +15,7 @@
         <v-img
           width="100%"
           height="100%"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          src="@/assets/img/nft.png"
         />
       </v-col>
       <v-col

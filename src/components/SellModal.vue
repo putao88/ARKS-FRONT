@@ -22,7 +22,7 @@
           <v-img
             class="white--text align-end"
             width="100%"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            src="@/assets/img/nft.png"
           />
           <v-text-field
             label="Amount"
