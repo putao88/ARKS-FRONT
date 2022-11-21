@@ -202,7 +202,6 @@
     methods: {
       init () {
         var screenModel = this.$vuetify.breakpoint.name
-        console.log(screenModel)
         if (['lg', 'xl'].includes(screenModel)) {
           this.carouselItems = this.formatArray(this.allCardsData, 4)
         } else if (['md'].includes(screenModel)) {
