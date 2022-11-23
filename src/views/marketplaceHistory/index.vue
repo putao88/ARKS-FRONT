@@ -11,6 +11,7 @@
     <base-material-card
       icon="mdi-clipboard-text"
       title="Marketplace History"
+      color="primary"
       class="px-5 py-3"
     >
       <v-data-table

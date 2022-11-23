@@ -1,40 +1,43 @@
 <template>
   <div
     v-ripple="{ class: 'indigo--text' }"
-    class="card-container pointer"
+    class="card-container pointer rounded-lg elevation-10 pa-2"
     @click="toDetail"
   >
-    <div class="primary--text text-h3 font-weight-bold py-1 d-flex align-center justify-center">
-      <span class="mr-1">+23.58%</span>
-      <v-icon>mdi-alert-circle-outline</v-icon>
+    <v-img
+      class="white--text align-end rounded-lg"
+      height="150px"
+      src="@/assets/img/nft.png"
+    />
+    <div class="card-content py-4">
+      <div class="d-flex justify-space-between">
+        <span>EXPECTED INCOME</span>
+        <span class="d-flex align-center">
+          <span class="mr-1">10.25%</span>
+          <v-icon size="16">mdi-alert-circle-outline</v-icon>
+        </span>
+      </div>
+      <div class="d-flex justify-space-between">
+        <span>CAPITAL ROI</span>
+        <div class="d-flex align-center">
+          <span class="mr-1">+13.33%</span>
+          <v-icon size="16">
+            mdi-alert-circle-outline
+          </v-icon>
+        </div>
+      </div>
+      <div class="d-flex justify-space-between font-weight-bold primary--text">
+        <span>TOTAL</span>
+        <div class="d-flex align-center">
+          <span class="mr-1">+23.58%</span>
+          <v-icon size="16">
+            mdi-alert-circle-outline
+          </v-icon>
+        </div>
+      </div>
     </div>
-    <div class="rounded elevation-10">
-      <div class="pa-4">
-        <div class="d-flex justify-space-between my-1">
-          <span>EXPECTED INCOME</span>
-          <span class="d-flex align-center">
-            <span class="mr-1">10.25%</span>
-            <v-icon size="16">mdi-alert-circle-outline</v-icon>
-          </span>
-        </div>
-        <div class="d-flex justify-space-between my-1">
-          <span>CAPITAL ROI</span>
-          <div class="d-flex align-center">
-            <span class="mr-1">+13.33%</span>
-            <v-icon size="16">
-              mdi-alert-circle-outline
-            </v-icon>
-          </div>
-        </div>
-      </div>
-      <v-img
-        class="white--text align-end"
-        height="150px"
-        src="@/assets/img/nft.png"
-      />
-      <div class="card-footer primary rounded-b text-h4 white--text">
-        18983 Alcoy Ave
-      </div>
+    <div class="card-footer text-h4  rounded-lg font-weight-bold primary white--text">
+      18983 Alcoy Ave
     </div>
   </div>
 </template>
@@ -62,6 +65,9 @@
     .lh-24 {
       line-height: 24px;
     }
+  }
+  .card-content {
+    font-size: 13px;
   }
   .card-footer {
     height: 30px;

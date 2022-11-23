@@ -16,6 +16,7 @@
       <div class="my-6 text-center">
         <v-btn
           class="mr-14"
+          rounded
           color="primary"
         >
           Learn More
@@ -23,6 +24,7 @@
         <v-btn
           color="primary"
           to="/launchpad"
+          rounded
         >
           Buy Now
         </v-btn>
@@ -115,17 +117,35 @@
           />
         </v-col>
       </v-row>
-      <v-row>
-        <template v-for="(item, index) in cardInfo">
-          <v-col
-            :key="index"
-            cols="12"
-            lg="3"
+      <v-carousel
+        v-model="curCard"
+        hide-delimiters
+        height="350"
+      >
+        <v-carousel-item
+          v-for="(item,i) in carouselItems"
+          :key="i"
+        >
+          <v-row
+            justify="space-around"
           >
-            <card />
-          </v-col>
-        </template>
-      </v-row>
+            <template v-for="(n,index) in item">
+              <v-col
+                :key="index"
+                cols="12"
+                sm="12"
+                md="4"
+                lg="3"
+                xl="3"
+              >
+                <div class="card-wrap">
+                  <card :key="index" />
+                </div>
+              </v-col>
+            </template>
+          </v-row>
+        </v-carousel-item>
+      </v-carousel>
     </div>
     <v-container />
   </v-container>
@@ -140,14 +160,43 @@
     },
     data () {
       return {
-        cardInfo: new Array(4),
+        curCard: 0,
+        allCardsData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        carouselItems: [],
       }
+    },
+    mounted () {
+      this.init()
     },
 
     methods: {
+      init () {
+        var screenModel = this.$vuetify.breakpoint.name
+        if (['lg', 'xl'].includes(screenModel)) {
+          this.carouselItems = this.formatArray(this.allCardsData, 4)
+        } else if (['md'].includes(screenModel)) {
+          this.carouselItems = this.formatArray(this.allCardsData, 3)
+        } else {
+          this.carouselItems = this.formatArray(this.allCardsData, 1)
+        }
+      },
+      previous () {},
+      next () {},
+      formatArray (data, num) {
+        const carouseArray = []
+        for (var i = 0, len = data.length; i < len; i += num) {
+          carouseArray.push(data.slice(i, i + num))
+        }
+        return carouseArray
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
+.card-wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 </style>
