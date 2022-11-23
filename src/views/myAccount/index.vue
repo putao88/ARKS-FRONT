@@ -31,7 +31,7 @@
           value="tab-1"
         >
           <v-row
-            class="elevation-3 my-8 rounded-lg"
+            class="mt-4 rounded-lg"
             justify="center"
             align="center"
           >
@@ -68,7 +68,7 @@
             </v-col>
           </v-row>
           <v-row
-            class="my-8 rounded-lg rounded-xl pa-10"
+            class="rounded-lg rounded-xl pa-10"
           >
             <v-col
               cols="12"
@@ -146,7 +146,7 @@
           value="tab-2"
         >
           <v-row
-            class="elevation-3 my-8 rounded-lg"
+            class="mt-8 rounded-lg"
             justify="center"
             align="center"
           >
@@ -180,7 +180,6 @@
             </v-col>
           </v-row>
           <v-row
-            class="elevation-3"
             justify="center"
           >
             <v-col
@@ -188,7 +187,7 @@
               sm="12"
               lg="12"
             >
-              <p class="text-h3 font-weight-bold text-center mb-8">
+              <p class="text-h3 primary--text font-weight-bold text-center mb-8">
                 My Referrals
               </p>
             </v-col>
@@ -282,14 +281,14 @@
           value="tab-3"
         >
           <v-row
-            class="elevation-10 my-8 rounded-lg rounded-xl pa-10"
+            class="rounded-lg rounded-xl pa-10"
           >
             <v-col
               cols="12"
               sm="12"
               lg="12"
             >
-              <p class="text-h3 font-weight-bold text-center mb-8">
+              <p class="text-h3 primary--text font-weight-bold text-center mb-8">
                 My Liquidity
               </p>
             </v-col>
@@ -333,47 +332,121 @@
                 Estimated Yield
               </p>
             </v-col>
-            <v-col
-              cols="12"
-              sm="12"
-              lg="12"
-              class="d-flex justify-center text-center px-10"
-            >
-              <div class="wp-50 mr-8">
-                <v-text-field
-                  v-model="referralsValue"
-                  class="mb-4 mt-4"
-                  :hint="hint"
-                  persistent-hint
-                />
-              </div>
-              <v-btn
-                class="mt-4"
-                color="primary"
-                rounded
-              >
-                deposite
-              </v-btn>
-            </v-col>
-            <template
-              v-for="i in 8"
-            >
-              <v-col
-                :key="i"
-                cols="12"
-                sm="12"
-                lg="3"
-              >
-                <v-card class="rounded-xl pointer">
-                  <v-img
-                    class="white--text align-end"
-                    height="220px"
-                    src="@/assets/img/nft.png"
-                  />
-                </v-card>
-              </v-col>
-            </template>
           </v-row>
+          <v-tabs
+            v-model="liquidityTab"
+            centered
+            light
+            icons-and-text
+          >
+            <v-tabs-slider />
+
+            <v-tab href="#deposite">
+              Deposite
+            </v-tab>
+
+            <v-tab href="#widthdrew">
+              Widthdrew
+            </v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="liquidityTab">
+            <v-tab-item
+              value="deposite"
+            >
+              <v-row
+                class="rounded-lg rounded-xl pa-10"
+              >
+                <v-col
+                  cols="12"
+                  sm="12"
+                  lg="12"
+                  class="d-flex justify-center text-center px-10"
+                >
+                  <div class="wp-50 mr-8">
+                    <v-text-field
+                      v-model="referralsValue"
+                      class="mb-4 mt-4"
+                      :hint="hint"
+                      persistent-hint
+                    />
+                  </div>
+                  <v-btn
+                    class="mt-4"
+                    color="primary"
+                    rounded
+                  >
+                    deposite
+                  </v-btn>
+                </v-col>
+                <template
+                  v-for="i in 8"
+                >
+                  <v-col
+                    :key="i"
+                    cols="12"
+                    sm="12"
+                    lg="3"
+                  >
+                    <v-card class="rounded-xl pointer">
+                      <v-img
+                        class="white--text align-end"
+                        height="220px"
+                        src="@/assets/img/nft.png"
+                      />
+                    </v-card>
+                  </v-col>
+                </template>
+              </v-row>
+            </v-tab-item>
+            <v-tab-item
+              value="widthdrew"
+            >
+              <v-row
+                class="rounded-lg rounded-xl pa-10"
+              >
+                <v-col
+                  cols="12"
+                  sm="12"
+                  lg="12"
+                  class="d-flex justify-center text-center px-10"
+                >
+                  <div class="wp-50 mr-8">
+                    <v-text-field
+                      v-model="referralsValue"
+                      class="mb-4 mt-4"
+                      :hint="hint"
+                      persistent-hint
+                    />
+                  </div>
+                  <v-btn
+                    class="mt-4"
+                    color="primary"
+                    rounded
+                  >
+                    widthdrew
+                  </v-btn>
+                </v-col>
+                <template
+                  v-for="i in 8"
+                >
+                  <v-col
+                    :key="i"
+                    cols="12"
+                    sm="12"
+                    lg="3"
+                  >
+                    <v-card class="rounded-xl pointer">
+                      <v-img
+                        class="white--text align-end"
+                        height="220px"
+                        src="@/assets/img/nft.png"
+                      />
+                    </v-card>
+                  </v-col>
+                </template>
+              </v-row>
+            </v-tab-item>
+          </v-tabs-items>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -386,6 +459,7 @@
     data () {
       return {
         tab: null,
+        liquidityTab: 'widthdrew',
         referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
         hint: 'Balance',
         headers: [
