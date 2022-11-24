@@ -15,7 +15,6 @@
       </div>
       <div class="my-6 text-center">
         <v-btn
-          class="mr-14"
           rounded
           color="primary"
         >
@@ -78,7 +77,7 @@
           lg="3"
         >
           <base-material-stats-card
-            color="info"
+            color="primary"
             icon="mdi-twitter"
             title="Assets Amount"
             value="31"
@@ -93,7 +92,7 @@
           lg="3"
         >
           <base-material-stats-card
-            color="orange"
+            color="primary"
             icon="mdi-poll"
             title="Assets Value(USD)"
             value="$2,135,397"
@@ -108,7 +107,7 @@
           lg="3"
         >
           <base-material-stats-card
-            color="success"
+            color="primary"
             icon="mdi-store"
             title="Users Amount"
             value="1,578"

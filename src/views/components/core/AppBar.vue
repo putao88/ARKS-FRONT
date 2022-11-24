@@ -19,7 +19,7 @@
       </v-icon>
 
       <v-icon v-else>
-        mdi-dots-vertical
+        mdi-menu
       </v-icon>
     </v-btn>
 

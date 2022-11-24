@@ -2,7 +2,7 @@
   <v-card
     v-bind="$attrs"
     :class="classes"
-    class="v-card--material pa-3"
+    class="v-card--material pa-3 rounded-lg"
   >
     <div class="d-flex grow flex-wrap">
       <v-avatar
@@ -17,13 +17,13 @@
       <v-sheet
         v-else
         :class="{
-          'pa-7': !$slots.image
+          'pa-4': !$slots.image
         }"
         :color="color"
         :max-height="icon ? 90 : undefined"
         :width="icon ? 'auto' : '100%'"
         elevation="6"
-        class="text-start v-card--material__heading mb-n6"
+        class="text-start v-card--material__heading"
         dark
       >
         <slot
