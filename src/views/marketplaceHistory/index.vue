@@ -7,19 +7,20 @@
     <!-- <div class="text-h3 primary--text text-center font-weight-bold">
       Marketplace History
     </div> -->
-
-    <base-material-card
-      icon="mdi-clipboard-text"
-      title="Marketplace History"
-      color="primary"
-      class="px-5 py-3"
-    >
-      <v-data-table
-        :headers="headers"
-        :items="desserts"
-        :items-per-page="5"
-      />
-    </base-material-card>
+    <v-card class="pa-8">
+      <base-material-card
+        icon="mdi-clipboard-text"
+        title="Marketplace History"
+        color="primary"
+        class="elevation-0"
+      >
+        <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :items-per-page="5"
+        />
+      </base-material-card>
+    </v-card>
   </v-container>
 </template>
 

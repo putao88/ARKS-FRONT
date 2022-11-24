@@ -18,7 +18,7 @@
             mdi-close
           </v-icon>
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="item-content-wrap">
           <v-row
             class="pa-4"
             justify="space-between"
@@ -132,6 +132,10 @@
   }
 </script>
 <style lang="scss" scoped>
+.item-content-wrap {
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
 .data-item {
   height: 40px;
   width: 100%;

@@ -123,33 +123,6 @@
         </div>
       </v-col>
     </v-row>
-    <!-- <v-row justify="space-between">
-      <v-icon
-        class="pointer ma-auto"
-        size="30"
-        color="primary"
-        @click="previous"
-      >
-        {{ ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'mdi-arrow-up-circle-outline' : 'mdi-arrow-left-circle-outline' }}
-      </v-icon>
-      <template v-for="i in 3">
-        <v-col
-          :key="i"
-          cols="12"
-          lg="3"
-        >
-          <card />
-        </v-col>
-      </template>
-      <v-icon
-        class="pointer ma-auto"
-        size="30"
-        color="primary"
-        @click="next"
-      >
-        {{ ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'mdi-arrow-down-circle-outline' : 'mdi-arrow-right-circle-outline' }}
-      </v-icon>
-    </v-row> -->
     <v-carousel
       v-model="curCard"
       hide-delimiters
@@ -160,7 +133,9 @@
         :key="i"
       >
         <v-row
+          class="carousel-item-wrap"
           justify="space-around"
+          align="center"
         >
           <template v-for="(n,index) in item">
             <v-col
@@ -172,7 +147,10 @@
               xl="3"
             >
               <div class="card-wrap">
-                <card :key="index" />
+                <card
+                  :key="index"
+                  @to-detail="toDetail"
+                />
               </div>
             </v-col>
           </template>
@@ -219,12 +197,18 @@
         }
         return carouseArray
       },
+      toDetail () {
+        this.$router.push('/propeties-detail')
+      },
 
     },
   }
 </script>
 
 <style lang="scss" scoped>
+.carousel-item-wrap {
+  height: 100%;
+}
 .card-wrap {
   height: 100%;
   display: flex;

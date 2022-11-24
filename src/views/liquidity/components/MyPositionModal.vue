@@ -26,7 +26,7 @@
                 cols="12"
                 lg="4"
               >
-                <v-card>
+                <v-card class="rounded-lg">
                   <v-card-text>
                     <div
                       class="data-item mt-6"
@@ -45,6 +45,7 @@
                       height="40"
                       color="primary"
                       class="mt-6"
+                      rounded
                     >
                       Borrow
                     </v-btn>

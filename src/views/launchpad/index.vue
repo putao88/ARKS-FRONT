@@ -4,9 +4,9 @@
     fluid
     tag="section"
   >
-    <div class="white">
+    <v-card class="pa-8">
       <v-row
-        class="ma-1 rounded-lg rounded-xl pa-6 white"
+        class="mx-1"
       >
         <v-col
           cols="12"
@@ -181,7 +181,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </div>
+    </v-card>
   </v-container>
 </template>
 

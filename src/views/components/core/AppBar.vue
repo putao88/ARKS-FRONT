@@ -60,7 +60,9 @@
           mdi-wallet
         </v-icon>
       </div>
-      <span class="primary--text font-weight-bold">Connect</span>
+      <div class="primary--text font-weight-bold address-div">
+        Connect
+      </div>
     </v-btn>
 
     <v-menu
@@ -176,7 +178,8 @@
 </script>
 <style lang="scss" scoped>
 .address-div {
-  max-width: 80px;
+  width: 80px;
+  text-align: left;
 }
 .wallet-icon-wrap {
   border-radius: 50%;

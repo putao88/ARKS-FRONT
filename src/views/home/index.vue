@@ -4,7 +4,7 @@
     fluid
     tag="section"
   >
-    <div class="home-container">
+    <v-card class="pa-8">
       <div>
         <p class="text-h3 font-weight-bold text-center">
           Connecting The Crypto World with The Real World
@@ -127,7 +127,9 @@
           :key="i"
         >
           <v-row
+            class="carousel-item-wrap"
             justify="space-around"
+            align="center"
           >
             <template v-for="(n,index) in item">
               <v-col
@@ -139,14 +141,17 @@
                 xl="3"
               >
                 <div class="card-wrap">
-                  <card :key="index" />
+                  <card
+                    :key="index"
+                    @to-detail="toDetail"
+                  />
                 </div>
               </v-col>
             </template>
           </v-row>
         </v-carousel-item>
       </v-carousel>
-    </div>
+    </v-card>
     <v-container />
   </v-container>
 </template>
@@ -189,11 +194,17 @@
         }
         return carouseArray
       },
+      toDetail () {
+        this.$router.push('/propeties-detail')
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
+.carousel-item-wrap {
+  height: 100%;
+}
 .card-wrap {
   height: 100%;
   display: flex;

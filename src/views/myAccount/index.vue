@@ -4,7 +4,7 @@
     fluid
     tag="section"
   >
-    <v-card>
+    <v-card class="pa-8">
       <v-tabs
         v-model="tab"
         centered
@@ -31,7 +31,7 @@
           value="tab-1"
         >
           <v-row
-            class="mt-4 rounded-lg"
+            class="mt-4"
             justify="center"
             align="center"
           >
@@ -67,9 +67,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <v-row
-            class="rounded-lg rounded-xl pa-10"
-          >
+          <v-row>
             <v-col
               cols="12"
               sm="12"
@@ -131,7 +129,7 @@
                 sm="12"
                 lg="3"
               >
-                <v-card class="rounded-xl pointer">
+                <v-card class="rounded-lg pointer">
                   <v-img
                     class="white--text align-end"
                     height="220px"
@@ -146,7 +144,7 @@
           value="tab-2"
         >
           <v-row
-            class="mt-8 rounded-lg"
+            class="mt-4"
             justify="center"
             align="center"
           >
@@ -267,7 +265,6 @@
               cols="12"
               sm="12"
               lg="12"
-              class="pa-10"
             >
               <v-data-table
                 :headers="headers"
@@ -281,7 +278,7 @@
           value="tab-3"
         >
           <v-row
-            class="rounded-lg rounded-xl pa-10"
+            class="mt-4"
           >
             <v-col
               cols="12"
@@ -353,9 +350,7 @@
             <v-tab-item
               value="deposite"
             >
-              <v-row
-                class="rounded-lg rounded-xl pa-10"
-              >
+              <v-row>
                 <v-col
                   cols="12"
                   sm="12"
@@ -387,7 +382,7 @@
                     sm="12"
                     lg="3"
                   >
-                    <v-card class="rounded-xl pointer">
+                    <v-card class="rounded-lg pointer">
                       <v-img
                         class="white--text align-end"
                         height="220px"
@@ -401,9 +396,7 @@
             <v-tab-item
               value="widthdrew"
             >
-              <v-row
-                class="rounded-lg rounded-xl pa-10"
-              >
+              <v-row>
                 <v-col
                   cols="12"
                   sm="12"
@@ -435,7 +428,7 @@
                     sm="12"
                     lg="3"
                   >
-                    <v-card class="rounded-xl pointer">
+                    <v-card class="rounded-lg pointer">
                       <v-img
                         class="white--text align-end"
                         height="220px"
