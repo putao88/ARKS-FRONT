@@ -29,18 +29,18 @@
           <div class="amount-wrap primary rounded-lg">
             <div class="mr-10 d-flex align-center">
               <v-img
-                width="30"
+                width="32"
                 height="30"
                 class="mr-2"
-                src="@/assets/img/bnb.png"
+                src="@/assets/img/usdt.png"
               />
-              <span class="white--text font-weight-bold">BNB</span>
+              <span class="white--text font-weight-bold">USDT</span>
             </div>
             <div class="select-wrap">
               <v-select
-                v-model="amount"
+                v-model="type"
                 :items="amountItems"
-                label="Amount"
+                label="Type"
                 color="white"
               />
             </div>
@@ -75,7 +75,7 @@
               <span>Blockchain</span><span>Polygon</span>
             </p>
             <p class="text-h4 my-2 d-flex justify-space-between">
-              <span>Contract Address</span><span>0x59bF...17E6B6</span>
+              <span>Contract Address</span><a href="https://etherscan.io/address/">0x59bF...17E6B6</a>
             </p>
             <p class="text-h4 my-2 d-flex justify-space-between">
               <span>APR</span><span>7.63%</span>
@@ -89,7 +89,7 @@
             width="100%"
             @click="openBuyModal"
           >
-            Buy
+            Approve
           </v-btn>
         </v-col>
       </v-row>
@@ -178,7 +178,7 @@
     data () {
       return {
         amountItems: [1, 2, 3],
-        amount: 1,
+        type: 1,
         showBuyModall: false,
         number: 1,
       }

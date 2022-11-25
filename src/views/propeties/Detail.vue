@@ -6,6 +6,14 @@
   >
     <p class="text-h3 font-weight-bold">
       8003 S Ingleside Ave, Chicago, IL 60619
+      <v-btn
+        to="/launchpad-detail"
+        rounded
+        small
+        color="primary"
+      >
+        BUY
+      </v-btn>
     </p>
     <v-row>
       <v-col

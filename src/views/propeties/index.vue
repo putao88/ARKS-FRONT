@@ -8,6 +8,14 @@
       <div class="propeties-container">
         <p class="text-h3 font-weight-bold text-center">
           Properties
+          <v-btn
+            to="/launchpad-detail"
+            rounded
+            small
+            color="primary"
+          >
+            BUY
+          </v-btn>
         </p>
         <p class="text-subtitle-2 text-center mb-10">
           We will purchase these real estate assets step by step and operate these assets in a very compliant way to ensure a stable rental income.

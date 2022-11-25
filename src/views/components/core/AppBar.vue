@@ -1,9 +1,8 @@
 <template>
   <v-app-bar
     id="app-bar"
-    absolute
+    fixed
     app
-    color="transparent"
     flat
     height="75"
   >
@@ -23,7 +22,20 @@
       </v-icon>
     </v-btn>
 
+    <v-btn
+      v-if="$route.path.indexOf('-detail') > 0"
+      elevation="1"
+      fab
+      small
+      class="hidden-sm-and-down font-weight-light"
+      @click="goBack"
+    >
+      <v-icon>
+        mdi-arrow-left-bold
+      </v-icon>
+    </v-btn>
     <v-toolbar-title
+      v-else
       class="hidden-sm-and-down font-weight-light"
       v-text="$route.name"
     />
@@ -154,12 +166,14 @@
     computed: {
       ...mapState(['drawer', 'connected', 'address']),
     },
-
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
         setConnected: 'SET_CONNECTED',
       }),
+      goBack () {
+        this.$router.go(-1)
+      },
       menuHandle (method) {
         if (method === 'Disconnect') {
           this.setConnected(false)
