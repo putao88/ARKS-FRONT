@@ -76,24 +76,45 @@
       <div />
     </v-list>
     <template v-slot:append>
-      <v-bottom-navigation
-        grow
+      <div
+        class="d-flex justify-space-around py-4"
+        style="background-color: #2e2e2e"
       >
-        <v-btn href="https://www.baidu.com/">
-          <span>Recent</span>
-          <v-icon>mdi-history</v-icon>
-        </v-btn>
+        <a
+          style="text-decoration: none"
+          href="https://www.baidu.com/"
+          target="_blank"
+        >
+          <v-icon>mdi-twitter</v-icon>
+        </a>
 
-        <v-btn href="https://www.baidu.com/">
-          <span>Favorites</span>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
+        <a
+          style="text-decoration: none"
+          href="https://www.baidu.com/"
+          target="_blank"
+        >
+          <v-img
+            src="@/assets/svg/discord.svg"
+          />
+        </a>
 
-        <v-btn href="https://www.baidu.com/">
-          <span>Nearby</span>
-          <v-icon>mdi-map-marker</v-icon>
-        </v-btn>
-      </v-bottom-navigation>
+        <a
+          style="text-decoration: none"
+          href="https://www.baidu.com/"
+          target="_blank"
+        >
+          <v-icon>mdi-github</v-icon>
+        </a>
+        <a
+          style="text-decoration: none"
+          href="https://www.baidu.com/"
+          target="_blank"
+        >
+          <v-img
+            src="@/assets/svg/polygon.svg"
+          />
+        </a>
+      </div>
     </template>
   </v-navigation-drawer>
 </template>
@@ -186,7 +207,6 @@
     },
   }
 </script>
-
 <style lang="sass">
   @import '~vuetify/src/styles/tools/_rtl.sass'
 
