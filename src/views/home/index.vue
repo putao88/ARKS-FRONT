@@ -32,45 +32,6 @@
         justify="space-around"
         class="my-8"
       >
-        <!-- <v-col
-          cols="12"
-          lg="3"
-        >
-          <div class="elevation-4 pa-3 rounded-lg">
-            <p class="text-body-2">
-              Assets Amount
-            </p>
-            <p class="text-h3">
-              31
-            </p>
-          </div>
-        </v-col>
-        <v-col
-          cols="12"
-          lg="3"
-        >
-          <div class="elevation-4 pa-3 rounded-lg">
-            <p class="text-body-2">
-              Assets Value(USD)
-            </p>
-            <p class="text-h3">
-              $2,135,397
-            </p>
-          </div>
-        </v-col>
-        <v-col
-          cols="12"
-          lg="3"
-        >
-          <div class="elevation-4 pa-3 rounded-lg">
-            <p class="text-body-2">
-              Users Amount
-            </p>
-            <p class="text-h3">
-              1,578
-            </p>
-          </div>
-        </v-col> -->
         <v-col
           cols="12"
           sm="6"

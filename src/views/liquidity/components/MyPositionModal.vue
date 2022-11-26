@@ -18,8 +18,8 @@
             mdi-close
           </v-icon>
         </v-card-title>
-        <v-card-text>
-          <v-row>
+        <v-card-text class="item-content-wrap">
+          <v-row class="my-4">
             <template v-for="(item, index) in cardInfo">
               <v-col
                 :key="index"
@@ -28,23 +28,28 @@
               >
                 <v-card class="rounded-lg">
                   <v-card-text>
+                    <v-img
+                      class="white--text align-end rounded-lg mb-4"
+                      height="150px"
+                      src="@/assets/img/nft.png"
+                    />
                     <div
-                      class="data-item mt-6"
+                      class="data-item"
                     >
-                      <span class="text-h4">interest:</span>
-                      <span class="text-h4 font-weight-bold">11.5%</span>
+                      <span>interest:</span>
+                      <span class="font-weight-bold">11.5%</span>
                     </div>
                     <div
                       class="data-item"
                     >
-                      <span class="text-h4">Total:</span>
-                      <span class="text-h4 font-weight-bold">32.5</span>
+                      <span>Total:</span>
+                      <span class="font-weight-bold">32.5</span>
                     </div>
                     <v-btn
                       width="100%"
                       height="40"
                       color="primary"
-                      class="mt-6"
+                      class="mt-2"
                       rounded
                     >
                       Borrow
@@ -82,8 +87,14 @@
   }
 </script>
 <style lang="scss" scoped>
+.item-content-wrap {
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
 .data-item {
-  height: 40px;
+  font-size: 14px;
+  height: 20px;
+  line-height: 20px;
   width: 100%;
   display: flex;
   justify-content: space-between;

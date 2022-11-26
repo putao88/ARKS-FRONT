@@ -110,7 +110,7 @@
     data () {
       return {
         active: 'RWA',
-        sortConditions: ['Highest Price', 'Lowest Price', 'Highest Discount Rate', 'Lowest Discount Rate'],
+        sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
         cardInfo: new Array(8),
         showSellModall: false,
       }

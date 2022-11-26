@@ -159,27 +159,27 @@
           </v-btn>
         </v-col>
       </v-row>
-      <buy-modal
-        :show-modal="showBuyModall"
-        @close-sell-modal="closeSellModal"
+      <purchase-modal
+        :show-modal="showPurchaseModall"
+        @close-purchase-modal="closePurchaseModal"
       />
     </v-card>
   </v-container>
 </template>
 
 <script>
-  import BuyModal from './components/BuyModal'
+  import PurchaseModal from './components/PurchaseModal'
 
   export default {
     name: 'LaunchpadDetail',
     components: {
-      BuyModal,
+      PurchaseModal,
     },
     data () {
       return {
         amountItems: [1, 2, 3],
         type: 1,
-        showBuyModall: false,
+        showPurchaseModall: false,
         number: 1,
       }
     },
@@ -188,10 +188,10 @@
         this.$router.push('/myAccount')
       },
       openBuyModal () {
-        this.showBuyModall = true
+        this.showPurchaseModall = true
       },
-      closeSellModal () {
-        this.showBuyModall = false
+      closePurchaseModal () {
+        this.showPurchaseModall = false
       },
       reduce () {
         if (this.number > 1) {

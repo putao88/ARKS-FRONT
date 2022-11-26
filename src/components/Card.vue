@@ -14,25 +14,21 @@
         <span>EXPECTED INCOME</span>
         <span class="d-flex align-center">
           <span class="mr-1">10.25%</span>
-          <v-icon size="16">mdi-alert-circle-outline</v-icon>
+          <tooltips tip-text="xxx" />
         </span>
       </div>
       <div class="d-flex justify-space-between">
         <span>CAPITAL ROI</span>
         <div class="d-flex align-center">
           <span class="mr-1">+13.33%</span>
-          <v-icon size="16">
-            mdi-alert-circle-outline
-          </v-icon>
+          <tooltips tip-text="xxx" />
         </div>
       </div>
       <div class="d-flex justify-space-between font-weight-bold primary--text">
         <span>TOTAL</span>
         <div class="d-flex align-center">
           <span class="mr-1">+23.58%</span>
-          <v-icon size="16">
-            mdi-alert-circle-outline
-          </v-icon>
+          <tooltips tip-text="xxx" />
         </div>
       </div>
     </div>
@@ -43,8 +39,10 @@
 </template>
 
 <script>
+  import Tooltips from '@/components/Tooltips'
   export default {
     name: 'Card',
+    components: { Tooltips },
     data () {
       return {
 

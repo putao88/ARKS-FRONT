@@ -105,10 +105,12 @@
                 <span>$71,634</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
-                <span>Pool APR
-                  <v-icon size="18">
-                    mdi-alert-circle-outline
-                  </v-icon>
+                <span>
+                  Pool APR
+                  <tooltips
+                    tip-text="xxx"
+                    size="18"
+                  />
                 </span>
                 <span>7.63%</span>
               </p>
@@ -159,10 +161,12 @@
                 <span>$71,634</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
-                <span>Pool APR
-                  <v-icon size="18">
-                    mdi-alert-circle-outline
-                  </v-icon>
+                <span>
+                  Pool APR
+                  <tooltips
+                    tip-text="xxx"
+                    size="18"
+                  />
                 </span>
                 <span>7.63%</span>
               </p>
@@ -186,9 +190,11 @@
 </template>
 
 <script>
+  import Tooltips from '@/components/Tooltips'
 
   export default {
     name: 'Launchpad',
+    components: { Tooltips },
     data () {
       return {
       }
