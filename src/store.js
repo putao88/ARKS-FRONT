@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
+    barColor: 'rgba(228, 226, 226, 1), rgba(255, 255, 255, 0.7)',
     // barImage: sidebar1,
     barImage: null,
     drawer: null,

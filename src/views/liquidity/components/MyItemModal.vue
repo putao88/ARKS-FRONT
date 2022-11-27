@@ -8,7 +8,7 @@
       <v-card>
         <v-card-title class="text-left white--text primary pb-4">
           <span class="text-h3">
-            My Position
+            My items
           </span>
           <v-icon
             size="20"
@@ -19,14 +19,56 @@
           </v-icon>
         </v-card-title>
         <v-card-text class="item-content-wrap">
-          <v-row class="my-4">
+          <v-row
+            class="mt-2"
+            justify="space-between"
+          >
+            <v-col
+              cols="12"
+              sm="12"
+              md="6"
+              lg="6"
+              :class="{'text-center': ['xs', 'sm'].includes($vuetify.breakpoint.name)}"
+            >
+              <v-btn
+                rounded
+                class="mr-10"
+                :color="active === 'RWA' ? 'primary':'grey'"
+                @click="filterData('RWA')"
+              >
+                RWA
+              </v-btn>
+              <v-btn
+                rounded
+                :color="active === 'ND' ? 'primary':'grey'"
+                @click="filterData('ND')"
+              >
+                ND
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              md="6"
+              lg="6"
+            >
+              <v-select
+                :items="sortConditions"
+                label="Sort"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
             <template v-for="(item, index) in cardInfo">
               <v-col
                 :key="index"
                 cols="12"
                 lg="4"
               >
-                <v-card class="rounded-lg">
+                <v-card
+                  class="rounded-lg"
+                  @click="deBorrow"
+                >
                   <v-card-text>
                     <v-img
                       class="white--text align-end rounded-lg mb-4"
@@ -45,16 +87,6 @@
                       <span>Total:</span>
                       <span class="font-weight-bold">32.5</span>
                     </div>
-                    <v-btn
-                      width="100%"
-                      height="40"
-                      color="primary"
-                      class="mt-2"
-                      rounded
-                      @click="deBorrow"
-                    >
-                      DeBorrow
-                    </v-btn>
                   </v-card-text>
                 </v-card>
               </v-col>

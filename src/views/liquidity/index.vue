@@ -82,20 +82,19 @@
         >
           <v-btn
             width="100%"
-            max-width="250"
-            height="222"
+            max-width="100%"
+            height="220"
             elevation="2"
             dark
             color="primary"
-            class="rounded-lg"
+            class="rounded-lg overflow-hidden"
             @click="openItemModal"
           >
             <v-img
               v-if="detail.src"
               class="white--text rounded-lg"
               width="100%"
-              height="222"
-              max-width="250"
+              height="220"
               src="@/assets/img/nft.png"
             />
             <v-icon

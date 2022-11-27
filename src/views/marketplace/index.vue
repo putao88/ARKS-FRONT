@@ -63,6 +63,7 @@
           lg="4"
         >
           <v-select
+            v-model="liabilityVal"
             :items="liabilityConditions"
             label="Liability"
           />
@@ -74,6 +75,7 @@
           lg="4"
         >
           <v-select
+            v-model="filterVal"
             :items="filterConditions"
             label="Filter"
           />
@@ -154,7 +156,9 @@
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
         filterConditions: ['RWA', 'ND'],
+        filterVal: 'RWA',
         liabilityConditions: ['Liability', 'No Liabilities'],
+        liabilityVal: 'No Liabilities',
         showItemModal: false,
         cardInfo: new Array(8),
       }
