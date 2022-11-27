@@ -185,7 +185,7 @@
     },
     methods: {
       toAccount () {
-        this.$router.push('/myAccount')
+        this.$router.push('/account')
       },
       openBuyModal () {
         this.showPurchaseModall = true

@@ -201,7 +201,7 @@
     },
     methods: {
       toAccount () {
-        this.$router.push('/myAccount')
+        this.$router.push('/account')
       },
       toDetail () {
         this.$router.push('/launchpad-detail')

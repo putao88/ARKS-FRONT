@@ -37,9 +37,9 @@ export default new Router({
           component: () => import('@/views/launchpad/LaunchpadDetail'),
         },
         {
-          name: 'MyAccount',
-          path: 'myAccount',
-          component: () => import('@/views/myAccount'),
+          name: 'Account',
+          path: 'account',
+          component: () => import('@/views/Account'),
         },
         {
           name: 'Marketplace',

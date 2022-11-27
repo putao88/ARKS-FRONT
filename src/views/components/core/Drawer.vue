@@ -154,8 +154,8 @@
         },
         {
           icon: 'mdi-account',
-          title: 'MyAccount',
-          to: '/myAccount',
+          title: 'Account',
+          to: '/account',
         },
         {
           icon: 'mdi-domain',

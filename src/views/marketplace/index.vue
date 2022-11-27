@@ -61,23 +61,22 @@
           sm="12"
           md="4"
           lg="4"
-          :class="{'text-center': ['xs', 'sm'].includes($vuetify.breakpoint.name)}"
         >
-          <v-btn
-            rounded
-            class="mr-10"
-            :color="active === 'RWA' ? 'primary':'grey'"
-            @click="filterData('RWA')"
-          >
-            RWA
-          </v-btn>
-          <v-btn
-            rounded
-            :color="active === 'ND' ? 'primary':'grey'"
-            @click="filterData('ND')"
-          >
-            ND
-          </v-btn>
+          <v-select
+            :items="liabilityConditions"
+            label="Liability"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          sm="12"
+          md="4"
+          lg="4"
+        >
+          <v-select
+            :items="filterConditions"
+            label="Filter"
+          />
         </v-col>
         <v-col
           cols="12"
@@ -154,6 +153,8 @@
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
+        filterConditions: ['RWA', 'ND'],
+        liabilityConditions: ['Liability', 'No Liabilities'],
         showItemModal: false,
         cardInfo: new Array(8),
       }

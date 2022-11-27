@@ -1,6 +1,6 @@
 <template>
   <v-container
-    id="MyAccount"
+    id="Account"
     fluid
     tag="section"
   >
@@ -10,20 +10,30 @@
         centered
         light
         icons-and-text
+        show-arrows
       >
-        <v-tabs-slider />
+        <v-row
+          justify="center"
+        >
+          <!-- <v-col
+            cols="12"
+            sm="12"
+            md="12"
+            lg="12"
+          > -->
+          <v-tab href="#tab-1">
+            Assets
+          </v-tab>
 
-        <v-tab href="#tab-1">
-          Assets
-        </v-tab>
+          <v-tab href="#tab-2">
+            Referrals
+          </v-tab>
 
-        <v-tab href="#tab-2">
-          Referrals
-        </v-tab>
-
-        <v-tab href="#tab-3">
-          Liquidity
-        </v-tab>
+          <v-tab href="#tab-3">
+            Liquidity
+          </v-tab>
+          <!-- </v-col> -->
+        </v-row>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
@@ -336,8 +346,6 @@
             light
             icons-and-text
           >
-            <v-tabs-slider />
-
             <v-tab href="#deposite">
               Deposite
             </v-tab>
@@ -448,7 +456,7 @@
 
 <script>
   export default {
-    name: 'MyAccount',
+    name: 'Account',
     data () {
       return {
         tab: null,

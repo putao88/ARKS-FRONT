@@ -82,16 +82,26 @@
         >
           <v-btn
             width="100%"
-            height="100%"
             max-width="250"
-            min-height="150"
+            height="222"
             elevation="2"
             dark
             color="primary"
             class="rounded-lg"
             @click="openItemModal"
           >
-            <v-icon large>
+            <v-img
+              v-if="detail.src"
+              class="white--text rounded-lg"
+              width="100%"
+              height="222"
+              max-width="250"
+              src="@/assets/img/nft.png"
+            />
+            <v-icon
+              v-else
+              large
+            >
               mdi-plus
             </v-icon>
           </v-btn>
@@ -114,13 +124,13 @@
             class="data-item"
           >
             <span class="text-h4">interest</span>
-            <span class="text-h4 font-weight-bold">11.5%</span>
+            <span class="text-h4 font-weight-bold">{{ detail.interest }}</span>
           </div>
           <div
             class="data-item"
           >
             <span class="text-h4">Borrow USDT</span>
-            <span class="text-h4 font-weight-bold">32.5</span>
+            <span class="text-h4 font-weight-bold">{{ detail.usdt }}</span>
           </div>
           <v-btn
             rounded
@@ -139,6 +149,7 @@
       />
       <my-item-modal
         :show-modal="showItemModal"
+        @de-borrow="deBorrow"
         @close-item-modal="closeItemModal"
       />
     </v-card>
@@ -146,7 +157,7 @@
 </template>
 <script>
   import MyPositionModal from './components/MyPositionModal'
-  import MyItemModal from '@/components/MyItemModal'
+  import MyItemModal from './components/MyItemModal'
 
   export default {
     name: 'Liquidity',
@@ -158,6 +169,11 @@
       return {
         showPositionModal: false,
         showItemModal: false,
+        detail: {
+          src: '',
+          usdt: '0.0',
+          interest: '0.0%',
+        },
       }
     },
     methods: {
@@ -171,6 +187,11 @@
         this.showItemModal = true
       },
       closeItemModal () {
+        this.showItemModal = false
+      },
+      deBorrow (param) {
+        // const { src, usdt, interest } = param
+        Object.assign(this.detail, param)
         this.showItemModal = false
       },
     },
