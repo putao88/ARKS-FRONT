@@ -156,10 +156,9 @@ export default {
   computed: {
     ...mapState(['drawer', 'connected', 'address']),
   },
-  mounted:function(){
+  mounted: function () {
     const unwatch = watchAccount(account => {
-      if(account.isConnected){
-        console.log(account)
+      if (account.isConnected) {
         this.setConnected(true)
         this.setAddress(account.address)
       }
@@ -188,8 +187,8 @@ export default {
     closeClaimModal() {
       this.showClaimModal = false
     },
-    async openWeb3Modal() {
-      await web3Modal.openModal()
+    openWeb3Modal() {
+      web3Modal.openModal()
     },
   },
 }
