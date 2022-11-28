@@ -2,8 +2,8 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
   },
-
-  transpileDependencies: ['vuetify'],
+  lintOnSave: false,
+  transpileDependencies: ['vuetify', '@wagmi/core', '@web3modal', '@web3modal','ethers'],
 
   pluginOptions: {
     i18n: {
@@ -13,4 +13,5 @@ module.exports = {
       enableInSFC: false,
     },
   },
+
 }

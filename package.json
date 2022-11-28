@@ -13,7 +13,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@wagmi/core": "^0.7.5",
+    "@web3modal/ethereum": "^2.0.0-beta.7",
+    "@web3modal/html": "^2.0.0-beta.7",
     "core-js": "^3.6.2",
+    "ethers": "^5.7.2",
     "vue": "^2.6.11",
     "vue-i18n": "^8.15.3",
     "vue-router": "^3.1.3",
