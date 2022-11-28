@@ -102,7 +102,7 @@
           >
             <div
               v-if="index === 0"
-              class="add-btn-wrap elevation-10"
+              class="add-btn-wrap elevation-10 rounded-lg"
             >
               <v-btn
                 width="100%"

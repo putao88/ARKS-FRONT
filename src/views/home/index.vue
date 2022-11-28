@@ -45,6 +45,37 @@
             sub-icon="mdi-clock"
             sub-text="Just Updated"
           />
+          <!-- <div class="elevation-4 rounded-lg pa-4 p-relative">
+            <div>
+              <div
+                class="primary rounded d-flex align-center justify-center elevation-4 p-absolute icon-wrap"
+              >
+                <v-icon
+                  color="white"
+                  class="fs-30"
+                >
+                  mdi-twitter
+                </v-icon>
+              </div>
+              <div class="bt-1 mb-3 text-right">
+                <p class="grey--text text-subtitle-1 mb-1">
+                  Assets Amount
+                </p>
+                <p class="text-h3 font-weight-light text--primary">
+                  31
+                </p>
+              </div>
+            </div>
+            <div>
+              <v-icon
+                color="grey--text"
+                class="mr-1"
+              >
+                mdi-clock
+              </v-icon>
+              <span class="grey--text text-body-2">Just Updated</span>
+            </div>
+          </div> -->
         </v-col>
 
         <v-col
@@ -55,10 +86,10 @@
           <base-material-stats-card
             color="primary"
             icon="mdi-poll"
-            title="Assets Value(USD)"
-            value="$2,135,397"
+            title="Assets(USD)"
+            value="$2,135,37"
             sub-icon="mdi-tag"
-            sub-text="Tracked from Google Analytics"
+            sub-text="Tracked from Google"
           />
         </v-col>
 
@@ -169,5 +200,23 @@
   height: 100%;
   display: flex;
   align-items: center;
+}
+.icon-wrap {
+  width: 70px;
+  height: 70px;
+}
+.p-relative {
+  position: relative;
+}
+.p-absolute {
+  position: absolute;
+  left: 10px;
+  top: -20px;
+}
+.fs-30 {
+  font-size: 30px;
+}
+.bt-1 {
+  border-bottom: 1px solid #eee;
 }
 </style>
