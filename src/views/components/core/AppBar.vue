@@ -112,8 +112,8 @@ import { Web3Modal } from '@web3modal/html'
 
 
 // 1. Define constants
-const projectId = '8e6b5ffdcbc9794bf9f4a1952578365b'
-const chains = [chain.mainnet]
+const projectId = 'ef558420ed3676cd88ef972a3b072453'
+const chains = [chain.polygon]
 
 // 2. Configure wagmi client
 const { provider } = configureChains(chains, [walletConnectProvider({ projectId })])
