@@ -1,25 +1,9 @@
 <template>
-  <v-app-bar
-    id="app-bar"
-    fixed
-    app
-    flat
-    height="75"
-  >
-    <v-btn
-      class="mr-3"
-      elevation="1"
-      fab
-      small
-      @click="setDrawer(!drawer)"
-    >
-      <v-icon v-if="value">
-        mdi-view-quilt
-      </v-icon>
+  <v-app-bar id="app-bar" fixed app flat height="75">
+    <v-btn class="mr-3" elevation="1" fab small @click="setDrawer(!drawer)">
+      <v-icon v-if="value"> mdi-view-quilt </v-icon>
 
-      <v-icon v-else>
-        mdi-menu
-      </v-icon>
+      <v-icon v-else> mdi-menu </v-icon>
     </v-btn>
 
     <v-btn
@@ -30,9 +14,7 @@
       class="hidden-sm-and-down font-weight-light"
       @click="goBack"
     >
-      <v-icon>
-        mdi-arrow-left-bold
-      </v-icon>
+      <v-icon> mdi-arrow-left-bold </v-icon>
     </v-btn>
     <v-toolbar-title
       v-else
@@ -52,9 +34,7 @@
       color="primary"
       @click="openClaimModal"
     >
-      <v-icon large>
-        mdi-bitcoin
-      </v-icon>
+      <v-icon large> mdi-bitcoin </v-icon>
       <span class="primary--text font-weight-bold">Claim</span>
     </v-btn>
 
@@ -65,16 +45,12 @@
       text
       rounded
       color="primary"
-      @click="setConnected(!connected)"
+      @click="onConnect"
     >
       <div class="wallet-icon-wrap">
-        <v-icon size="20">
-          mdi-wallet
-        </v-icon>
+        <v-icon size="20"> mdi-wallet </v-icon>
       </div>
-      <div class="primary--text font-weight-bold address-div">
-        Connect
-      </div>
+      <div class="primary--text font-weight-bold address-div">Connect</div>
     </v-btn>
 
     <v-menu
@@ -95,22 +71,15 @@
           v-on="on"
         >
           <div class="wallet-icon-wrap">
-            <v-icon size="20">
-              mdi-wallet
-            </v-icon>
+            <v-icon size="20"> mdi-wallet </v-icon>
           </div>
-          <div
-            class="primary--text font-weight-bold overflow-text address-div"
-          >
+          <div class="primary--text font-weight-bold overflow-text address-div">
             {{ address }}
           </div>
         </v-btn>
       </template>
 
-      <v-list
-        :tile="false"
-        nav
-      >
+      <v-list :tile="false" nav>
         <v-list-item
           v-for="(item, i) in subMenus"
           :key="i"
@@ -133,62 +102,93 @@
 </template>
 
 <script>
-  // Utilities
-  import { mapState, mapMutations } from 'vuex'
-  import ClaimModal from '@/components/ClaimModal'
+// Utilities
+import { mapState, mapMutations } from 'vuex'
+import ClaimModal from '@/components/ClaimModal'
 
-  export default {
-    name: 'DashboardCoreAppBar',
-    components: {
-      ClaimModal,
+import { chain, configureChains, createClient } from '@wagmi/core'
+import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/html'
+
+// 1. Define constants
+const projectId = '8e6b5ffdcbc9794bf9f4a1952578365b'
+const chains = [chain.mainnet]
+
+// 2. Configure wagmi client
+const { provider } = configureChains(chains, [walletConnectProvider({ projectId })])
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors: modalConnectors({ appName: 'web3Modal', chains }),
+  provider
+})
+
+// 3. Create ethereum and modal clients
+const ethereumClient = new EthereumClient(wagmiClient, chains)
+export const web3Modal = new Web3Modal({ projectId }, ethereumClient)
+
+export default {
+  name: 'DashboardCoreAppBar',
+  components: {
+    ClaimModal,
+  },
+  props: {
+    value: {
+      type: Boolean,
+      default: false,
     },
-    props: {
-      value: {
-        type: Boolean,
-        default: false,
+  },
+
+  data: () => ({
+    subMenus: [
+      {
+        icon: 'mdi-store',
+        text: 'Deposite',
       },
-    },
+      {
+        icon: 'mdi-logout',
+        text: 'Disconnect',
+      },
+    ],
+    showClaimModal: false,
+  }),
 
-    data: () => ({
-      subMenus: [
-        {
-          icon: 'mdi-store',
-          text: 'Deposite',
-        },
-        {
-          icon: 'mdi-logout',
-          text: 'Disconnect',
-        },
-      ],
-      showClaimModal: false,
+  computed: {
+    ...mapState(['drawer', 'connected', 'address']),
+  },
+  methods: {
+    ...mapMutations({
+      setDrawer: 'SET_DRAWER',
+      setConnected: 'SET_CONNECTED',
+      setAddress: 'SET_ADDRESS',
     }),
+    goBack() {
+      this.$router.go(-1)
+    },
+    menuHandle(method) {
+      if (method === 'Disconnect') {
+        this.setConnected(false)
+      } else {
+        this.$router.push('/launchpad')
+      }
+    },
+    openClaimModal() {
+      this.showClaimModal = true
+    },
+    closeClaimModal() {
+      this.showClaimModal = false
+    },
+    async onConnect() {
+      await web3Modal.openModal()
+      const signer = await provider.getSigner()
+      const address = await signer.getAddress()
+      this.setConnected(true)
+      this.setAddress(address)
+    },
+  },
+}
 
-    computed: {
-      ...mapState(['drawer', 'connected', 'address']),
-    },
-    methods: {
-      ...mapMutations({
-        setDrawer: 'SET_DRAWER',
-        setConnected: 'SET_CONNECTED',
-      }),
-      goBack () {
-        this.$router.go(-1)
-      },
-      menuHandle (method) {
-        if (method === 'Disconnect') {
-          this.setConnected(false)
-        } else {
-          this.$router.push('/launchpad')
-        }
-      },
-      openClaimModal () {
-        this.showClaimModal = true
-      },
-      closeClaimModal () {
-        this.showClaimModal = false
-      },
-    },
-  }
+
+
 </script>
 <style lang="scss" scoped>
 .address-div {
