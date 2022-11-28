@@ -45,7 +45,7 @@
       text
       rounded
       color="primary"
-      @click="onConnect"
+      @click="openWeb3Modal"
     >
       <div class="wallet-icon-wrap">
         <v-icon size="20"> mdi-wallet </v-icon>
@@ -106,9 +106,10 @@
 import { mapState, mapMutations } from 'vuex'
 import ClaimModal from '@/components/ClaimModal'
 
-import { chain, configureChains, createClient } from '@wagmi/core'
+import { chain, configureChains, createClient, getAccount, disconnect, connect, watchAccount } from '@wagmi/core'
 import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/html'
+
 
 // 1. Define constants
 const projectId = '8e6b5ffdcbc9794bf9f4a1952578365b'
@@ -155,6 +156,15 @@ export default {
   computed: {
     ...mapState(['drawer', 'connected', 'address']),
   },
+  mounted:function(){
+    const unwatch = watchAccount(account => {
+      if(account.isConnected){
+        console.log(account)
+        this.setConnected(true)
+        this.setAddress(account.address)
+      }
+    })
+  },
   methods: {
     ...mapMutations({
       setDrawer: 'SET_DRAWER',
@@ -166,6 +176,7 @@ export default {
     },
     menuHandle(method) {
       if (method === 'Disconnect') {
+        disconnect()
         this.setConnected(false)
       } else {
         this.$router.push('/launchpad')
@@ -177,12 +188,8 @@ export default {
     closeClaimModal() {
       this.showClaimModal = false
     },
-    async onConnect() {
+    async openWeb3Modal() {
       await web3Modal.openModal()
-      const signer = await provider.getSigner()
-      const address = await signer.getAddress()
-      this.setConnected(true)
-      this.setAddress(address)
     },
   },
 }
