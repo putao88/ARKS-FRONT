@@ -13,7 +13,6 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@react-native-community/cli-plugin-metro": "https://registry-npm-next.huolala.work/@react-native-community/cli-plugin-metro/-/cli-plugin-metro-9.2.1.tgz",
     "@wagmi/core": "^0.7.5",
     "@web3modal/ethereum": "^2.0.0-beta.7",
     "@web3modal/html": "^2.0.0-beta.7",
