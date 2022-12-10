@@ -5,7 +5,7 @@
     tag="section"
   >
     <p class="text-h3 font-weight-bold">
-      8003 S Ingleside Ave, Chicago, IL 60619
+      {{ cardDetail.address }}
       <v-btn
         to="/launchpad-detail"
         rounded
@@ -23,7 +23,7 @@
       >
         <v-img
           height="300px"
-          src="@/assets/img/nft.png"
+          :src="cardDetail.coverImg"
         />
       </v-col>
       <v-col
@@ -33,29 +33,15 @@
         class="d-flex flex-wrap justify-space-between align-content-space-around
 "
       >
-        <v-img
-          class="mr-2 mb-1"
-          width="48%"
-          height="140px"
-          src="@/assets/img/nft.png"
-        />
-        <v-img
-          class="mb-1"
-          width="48%"
-          height="140px"
-          src="@/assets/img/nft.png"
-        />
-        <v-img
-          class="mr-2"
-          width="48%"
-          height="140px"
-          src="@/assets/img/nft.png"
-        />
-        <v-img
-          width="48%"
-          height="140px"
-          src="@/assets/img/nft.png"
-        />
+        <template v-for="(img,imgIndex) in cardDetail.introduceImg">
+          <v-img
+            :key="imgIndex"
+            class="mr-2 mb-1"
+            width="48%"
+            height="140px"
+            :src="img"
+          />
+        </template>
       </v-col>
       <v-col
         cols="12"
@@ -63,7 +49,7 @@
         lg="12"
         class="text-h4 font-weight-bold"
       >
-        TOTAL INVESTMENT: $ 1,012,800.00
+        TOTAL INVESTMENT: {{ cardDetail.totalInvestment }}
       </v-col>
       <v-col
         cols="12"
@@ -74,7 +60,7 @@
           Property Description
         </p>
         <p class="text-body-2">
-          Using display utilities you can turn any element into a flexbox container transforming direct children elements into flex items. Using additional flex property utilities, you can customize their interaction even further.
+          {{ cardDetail.description }}
         </p>
       </v-col>
       <v-col
@@ -87,46 +73,46 @@
         </p>
         <div class="text-body-2">
           <p class="mb-2">
-            <span>- Address: </span><span>xx Road, Jingan District, Shanghai</span>
+            <span>- Address: </span><span>{{ cardDetail.address }}</span>
           </p>
           <p class="mb-2">
-            <span>- Total Investment: </span><span>$600,000</span>
+            <span>- Total Investment: </span><span>{{ cardDetail.totalInvestment }}</span>
           </p>
           <p class="mb-2">
-            <span>- Offering Percent (of Total Tokens): </span><span>100%</span>
+            <span>- Offering Percent (of Total Tokens): </span><span>{{ cardDetail.offeringPercent }}</span>
           </p>
           <p class="mb-2">
-            <span>- Type: </span><span>商铺</span>
+            <span>- Type: </span><span>{{ cardDetail.type }}</span>
           </p>
           <p class="mb-2">
-            <span>- 投资方式: </span><span>股权收购/资产收购/Distressed收购</span>
+            <span>- Type of Investment: </span><span>{{ cardDetail.typeOfInvestment }}</span>
           </p>
           <p class="mb-2">
-            <span>- 历史平均升值: </span><span>每年不少于2-4%</span>
+            <span>- Average Annual Appreciation of Real Estate(Historical ): </span><span>{{ cardDetail.totalInvestment }}</span>
           </p>
           <p class="mb-2">
-            <span>- 历史平均租金回报: </span><span>每年不少于4-7%</span>
+            <span>- Average Annual Rental Return(Historical ): </span><span>{{ cardDetail.totalInvestmentRate }}</span>
           </p>
           <p class="mb-2">
-            <span>- Construction Year: </span><span>2001</span>
+            <span>- Construction Year: </span><span>{{ cardDetail.constructionYear }}</span>
           </p>
           <p class="mb-2">
-            <span>- Rooms: </span><span>×1</span>
+            <span>- Rooms: </span><span>{{ cardDetail.bedrooms+cardDetail.bathrooms }}</span>
           </p>
           <p class="mb-2">
-            <span>- Size(sqft): </span><span>100</span>
+            <span>- Size(sqft): </span><span>{{ cardDetail.sizeUnits }}</span>
           </p>
           <p class="mb-2">
-            <span>- Garage: </span><span>1</span>
+            <span>- Garage: </span><span>{{ cardDetail.garage }}</span>
           </p>
           <p class="mb-2">
-            <span>- 空调和暖气: </span><span>中央空调+地暖×1</span>
+            <span>- Air Conditioner / Heater: </span><span>{{ cardDetail.heater }}</span>
           </p>
           <p class="mb-2">
-            <span>- Rented: </span><span>Fully rented</span>
+            <span>- Rented: </span><span>{{ cardDetail.rented }}</span>
           </p>
           <p class="mb-2">
-            <span>- 翻修: </span><span>不需要</span>
+            <span>- Renovation: </span><span>{{ cardDetail.renovation }}</span>
           </p>
         </div>
       </v-col>
@@ -156,8 +142,8 @@
             >
               <div class="card-wrap">
                 <card
-                  :key="index"
-                  @to-detail="toDetail"
+                  :card-detail="n"
+                  @to-detail="toDetail(n.id)"
                 />
               </div>
             </v-col>
@@ -170,6 +156,7 @@
 
 <script>
   import Card from '@/components/Card.vue'
+  import { houseInfo } from '@/data/index'
   export default {
     name: 'Detail',
     components: {
@@ -178,14 +165,20 @@
     data () {
       return {
         curCard: 0,
-        allCardsData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        allCardsData: houseInfo,
         carouselItems: [],
+        cardDetail: {},
       }
     },
     mounted () {
       this.init()
+      this.getDetail()
     },
     methods: {
+      getDetail () {
+        const id = this.$route.query.id
+        this.cardDetail = houseInfo.filter(item => item.id === id)[0]
+      },
       init () {
         var screenModel = this.$vuetify.breakpoint.name
         if (['lg', 'xl'].includes(screenModel)) {
@@ -205,8 +198,8 @@
         }
         return carouseArray
       },
-      toDetail () {
-        this.$router.push('/propeties-detail')
+      toDetail (id) {
+        this.cardDetail = houseInfo.filter(item => item.id === id)[0]
       },
 
     },

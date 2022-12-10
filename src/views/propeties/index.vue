@@ -27,7 +27,10 @@
               cols="12"
               lg="3"
             >
-              <card @to-detail="toDetail" />
+              <card
+                :card-detail="n"
+                @to-detail="toDetail(item.id)"
+              />
             </v-col>
           </template>
         </v-row>
@@ -38,6 +41,7 @@
 
 <script>
   import Card from '../../components/Card.vue'
+  import { houseInfo } from '@/data/index'
   export default {
     name: 'Propeties',
     components: {
@@ -45,12 +49,12 @@
     },
     data () {
       return {
-        cardInfo: new Array(8),
+        cardInfo: houseInfo,
       }
     },
     methods: {
-      toDetail () {
-        this.$router.push('/propeties-detail')
+      toDetail (id) {
+        this.$router.push(`/propeties-detail?id=${id}`)
       },
     },
   }

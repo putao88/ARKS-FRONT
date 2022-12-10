@@ -133,8 +133,8 @@
               >
                 <div class="card-wrap">
                   <card
-                    :key="index"
-                    @to-detail="toDetail"
+                    :card-detail="n"
+                    @to-detail="toDetail(n.id)"
                   />
                 </div>
               </v-col>
@@ -149,6 +149,7 @@
 
 <script>
   import Card from '@/components/Card.vue'
+  import { houseInfo } from '@/data/index'
   export default {
     name: 'Home',
     components: {
@@ -157,7 +158,7 @@
     data () {
       return {
         curCard: 0,
-        allCardsData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        allCardsData: houseInfo,
         carouselItems: [],
       }
     },
@@ -185,8 +186,8 @@
         }
         return carouseArray
       },
-      toDetail () {
-        this.$router.push('/propeties-detail')
+      toDetail (id) {
+        this.$router.push(`/propeties-detail?id=${id}`)
       },
     },
   }
