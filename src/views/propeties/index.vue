@@ -28,7 +28,7 @@
               lg="3"
             >
               <card
-                :card-detail="n"
+                :card-detail="item"
                 @to-detail="toDetail(item.id)"
               />
             </v-col>
