@@ -38,7 +38,7 @@
             </div>
             <div class="select-wrap">
               <v-select
-                v-model="type"
+                v-model="amount"
                 :items="amountItems"
                 label="Type"
                 color="white"
@@ -177,8 +177,8 @@
     },
     data () {
       return {
-        amountItems: [1, 2, 3],
-        type: 1,
+        amountItems: [50, 100, 500, 1000, 5000, 10000, 100000],
+        amount: 50,
         showPurchaseModall: false,
         number: 1,
       }
