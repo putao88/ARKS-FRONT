@@ -82,7 +82,7 @@
       >
         <a
           style="text-decoration: none"
-          href="https://www.baidu.com/"
+          href="https://twitter.com/"
           target="_blank"
         >
           <v-icon>mdi-twitter</v-icon>
@@ -90,7 +90,7 @@
 
         <a
           style="text-decoration: none"
-          href="https://www.baidu.com/"
+          href="https://discord.com/"
           target="_blank"
         >
           <v-img
@@ -100,14 +100,14 @@
 
         <a
           style="text-decoration: none"
-          href="https://www.baidu.com/"
+          href="https://github.com/"
           target="_blank"
         >
           <v-icon>mdi-github</v-icon>
         </a>
         <a
           style="text-decoration: none"
-          href="https://www.baidu.com/"
+          href="https://polygon.technology/"
           target="_blank"
         >
           <v-img
