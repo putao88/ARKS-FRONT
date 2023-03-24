@@ -144,8 +144,8 @@
         },
         {
           icon: 'mdi-store',
-          title: 'Propeties',
-          to: '/propeties',
+          title: 'Pool',
+          to: '/pool',
         },
         {
           icon: 'mdi-dialpad',

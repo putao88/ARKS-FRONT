@@ -17,6 +17,11 @@ export default new Router({
           component: () => import('@/views/home'),
         },
         {
+          name: 'Pool',
+          path: 'pool',
+          component: () => import('@/views/pool'),
+        },
+        {
           name: 'Propeties',
           path: 'propeties',
           component: () => import('@/views/propeties'),
