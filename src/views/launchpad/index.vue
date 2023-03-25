@@ -25,7 +25,8 @@
           class="text-center"
         >
           <p class="text-h2 mb-1">
-            $9,346
+            <!-- $9,346 -->
+            ${{ myAssetsValue }}
           </p>
           <p class="text-h4 grey--text">
             My Assets Value
@@ -40,7 +41,7 @@
           :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
         >
           <p class="text-h2 mb-1">
-            16
+            {{ myAssetsAmount }}
           </p>
           <p class="text-h4 grey--text">
             My Assets Amount
@@ -54,7 +55,8 @@
           class="text-center"
         >
           <p class="text-h2 mb-1">
-            $187
+            <!-- $187 -->
+            ${{ myClaimedValue }}
           </p>
           <p class="text-h4 grey--text">
             My Claimed Value
@@ -102,7 +104,7 @@
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>${{ poolTotalSoldValue }}</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -157,7 +159,7 @@
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>${{ raTotalSoldValue }}</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -213,7 +215,7 @@
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>${{ ndTotalSoldValue }}</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -246,10 +248,10 @@
 <script>
   import Web3 from 'web3'
 
-  import ARKSMain from '../../abi/ARKSMain.json'
-  import ARKSTestUSDT from '../../abi/ARKSTestUSDT.json'
-  import { mainAddress, testUSDTAddress } from '../../abi/contractdata'
-
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
+  import { getPriceValue } from '@/utils/tools'
   import Tooltips from '@/components/Tooltips'
 
   export default {
@@ -260,6 +262,12 @@
         mainContract: null,
         testContract: null,
         fromAddress: '',
+        myAssetsValue: 0,
+        myAssetsAmount: 0,
+        myClaimedValue: 0,
+        poolTotalSoldValue: 0,
+        raTotalSoldValue: 0,
+        ndTotalSoldValue: 0,
       }
     },
     async mounted () {
@@ -287,7 +295,10 @@
       },
       getLaunch () {
         this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
-          console.log(res, '1')
+          console.log(res, 'getLaunch')
+          this.myAssetsValue = getPriceValue(res[0])
+          this.myAssetsAmount = res[1]
+          this.myClaimedValue = getPriceValue(res[2])
         })
         this.mainContract.methods.getAddressInfoMain(0).call().then(res => {
           console.log(res, '2')
