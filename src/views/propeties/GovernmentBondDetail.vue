@@ -169,7 +169,7 @@
       </div>
       <div class="text-h4 font-weight-medium d-flex justify-space-between width-half">
         <div class="mr-2">
-          coming soon
+          Coming soon
         </div>
         <div>
           <v-btn
@@ -178,7 +178,7 @@
             small
             color="primary"
             class="mr-2"
-            @click="copy('coming soon')"
+            @click="copy('Coming soon')"
           >
             <v-icon size="14">
               mdi-content-copy
@@ -279,6 +279,7 @@
   import Card from '@/components/Card.vue'
   import Tooltips from '@/components/Tooltips'
   import { houseInfo } from '@/data/index'
+  import { copy } from '@/utils/common'
   export default {
     name: 'Detail',
     components: {
@@ -298,6 +299,7 @@
       this.getDetail()
     },
     methods: {
+      copy: copy,
       getDetail () {
         const id = this.$route.query.id
         this.cardDetail = houseInfo.filter(item => item.id === id)[0]
@@ -325,16 +327,6 @@
         } else {
           this.$router.push(`/propeties-detail?id=${id}`)
         }
-      },
-      copy (str) {
-        const input = document.createElement('input')
-        document.body.appendChild(input)
-        input.setAttribute('value', str)
-        input.select()
-        if (document.execCommand('copy')) {
-          document.execCommand('copy')
-        }
-        document.body.removeChild(input)
       },
     },
   }

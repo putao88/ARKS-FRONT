@@ -208,6 +208,7 @@
                 width="100px"
                 color="primary"
                 rounded
+                @click="copy(referralsValue)"
               >
                 COPY
               </v-btn>
@@ -450,11 +451,11 @@
 <script>
   import Web3 from 'web3'
 
-  import ARKSMain from '../../abi/ARKSMain.json'
-  import ARKSNFT from '../../abi/ARKSNFT.json'
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSNFT from '@/abi/ARKSNFT.json'
   import { mainAddress, nftAddress } from '../../abi/contractdata'
-  import { getPriceValue } from '../../utils/tools'
-
+  import { getPriceValue } from '@/utils/tools'
+  import { copy } from '@/utils/common'
   export default {
     name: 'Account',
     data () {
@@ -527,6 +528,7 @@
     },
     methods: {
       getPriceValue: getPriceValue,
+      copy: copy,
       init () {
         this.hint = `Balance: ${97}`
         this.openTab()
