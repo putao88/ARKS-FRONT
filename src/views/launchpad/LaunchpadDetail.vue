@@ -177,7 +177,15 @@
     },
     data () {
       return {
-        amountItems: [50, 100, 500, 1000, 5000, 10000, 100000],
+        amountItems: [
+          { text: 50, value: 0 },
+          { text: 100, value: 1 },
+          { text: 500, value: 2 },
+          { text: 1000, value: 3 },
+          { text: 5000, value: 4 },
+          { text: 10000, value: 5 },
+          { text: 100000, value: 6 },
+        ],
         amount: 50,
         showPurchaseModall: false,
         number: 1,

@@ -1,9 +1,8 @@
 export const houseInfo = [
 {
   id: '0',
-  address: 'This share class provides liquid exposure to an ETF of short-term U.S. Treasuries.',
-  appreciation: '6%',
-  rentalReturn: '5%',
+  address: 'U.S. Treasuries',
+  estimated: '4.94%',
   coverImg: require('@/assets/house/0/cover.png'),
   introduceImg: [require('@/assets/house/0/1.jpg')],
 },

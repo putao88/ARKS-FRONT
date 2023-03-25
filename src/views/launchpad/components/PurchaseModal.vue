@@ -24,6 +24,11 @@
             :items="planLengthItems"
             label="Length of Plan"
           />
+          <v-select
+            v-model="downPayment"
+            :items="downPaymentItems"
+            label="Down Payment"
+          />
           <v-card class="pa-4">
             <div class="d-flex justify-space-between align-center mb-2">
               <span class="text-h3">Transaction Details</span>
@@ -168,6 +173,8 @@
           { text: '5 month', value: 5 },
           { text: '8 month', value: 8 },
         ],
+        downPayment: '',
+        downPaymentItems: [],
       }
     },
     mounted () {

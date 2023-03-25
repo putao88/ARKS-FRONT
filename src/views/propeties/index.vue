@@ -42,6 +42,7 @@
 <script>
   import Card from '../../components/Card.vue'
   import { houseInfo } from '@/data/index'
+  const newData = houseInfo.filter(item => item.id !== '0')
   export default {
     name: 'Propeties',
     components: {
@@ -49,7 +50,7 @@
     },
     data () {
       return {
-        cardInfo: houseInfo,
+        cardInfo: newData,
       }
     },
     methods: {

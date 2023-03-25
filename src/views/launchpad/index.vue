@@ -90,7 +90,7 @@
                 size="80"
                 class="rounded"
               >
-                <v-img src="@/assets/img/rwa.png" />
+                <v-img src="@/assets/img/nd.png" />
               </v-list-item-avatar>
             </v-list-item>
             <v-list-item-content>
@@ -108,7 +108,7 @@
                 <span>
                   Pool APR
                   <tooltips
-                    tip-text="xxx"
+                    tip-text="Variable APY based on today's RWA Income"
                     size="18"
                   />
                 </span>
@@ -121,7 +121,6 @@
                 class="primary mx-auto"
                 width="100%"
                 rounded
-                @click="toDetail"
               >
                 Coming soon
               </v-btn>
@@ -164,7 +163,7 @@
                 <span>
                   Pool APR
                   <tooltips
-                    tip-text="xxx"
+                    tip-text="Variable APY based on today's RWA Income"
                     size="18"
                   />
                 </span>
@@ -177,7 +176,7 @@
                 class="primary mx-auto"
                 width="100%"
                 rounded
-                @click="toDetail"
+                @click="toBuy"
               >
                 Buy
               </v-btn>
@@ -220,7 +219,7 @@
                 <span>
                   Pool APR
                   <tooltips
-                    tip-text="xxx"
+                    tip-text="Variable APY based on today's RWA Income"
                     size="18"
                   />
                 </span>
@@ -233,7 +232,6 @@
                 rounded
                 class="primary mx-auto"
                 width="100%"
-                @click="toDetail"
               >
                 Coming Soon
               </v-btn>
@@ -259,7 +257,7 @@
       toAccount () {
         this.$router.push('/account')
       },
-      toDetail () {
+      toBuy () {
         this.$router.push('/launchpad-detail')
       },
     },

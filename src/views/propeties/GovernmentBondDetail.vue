@@ -40,31 +40,28 @@
           />
         </v-col>
       </template>
-      <v-col
-        cols="12"
-        sm="12"
-        lg="12"
-      >
-        <p class="text-h4 font-weight-medium mb-2">
-          Investing in a US Treasury bills ETF is an ultra-low risk investment option that offers exposure to the beta of the financial market. With stable and predictable returns and exceptional liquidity, it is the ideal choice for investors seeking safety, stability, and liquidity.
-        </p>
-        <p class="text-h4 font-weight-medium mb-2">
-          Compared to typical DeFi products, this investment option offers a real yield with high certainty and transparency, making it more suitable for long-term investors looking for stable and robust investment opportunities.
-        </p>
-        <p class="text-h4 font-weight-medium mb-2">
-          The significant majority of this portfolio will be in the iShares Short Treasury Bond ETF (NASDAQ: SHV). There is also a small portion of USDT and USD for liquidity purposes.
-        </p>
-        <p class="text-h4 font-weight-medium mb-2">
-          Distributions are automatically reinvested in the underlying assets to compound your revenue.
-        </p>
-        <p class="text-h4 font-weight-medium mb-2">
-          Fund management fees: 0.15% per year.
-        </p>
-        <p class="text-h4 font-weight-medium mb-2">
-          ETF management fees: 0.15% per year.
-        </p>
-      </v-col>
     </v-row>
+    <div class="text-h2 font-weight-bold mt-4 mb-2">
+      This pool provides liquid exposure to an ETF of short-term U.S. Treasuries.
+    </div>
+    <p class="text-h4 font-weight-medium mb-2">
+      Investing in a US Treasury bills ETF is an ultra-low risk investment option that offers exposure to the beta of the financial market. With stable and predictable returns and exceptional liquidity, it is the ideal choice for investors seeking safety, stability, and liquidity.
+    </p>
+    <p class="text-h4 font-weight-medium mb-2">
+      Compared to typical DeFi products, this investment option offers a real yield with high certainty and transparency, making it more suitable for long-term investors looking for stable and robust investment opportunities.
+    </p>
+    <p class="text-h4 font-weight-medium mb-2">
+      The significant majority of this portfolio will be in the iShares Short Treasury Bond ETF (NASDAQ: SHV). There is also a small portion of USDT and USD for liquidity purposes.
+    </p>
+    <p class="text-h4 font-weight-medium mb-2">
+      Distributions are automatically reinvested in the underlying assets to compound your revenue.
+    </p>
+    <p class="text-h4 font-weight-medium mb-2">
+      Fund management fees: 0.15% per year.
+    </p>
+    <p class="text-h4 font-weight-medium mb-2">
+      ETF management fees: 0.15% per year.
+    </p>
     <div class="text-h2 font-weight-bold mt-4 mb-2">
       ETF Details
     </div>
@@ -168,11 +165,11 @@
     </div>
     <div class="d-flex justify-start py-3 border-bottom">
       <div class="d-flex align-center width-half">
-        <span class="text-h4 font-weight-medium mr-1">OUSG</span>
+        <span class="text-h4 font-weight-medium mr-1">U.S. Treasuries Pool</span>
       </div>
       <div class="text-h4 font-weight-medium d-flex justify-space-between width-half">
         <div class="mr-2">
-          0x1b..ee92
+          coming soon
         </div>
         <div>
           <v-btn
@@ -181,7 +178,7 @@
             small
             color="primary"
             class="mr-2"
-            @click="copy('0x1b19c19393e2d034d8ff31ff34c81252fcbbee92')"
+            @click="copy('coming soon')"
           >
             <v-icon size="14">
               mdi-content-copy
@@ -205,7 +202,7 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-start py-3 border-bottom">
+    <!-- <div class="d-flex justify-start py-3 border-bottom">
       <div class="d-flex align-center width-half">
         <span class="text-h4 font-weight-medium mr-1">Coinbase Prime</span>
         <tooltips tip-text="Used for USDC deposits" />
@@ -240,7 +237,7 @@
             >mdi-arrow-top-right-bold-box-outline</v-icon></v-btn>
         </span>
       </div>
-    </div>
+    </div> -->
     <v-carousel
       v-model="curCard"
       hide-delimiters
