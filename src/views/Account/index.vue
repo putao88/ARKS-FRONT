@@ -49,7 +49,7 @@
                 Interest
               </p>
               <p class="text-h2">
-                $9,346.95
+                ${{ getPriceValue(interestValue) }}
               </p>
             </v-col>
             <v-col
@@ -448,6 +448,13 @@
 </template>
 
 <script>
+  import Web3 from 'web3'
+
+  import ARKSMain from '../../abi/ARKSMain.json'
+  import ARKSNFT from '../../abi/ARKSNFT.json'
+  import { mainAddress, nftAddress } from '../../abi/contractdata'
+  import { getPriceValue } from '../../utils/tools'
+
   export default {
     name: 'Account',
     data () {
@@ -493,12 +500,33 @@
             Rewards: '6 USDT',
           },
         ],
+        interestValue: 0,
+        mainContract: null,
+        nftContract: null,
+        fromAddress: '',
+        // web3: null,
       }
     },
-    mounted () {
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.nftContract = new web3.eth.Contract(
+          ARKSNFT,
+          nftAddress,
+        )
+        this.getAssets()
+        this.getReferral()
+        this.getLiquidity()
+      }
       this.init()
     },
     methods: {
+      getPriceValue: getPriceValue,
       init () {
         this.hint = `Balance: ${97}`
         this.openTab()
@@ -513,6 +541,33 @@
             this.liquidityTab = tabArray[1]
           }
         }
+      },
+      getAssets () {
+        this.mainContract.methods.getAddressUnclaimedRewardRent(this.fromAddress[0]).call().then(res => {
+          this.interestValue = res
+        })
+        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+          console.log(res, '2')
+        })
+        // this.nftContract.methods.tokenURI().call().then(res => {
+        //   console.log(res)
+        // })
+      },
+      getReferral () {
+        this.mainContract.methods.getAddressUnclaimedRewardRef(this.fromAddress[0]).call().then(res => {
+          console.log(res, '3')
+        })
+        this.mainContract.methods.getAddressInfoRef(this.fromAddress[0]).call().then(res => {
+          console.log(res, '4')
+        })
+        this.mainContract.methods.getAddressInfoRefDetails(this.fromAddress[0]).call().then(res => {
+          console.log(res, '5')
+        })
+      },
+      getLiquidity () {
+        this.mainContract.methods.getAddressInfoLiquidity(this.fromAddress[0]).call().then(res => {
+          console.log(res, '6')
+        })
       },
     },
   }

@@ -244,6 +244,12 @@
 </template>
 
 <script>
+  import Web3 from 'web3'
+
+  import ARKSMain from '../../abi/ARKSMain.json'
+  import ARKSTestUSDT from '../../abi/ARKSTestUSDT.json'
+  import { mainAddress, testUSDTAddress } from '../../abi/contractdata'
+
   import Tooltips from '@/components/Tooltips'
 
   export default {
@@ -251,6 +257,25 @@
     components: { Tooltips },
     data () {
       return {
+        mainContract: null,
+        testContract: null,
+        fromAddress: '',
+      }
+    },
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.testContract = new web3.eth.Contract(
+          ARKSTestUSDT,
+          testUSDTAddress,
+        )
+        this.getLaunch()
+        this.getDetail()
       }
     },
     methods: {
@@ -259,6 +284,31 @@
       },
       toBuy () {
         this.$router.push('/launchpad-detail')
+      },
+      getLaunch () {
+        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+          console.log(res, '1')
+        })
+        this.mainContract.methods.getAddressInfoMain(0).call().then(res => {
+          console.log(res, '2')
+        })
+      },
+      getDetail () {
+        this.testContract.methods.allowance(this.fromAddress[0], mainAddress).call().then(res => {
+          console.log(res, '1')
+        })
+        // this.testContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+        //   console.log(res, '1')
+        // })
+        this.mainContract.methods.getBuyPlanDownPayment(this.fromAddress[0]).call().then(res => {
+          console.log(res, '1')
+        })
+        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+          console.log(res, '1')
+        })
+        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+          console.log(res, '1')
+        })
       },
     },
   }
