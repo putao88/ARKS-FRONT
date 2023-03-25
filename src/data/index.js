@@ -1,5 +1,13 @@
 export const houseInfo = [
 {
+  id: '0',
+  address: 'This share class provides liquid exposure to an ETF of short-term U.S. Treasuries.',
+  appreciation: '6%',
+  rentalReturn: '5%',
+  coverImg: require('@/assets/house/0/cover.png'),
+  introduceImg: [require('@/assets/house/0/1.jpg')],
+},
+{
   id: '1',
   name: '奥斯汀湖畔学府',
   address: 'Austin Lake Bank SH123, Austin-Round Rock-San Marcos, Texas, United States',

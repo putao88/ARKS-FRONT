@@ -15,30 +15,23 @@
         <v-row
           justify="center"
         >
-          <!-- <v-col
-            cols="12"
-            sm="12"
-            md="12"
-            lg="12"
-          > -->
-          <v-tab href="#tab-1">
+          <v-tab href="#Assets">
             Assets
           </v-tab>
 
-          <v-tab href="#tab-2">
+          <v-tab href="#Referrals">
             Referrals
           </v-tab>
 
-          <v-tab href="#tab-3">
+          <v-tab href="#Liquidity">
             Liquidity
           </v-tab>
-          <!-- </v-col> -->
         </v-row>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
         <v-tab-item
-          value="tab-1"
+          value="Assets"
         >
           <v-row
             class="mt-4"
@@ -151,7 +144,7 @@
           </v-row>
         </v-tab-item>
         <v-tab-item
-          value="tab-2"
+          value="Referrals"
         >
           <v-row
             class="mt-4"
@@ -285,7 +278,7 @@
           </v-row>
         </v-tab-item>
         <v-tab-item
-          value="tab-3"
+          value="Liquidity"
         >
           <v-row
             class="mt-4"
@@ -346,17 +339,17 @@
             light
             icons-and-text
           >
-            <v-tab href="#deposite">
-              Deposite
+            <v-tab href="#Deposit">
+              Deposit
             </v-tab>
 
-            <v-tab href="#widthdrew">
+            <v-tab href="#Widthdrew">
               Widthdrew
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="liquidityTab">
             <v-tab-item
-              value="deposite"
+              value="Deposit"
             >
               <v-row>
                 <v-col
@@ -378,7 +371,7 @@
                     color="primary"
                     rounded
                   >
-                    deposite
+                    deposit
                   </v-btn>
                 </v-col>
                 <template
@@ -402,7 +395,7 @@
               </v-row>
             </v-tab-item>
             <v-tab-item
-              value="widthdrew"
+              value="Widthdrew"
             >
               <v-row>
                 <v-col
@@ -460,7 +453,7 @@
     data () {
       return {
         tab: null,
-        liquidityTab: 'widthdrew',
+        liquidityTab: 'Widthdrew',
         referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
         hint: 'Balance',
         headers: [
@@ -508,6 +501,18 @@
     methods: {
       init () {
         this.hint = `Balance: ${97}`
+        this.openTab()
+      },
+      openTab () {
+        const tab = this.$route.query.tab
+        if (tab) {
+          const tabArray = tab.split('-')
+          console.log(tabArray)
+          this.tab = tabArray[0]
+          if (tabArray[0] === 'Liquidity' && tabArray.length > 1) {
+            this.liquidityTab = tabArray[1]
+          }
+        }
       },
     },
   }

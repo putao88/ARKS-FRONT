@@ -187,7 +187,11 @@
         return carouseArray
       },
       toDetail (id) {
-        this.$router.push(`/propeties-detail?id=${id}`)
+        if (id === '0') {
+          this.$router.push(`/government-bond-detail?id=${id}`)
+        } else {
+          this.$router.push(`/propeties-detail?id=${id}`)
+        }
       },
     },
   }

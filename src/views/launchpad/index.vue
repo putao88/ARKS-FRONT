@@ -98,7 +98,63 @@
                 $2,135,397
               </v-list-item-title>
               <v-list-item-subtitle class="text-h3">
-                RWA
+                U.S. Treasuries Pool
+              </v-list-item-subtitle>
+              <p class="text-h4 my-2 d-flex justify-space-between">
+                <span>Total Sold Value</span>
+                <span>$71,634</span>
+              </p>
+              <p class="text-h4 my-2 d-flex justify-space-between">
+                <span>
+                  Pool APR
+                  <tooltips
+                    tip-text="xxx"
+                    size="18"
+                  />
+                </span>
+                <span>7.63%</span>
+              </p>
+            </v-list-item-content>
+
+            <v-card-actions>
+              <v-btn
+                class="primary mx-auto"
+                width="100%"
+                rounded
+                @click="toDetail"
+              >
+                Coming soon
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="12"
+          md="4"
+          lg="4"
+        >
+          <v-card
+            class="mx-auto rounded-lg rounded-xl pa-4"
+          >
+            <v-list-item
+              three-line
+              class="px-0"
+            >
+              <v-list-item-avatar
+                tile
+                size="80"
+                class="rounded"
+              >
+                <v-img src="@/assets/img/rwa.png" />
+              </v-list-item-avatar>
+            </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-h2 font-weight-bold">
+                $2,135,397
+              </v-list-item-title>
+              <v-list-item-subtitle class="text-h3">
+                ARKS Global Real Estate NFT Pool
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
@@ -154,7 +210,7 @@
                 $2,135,397
               </v-list-item-title>
               <v-list-item-subtitle class="text-h3">
-                ND
+                ARKS Structured Credit NFT Pool
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>

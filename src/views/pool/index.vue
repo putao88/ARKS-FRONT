@@ -15,8 +15,9 @@
         lg="3"
       >
         <v-card
-          class="rounded-lg pa-4 grey lighten-5 d-flex flex-column justify-space-between"
+          class="rounded-lg pa-4 grey lighten-5 d-flex flex-column justify-space-between hover-background pointer"
           style="height: 100%"
+          @click="toDetail(1)"
         >
           <div>
             <div class="text-h4 font-weight-bold mb-4">
@@ -30,7 +31,7 @@
           <div class="mt-10">
             <v-icon
               size="36"
-              class="mdi mdi-arrow-right-thin-circle-outline float-right pointer"
+              class="mdi mdi-arrow-right-thin-circle-outline float-right rounded-circle elevation-1"
             />
           </div>
         </v-card>
@@ -43,8 +44,9 @@
         lg="3"
       >
         <v-card
-          class="rounded-lg pa-4 indigo accent-4 d-flex flex-column justify-space-between"
+          class="rounded-lg pa-4 indigo accent-4 d-flex flex-column justify-space-between hover-background pointer"
           style="height: 100%"
+          @click="toDetail(2)"
         >
           <div>
             <div class="text-h4 font-weight-bold mb-4 white--text">
@@ -59,7 +61,7 @@
             <v-icon
               size="36"
               color="white"
-              class="mdi mdi-arrow-right-thin-circle-outline float-right pointer"
+              class="mdi mdi-arrow-right-thin-circle-outline float-right rounded-circle elevation-1"
             />
           </div>
         </v-card>
@@ -72,8 +74,9 @@
         lg="3"
       >
         <v-card
-          class="rounded-lg pa-4 purple accent-4 d-flex flex-column justify-space-between"
+          class="rounded-lg pa-4 purple accent-4 d-flex flex-column justify-space-between hover-background pointer"
           style="height: 100%"
+          @click="toDetail(3)"
         >
           <div>
             <div class="text-h4 font-weight-bold mb-4 white--text">
@@ -88,7 +91,7 @@
             <v-icon
               size="36"
               color="white"
-              class="mdi mdi-arrow-right-thin-circle-outline float-right pointer"
+              class="mdi mdi-arrow-right-thin-circle-outline float-right rounded-circle elevation-1"
             />
           </div>
         </v-card>
@@ -101,14 +104,14 @@
         lg="3"
       >
         <v-card
-          class="rounded-lg pa-4 black lighten-5 d-flex flex-column justify-space-between"
+          class="rounded-lg pa-4 black lighten-5 d-flex flex-column justify-space-between hover-background pointer"
           style="height: 100%"
         >
           <div>
             <div class="text-h4 font-weight-bold mb-4 white--text">
               ARKS Structured Credit NFT Pool
             </div>
-            <div class="text-h4 font-weight-medium mb-1">
+            <div class="text-h4 font-weight-medium mb-1 white--text">
               Junior Yield
             </div>
             <div class="font-weight-bold">
@@ -120,7 +123,7 @@
               <span class="rounded-lg orange py-1 px-2 mr-2 white--text">C</span>
               <span class="rounded-lg deep-orange py-1 px-2 mr-2 white--text">D</span>
             </div>
-            <div class="text-h4 font-weight-medium mb-1">
+            <div class="text-h4 font-weight-medium mb-1 white--text">
               Senior Yield
             </div>
             <div class="font-weight-bold">
@@ -132,7 +135,7 @@
             <v-icon
               size="36"
               color="white"
-              class="mdi mdi-arrow-right-thin-circle-outline float-right pointer"
+              class="mdi mdi-arrow-right-thin-circle-outline float-right rounded-circle elevation-1"
             />
           </div>
         </v-card>
@@ -149,16 +152,23 @@
       }
     },
     methods: {
-      toAccount () {
-        this.$router.push('/account')
-      },
-      toDetail () {
-        this.$router.push('/launchpad-detail')
+      toDetail (cardNum) {
+        if (cardNum === 1) {
+          this.$router.push('/government-bond-detail?id=0')
+        } else if (cardNum === 2) {
+          this.$router.push('/account?tab=Liquidity-Deposit')
+        } else if (cardNum === 3) {
+          this.$router.push('/propeties')
+        }
       },
     },
   }
 </script>
 
 <style lang="scss" scoped>
-
+.hover-background:hover {
+  .mdi-arrow-right-thin-circle-outline {
+    background-color: var(--color-primary);
+  }
+}
 </style>

@@ -189,8 +189,6 @@
           this.carouselItems = this.formatArray(this.allCardsData, 1)
         }
       },
-      previous () {},
-      next () {},
       formatArray (data, num) {
         const carouseArray = []
         for (var i = 0, len = data.length; i < len; i += num) {
@@ -199,9 +197,12 @@
         return carouseArray
       },
       toDetail (id) {
-        this.cardDetail = houseInfo.filter(item => item.id === id)[0]
+        if (id === '0') {
+          this.$router.push(`/government-bond-detail?id=${id}`)
+        } else {
+          this.cardDetail = houseInfo.filter(item => item.id === id)[0]
+        }
       },
-
     },
   }
 </script>

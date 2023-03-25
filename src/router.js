@@ -32,6 +32,11 @@ export default new Router({
           component: () => import('@/views/propeties/Detail.vue'),
         },
         {
+          name: 'Government Bond Detail',
+          path: 'government-bond-detail',
+          component: () => import('@/views/propeties/GovernmentBondDetail.vue'),
+        },
+        {
           name: 'Launchpad',
           path: '/launchpad',
           component: () => import('@/views/launchpad'),
