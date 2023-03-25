@@ -124,10 +124,10 @@
               </p>
             </v-col>
             <template
-              v-for="i in 8"
+              v-for="(i, index) in dataUrl"
             >
               <v-col
-                :key="i"
+                :key="index"
                 cols="12"
                 sm="12"
                 lg="3"
@@ -136,7 +136,7 @@
                   <v-img
                     class="white--text align-end"
                     height="220px"
-                    src="@/assets/img/nft.png"
+                    :src="i"
                   />
                 </v-card>
               </v-col>
@@ -161,7 +161,7 @@
                 Rewards
               </p>
               <p class="text-h2">
-                $9,346.95
+                ${{ getPriceValue(rewardValue) }}
               </p>
             </v-col>
             <v-col
@@ -220,7 +220,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                $9,346
+                ${{ getPriceValue(referrals.value) }}
               </p>
               <p class="text-h4">
                 Total Referrals Value
@@ -233,7 +233,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                Lv 3
+                Lv {{ referrals.level }}
               </p>
               <p class="text-h4">
                 Referral Level
@@ -246,7 +246,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                10%
+                {{ referrals.rate }}%
               </p>
               <p class="text-h4">
                 Current Rate
@@ -259,7 +259,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                $146
+                ${{ getPriceValue(referrals.reward) }}
               </p>
               <p class="text-h4">
                 Claimed Rewards
@@ -300,7 +300,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                17.95
+                {{ getPriceValue(liquidity.token) }}
               </p>
               <p class="text-h4">
                 My Liquidity Token
@@ -314,7 +314,7 @@
               :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
             >
               <p class="text-h2 mb-1">
-                $91,346
+                ${{ getPriceValue(liquidity.value) }}
               </p>
               <p class="text-h4">
                 My Liquidity Value
@@ -327,7 +327,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                7.12%
+                {{ getPriceValue(liquidity.yield) }}
               </p>
               <p class="text-h4">
                 Estimated Yield
@@ -502,6 +502,19 @@
           },
         ],
         interestValue: 0,
+        rewardValue: 0,
+        referrals: {
+          value: 0,
+          level: 0,
+          rate: 0,
+          reward: 0,
+        },
+        liquidity: {
+          token: 0,
+          value: 0,
+          yield: 0,
+        },
+        dataUrl: [],
         mainContract: null,
         nftContract: null,
         fromAddress: '',
@@ -549,26 +562,56 @@
           this.interestValue = res
         })
         this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
-          console.log(res, '2')
+          const dataToken = res
+          // const tempUrl = []
+          dataToken.forEach(item => {
+            this.nftContract.methods.tokenURI(item).call().then(res => {
+              this.dataUrl.push(res)
+            })
+          })
         })
-        // this.nftContract.methods.tokenURI().call().then(res => {
-        //   console.log(res)
-        // })
       },
       getReferral () {
         this.mainContract.methods.getAddressUnclaimedRewardRef(this.fromAddress[0]).call().then(res => {
-          console.log(res, '3')
+          this.rewardValue = res
         })
         this.mainContract.methods.getAddressInfoRef(this.fromAddress[0]).call().then(res => {
-          console.log(res, '4')
+          this.referrals.value = res[0]
+          this.referrals.level = res[1]
+          this.referrals.rate = res[2]
+          this.referrals.reward = res[3]
         })
         this.mainContract.methods.getAddressInfoRefDetails(this.fromAddress[0]).call().then(res => {
+          if (res.length) {
+            this.desserts = []
+            const temp = []
+            res.forEach(item => {
+              const date = new Date(item[1])
+              const year = date.getFullYear()
+              let month = date.getMonth() + 1
+              let day = date.getDate()
+              month = month < 10 ? ('0' + month) : month
+              day = day < 10 ? ('0' + day) : day
+              const obj = {
+                Address: item[0],
+                Date: `${year}-${month}-${day}`,
+                Value: getPriceValue(item[2]) + ' USDT',
+                Rate: getPriceValue(item[3]) + '%',
+                Rewards: item[4] + ' USDT',
+              }
+              temp.push(obj)
+            })
+            this.desserts = temp
+          }
           console.log(res, '5')
         })
       },
       getLiquidity () {
         this.mainContract.methods.getAddressInfoLiquidity(this.fromAddress[0]).call().then(res => {
           console.log(res, '6')
+          this.liquidity.token = res[0]
+          this.liquidity.value = res[1]
+          this.liquidity.yield = res[2]
         })
       },
     },
