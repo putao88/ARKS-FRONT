@@ -247,7 +247,6 @@
 
 <script>
   import Web3 from 'web3'
-
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
@@ -283,7 +282,8 @@
           testUSDTAddress,
         )
         this.getLaunch()
-        this.getDetail()
+        this.getPoolTotal()
+        // this.getDetail()
       }
     },
     methods: {
@@ -295,30 +295,20 @@
       },
       getLaunch () {
         this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
-          console.log(res, 'getLaunch')
           this.myAssetsValue = getPriceValue(res[0])
           this.myAssetsAmount = res[1]
           this.myClaimedValue = getPriceValue(res[2])
         })
-        this.mainContract.methods.getAddressInfoMain(0).call().then(res => {
-          console.log(res, '2')
-        })
       },
-      getDetail () {
-        this.testContract.methods.allowance(this.fromAddress[0], mainAddress).call().then(res => {
-          console.log(res, '1')
+      getPoolTotal () {
+        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+          this.poolTotalSoldValue = getPriceValue(res)
         })
-        // this.testContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
-        //   console.log(res, '1')
-        // })
-        this.mainContract.methods.getBuyPlanDownPayment(this.fromAddress[0]).call().then(res => {
-          console.log(res, '1')
+        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+          this.raTotalSoldValue = getPriceValue(res)
         })
-        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
-          console.log(res, '1')
-        })
-        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
-          console.log(res, '1')
+        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+          this.ndTotalSoldValue = getPriceValue(res)
         })
       },
     },

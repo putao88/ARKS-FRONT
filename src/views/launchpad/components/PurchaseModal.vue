@@ -23,11 +23,13 @@
             v-model="planLength"
             :items="planLengthItems"
             label="Length of installment plan"
+            @change="planLengthChange"
           />
           <v-select
             v-model="downPayment"
             :items="downPaymentItems"
             label="Down Payment"
+            @change="downPaymentChange"
           />
           <v-card class="pa-4">
             <div class="d-flex justify-space-between align-center mb-2">
@@ -62,7 +64,7 @@
                     </span>
                     <span>
                       100USDT
-                      <span class="grey--text">(10%)</span>
+                      <span class="grey--text">({{ interestRate }}%)</span>
                     </span>
                   </div>
                   <div class="d-flex justify-space-between">
@@ -141,7 +143,12 @@
 </template>
 
 <script>
+  import Web3 from 'web3'
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
   import Tooltips from '@/components/Tooltips'
+  import BigNumber from 'bignumber.js'
 
   export default {
     name: 'PurchaseModal',
@@ -155,9 +162,18 @@
         type: Object,
         default: null,
       },
+      type: {
+        type: Number,
+        default: 1,
+      },
+      amount: {
+        type: Number,
+        default: 1,
+      },
     },
     data () {
       return {
+        fromAddress: null,
         show: true,
         showExplain: true,
         planLength: 3,
@@ -173,15 +189,60 @@
           { text: '5 month', value: 5 },
           { text: '8 month', value: 8 },
         ],
-        downPayment: '',
+        downPayment: null,
         downPaymentItems: [],
+        interestRate: 0,
       }
     },
-    mounted () {
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.testContract = new web3.eth.Contract(
+          ARKSTestUSDT,
+          testUSDTAddress,
+        )
+        this.getBuyPlanDownPayment()
+      }
     },
     methods: {
       closeDailog () {
         this.$emit('close-purchase-modal')
+      },
+      getBuyPlanDownPayment () {
+        this.mainContract.methods.getBuyPlanDownPayment(this.fromAddress[0], this.type, this.amount, this.planLength).call().then(res => {
+          console.log(res, 'getBuyPlanDownPayment')
+          const firstnumber = new BigNumber(res)
+          this.downPaymentItems = [
+            { text: `${firstnumber}%`, value: res },
+            { text: `${firstnumber.plus(10)}%`, value: res + 10 },
+            { text: `${firstnumber.plus(20)}%`, value: res + 20 },
+          ]
+        })
+      },
+      getBuyPlanInterestRate () {
+        this.mainContract.methods.getBuyPlanInterestRate(this.fromAddress[0], this.type, this.amount, this.downPayment, this.planLength).call().then(res => {
+          console.log(res, 'getBuyPlanInterestRate')
+          this.interestRate = new BigNumber(res).dividedBy(100).toFormat()
+          console.log(this.interestRate, 'getBuyPlanInterestRate')
+        })
+      },
+      planLengthChange (val) {
+        if (val === 0) {
+          this.downPaymentItems = [
+            { text: '100%', value: 1 },
+          ]
+        } else {
+          this.getBuyPlanDownPayment()
+        }
+        this.downPayment = null
+      },
+      downPaymentChange (val) {
+        this.getBuyPlanInterestRate()
       },
     },
   }

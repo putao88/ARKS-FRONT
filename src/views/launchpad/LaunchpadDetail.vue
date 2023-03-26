@@ -38,7 +38,7 @@
             </div>
             <div class="select-wrap">
               <v-select
-                v-model="amount"
+                v-model="type"
                 :items="amountItems"
                 label="Type"
                 color="white"
@@ -58,7 +58,7 @@
                   <v-icon>mdi-minus</v-icon>
                 </v-btn>
                 <div class="number-div">
-                  {{ number }}
+                  {{ amount }}
                 </div>
                 <v-btn
                   small
@@ -75,19 +75,32 @@
               <span>Blockchain</span><span>Polygon</span>
             </p>
             <p class="text-h4 my-2 d-flex justify-space-between">
-              <span>Contract Address</span><a href="https://etherscan.io/address/">0x59bF...17E6B6</a>
+              <span>Contract Address</span>
+              <a
+                href="https://etherscan.io/address/"
+                class="addressStyle"
+              >{{ nftAddress }}</a>
             </p>
             <p class="text-h4 my-2 d-flex justify-space-between">
               <span>APR</span><span>7.63%</span>
             </p>
-            <p class="text-h4 my-2 d-flex justify-space-between">
+            <!-- <p class="text-h4 my-2 d-flex justify-space-between">
               <span>Total</span><span>500USDT</span>
-            </p>
+            </p> -->
           </div>
           <v-btn
+            v-if="isApproved"
             class="primary rounded-pill"
             width="100%"
             @click="openBuyModal"
+          >
+            Buy
+          </v-btn>
+          <v-btn
+            v-else
+            class="primary rounded-pill"
+            width="100%"
+            @click="Approve"
           >
             Approve
           </v-btn>
@@ -160,7 +173,10 @@
         </v-col>
       </v-row>
       <purchase-modal
+        v-if="showPurchaseModall"
         :show-modal="showPurchaseModall"
+        :amount="amount"
+        :type="type"
         @close-purchase-modal="closePurchaseModal"
       />
     </v-card>
@@ -168,8 +184,12 @@
 </template>
 
 <script>
+  import Web3 from 'web3'
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { mainAddress, testUSDTAddress, nftAddress } from '@/abi/contractdata'
   import PurchaseModal from './components/PurchaseModal'
-
+  import { maxUnit256 } from '@/utils/tools'
   export default {
     name: 'LaunchpadDetail',
     components: {
@@ -177,6 +197,8 @@
     },
     data () {
       return {
+        fromAddress: null,
+        isApproved: true,
         amountItems: [
           { text: 50, value: 0 },
           { text: 100, value: 1 },
@@ -186,14 +208,38 @@
           { text: 10000, value: 5 },
           { text: 100000, value: 6 },
         ],
-        amount: 50,
+        type: 0,
         showPurchaseModall: false,
-        number: 1,
+        amount: 1,
+        nftAddress: nftAddress,
+      }
+    },
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.testContract = new web3.eth.Contract(
+          ARKSTestUSDT,
+          testUSDTAddress,
+        )
+        this.getDetail()
       }
     },
     methods: {
       toAccount () {
         this.$router.push('/account')
+      },
+      Approve () {
+        if (window.ethereum) {
+          this.testContract.methods.approve(mainAddress, maxUnit256()).call().then(res => {
+            console.log(res, 'approve')
+            this.isApproved = true
+          })
+        }
       },
       openBuyModal () {
         this.showPurchaseModall = true
@@ -202,12 +248,27 @@
         this.showPurchaseModall = false
       },
       reduce () {
-        if (this.number > 1) {
-          this.number--
+        if (this.amount > 1) {
+          this.amount--
         }
       },
       add () {
-        this.number++
+        if (this.amount < 5) {
+          this.amount++
+        }
+      },
+      getDetail () {
+        this.testContract.methods.allowance(this.fromAddress[0], mainAddress).call().then(res => {
+          console.log(res, 'allowance')
+          // if (res > maxUnit256() / 2) {
+          //   this.isApproved = true
+          // } else {
+          //   this.isApproved = false
+          // }
+        })
+        // this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+        //   console.log(res, '1')
+        // })
       },
     },
   }
@@ -230,5 +291,11 @@
 }
 .select-wrap {
   max-width: 200px;
+}
+.addressStyle {
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
 }
 </style>
