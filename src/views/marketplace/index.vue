@@ -93,7 +93,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <template v-for="(item, index) in cardInfo">
+        <template v-for="(item, index) in dataUrl">
           <v-col
             :key="index"
             cols="12"
@@ -127,7 +127,7 @@
               <v-img
                 class="white--text align-end"
                 height="200px"
-                src="@/assets/img/nft.png"
+                :src="item"
               />
               <div class="card-bottom-div">
                 <span>Price:</span>
@@ -145,7 +145,14 @@
   </v-container>
 </template>
 <script>
+  import Web3 from 'web3'
+
+  // import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSNFT from '@/abi/ARKSNFT.json'
+  import { nftAddress } from '@/abi/contractdata'
+
   import MyItemModal from '@/components/MyItemModal'
+  import { Base64 } from 'js-base64'
   export default {
     name: 'Marketplace',
     components: {
@@ -160,10 +167,20 @@
         liabilityConditions: ['Liability', 'No Liabilities'],
         liabilityVal: 'No Liabilities',
         showItemModal: false,
-        cardInfo: new Array(8),
+        dataUrl: [],
+        nftContract: null,
       }
     },
-    mounted () {
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.nftContract = new web3.eth.Contract(
+          ARKSNFT,
+          nftAddress,
+        )
+        this.getTokenInfo()
+      }
     },
     methods: {
       filterData (tab) {
@@ -174,6 +191,19 @@
       },
       closeItemModal () {
         this.showItemModal = false
+      },
+      getTokenInfo () {
+        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+          const dataToken = res
+          // const tempUrl = []
+          dataToken.forEach(item => {
+            this.nftContract.methods.tokenURI(item).call().then(res => {
+              const data = res.split('data:application/json;base64,')[1]
+              const obj = JSON.parse(Base64.decode(data))
+              this.dataUrl.push(obj.image)
+            })
+          })
+        })
       },
     },
   }

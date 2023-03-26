@@ -456,6 +456,7 @@
   import { mainAddress, nftAddress } from '../../abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import { copy } from '@/utils/common'
+  import { Base64 } from 'js-base64'
   export default {
     name: 'Account',
     data () {
@@ -566,7 +567,9 @@
           // const tempUrl = []
           dataToken.forEach(item => {
             this.nftContract.methods.tokenURI(item).call().then(res => {
-              this.dataUrl.push(res)
+              const data = res.split('data:application/json;base64,')[1]
+              const obj = JSON.parse(Base64.decode(data))
+              this.dataUrl.push(obj.image)
             })
           })
         })

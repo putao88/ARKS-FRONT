@@ -39,7 +39,7 @@
             <div class="select-wrap">
               <v-select
                 v-model="type"
-                :items="amountItems"
+                :items="typeItems"
                 label="Type"
                 color="white"
               />
@@ -199,16 +199,16 @@
       return {
         fromAddress: null,
         isApproved: true,
-        amountItems: [
-          { text: 50, value: 0 },
-          { text: 100, value: 1 },
-          { text: 500, value: 2 },
-          { text: 1000, value: 3 },
-          { text: 5000, value: 4 },
-          { text: 10000, value: 5 },
-          { text: 100000, value: 6 },
+        typeItems: [
+          { text: 50, value: '0-50' },
+          { text: 100, value: '1-100' },
+          { text: 500, value: '2-500' },
+          { text: 1000, value: '3-1000' },
+          { text: 5000, value: '4-5000' },
+          { text: 10000, value: '5-10000' },
+          { text: 100000, value: '6-100000' },
         ],
-        type: 0,
+        type: '0-50',
         showPurchaseModall: false,
         amount: 1,
         nftAddress: nftAddress,

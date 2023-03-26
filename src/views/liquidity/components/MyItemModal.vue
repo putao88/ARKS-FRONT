@@ -59,7 +59,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <template v-for="(item, index) in cardInfo">
+            <template v-for="(item, index) in tokenData">
               <v-col
                 :key="index"
                 cols="12"
@@ -67,7 +67,7 @@
               >
                 <v-card
                   class="rounded-lg"
-                  @click="deBorrow"
+                  @click="deBorrow(item)"
                 >
                   <v-card-text>
                     <v-img
@@ -79,13 +79,13 @@
                       class="data-item"
                     >
                       <span>interest:</span>
-                      <span class="font-weight-bold">11.5%</span>
+                      <span class="font-weight-bold">{{ item.interest / 100 }}%</span>
                     </div>
                     <div
                       class="data-item"
                     >
                       <span>Total:</span>
-                      <span class="font-weight-bold">32.5</span>
+                      <span class="font-weight-bold">{{ getPriceValue(item.total) }}</span>
                     </div>
                   </v-card-text>
                 </v-card>
@@ -104,6 +104,7 @@
 
 <script>
   import SellModal from '@/components/SellModal'
+  import { getPriceValue } from '@/utils/tools'
 
   export default {
     name: 'MyItemModal',
@@ -115,16 +116,23 @@
         type: Boolean,
         default: false,
       },
+      tokenData: {
+        type: Array,
+        default () {
+          return []
+        },
+      },
     },
     data () {
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
-        cardInfo: new Array(8),
+        // cardInfo: new Array(8),
         showSellModall: false,
       }
     },
     methods: {
+      getPriceValue: getPriceValue,
       filterData (tab) {
         this.active = tab
       },
@@ -137,8 +145,8 @@
       closeSellModal () {
         this.showSellModall = false
       },
-      deBorrow () {
-        this.$emit('de-borrow', { src: 'nft.png', interest: '11.5%', usdt: 32.5 })
+      deBorrow (value) {
+        this.$emit('de-borrow', value)
       },
     },
   }

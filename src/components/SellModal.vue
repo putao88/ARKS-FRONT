@@ -25,6 +25,7 @@
             src="@/assets/img/nft.png"
           />
           <v-text-field
+            v-model="price"
             label="Amount"
             suffix="USDT"
             class="mb-4 mt-4"
@@ -39,6 +40,7 @@
             width="100%"
             color="primary"
             rounded
+            @click="cellShop"
           >
             SELL
           </v-btn>
@@ -65,6 +67,7 @@
     data () {
       return {
         balance: 97,
+        price: '',
       }
     },
     computed: {
@@ -77,6 +80,13 @@
     methods: {
       closeDailog () {
         this.$emit('close-sell-modal')
+      },
+      cellShop () {
+        const price = Number(this.price)
+        if (!!price && typeof price === 'number') {
+          console.log(price)
+          this.$emit('cell-shop', price)
+        }
       },
     },
   }
