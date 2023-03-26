@@ -59,7 +59,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <template v-for="(item, index) in cardInfo">
+            <template v-for="(item, index) in tokenId">
               <v-col
                 :key="index"
                 cols="12"
@@ -68,7 +68,7 @@
               >
                 <div
                   class="pointer rounded-lg overflow-hidden elevation-10"
-                  @click="openSellModal"
+                  @click="openSellModal(item)"
                 >
                   <v-img
                     class="white--text align-end"
@@ -89,12 +89,19 @@
     <sell-modal
       :show-modal="showSellModall"
       @close-sell-modal="closeSellModal"
+      @cell-shop="setCellShop"
     />
   </div>
 </template>
 
 <script>
   import SellModal from '@/components/SellModal'
+  import Web3 from 'web3'
+
+  // import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSNFT from '@/abi/ARKSNFT.json'
+  import { nftAddress } from '@/abi/contractdata'
+  // import { getPriceValue } from '@/utils/tools'
 
   export default {
     name: 'MyItemModal',
@@ -105,14 +112,34 @@
       showModal: {
         type: Boolean,
         default: false,
+        nftContract: null,
+        fromAddress: '',
+        targetTokenId: '',
       },
     },
     data () {
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
-        cardInfo: new Array(8),
+        tokenId: new Array(8),
         showSellModall: false,
+      }
+    },
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.nftContract = new web3.eth.Contract(
+          ARKSNFT,
+          nftAddress,
+        )
+        const res = await this.getApproved()
+        if (res) {
+          // 已授权
+          this.getCellShop()
+        } else {
+          // 未授权
+        }
       }
     },
     methods: {
@@ -122,11 +149,37 @@
       closeDailog () {
         this.$emit('close-item-modal')
       },
-      openSellModal () {
+      openSellModal (val) {
+        this.targetTokenId = val
         this.showSellModall = true
       },
       closeSellModal () {
         this.showSellModall = false
+      },
+      getApproved () {
+        // 获取授权权限
+        // this.nftContract.methods.isApprovedForAll(this.fromAddress).call()
+      },
+      setApproved () {
+        // 授权的操作(address operator, bool _approved)(ARKS: Marketplace的合约地址，true)
+        // this.nftContract.methods.isApprovedForAll(this.fromAddress, true).call().then(res => {
+        //   console.log(res, '1')
+        // })
+      },
+      getCellShop () {
+        console.log(this.fromAddress[0])
+        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+          this.tokenId = res || []
+          console.log(res, '2')
+        })
+      },
+      setCellShop (price) {
+        // var p = String(price)
+        // p = p.replace('.', '').length
+        // var pri = price
+        // Marketplace.createMarketItem.call(nftAddress, this.targetTokenId, price).then(resl => {
+        //   console.log(res, '3')
+        // })
       },
     },
   }

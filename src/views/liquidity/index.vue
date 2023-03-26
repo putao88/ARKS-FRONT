@@ -16,7 +16,7 @@
           class="text-center"
         >
           <p class="text-h2 mb-1">
-            $91,346
+            $ {{ getPriceValue(priceValue.totalValue) }}
           </p>
           <p class="text-h4 grey--text">
             Total Value
@@ -31,7 +31,7 @@
           :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
         >
           <p class="text-h2 mb-1">
-            $1,346
+            ${{ getPriceValue(priceValue.nftValue) }}
           </p>
           <p class="text-h4 grey--text">
             Total NFT Value
@@ -45,7 +45,7 @@
           class="text-center"
         >
           <p class="text-h2 mb-1">
-            $90,000
+            ${{ getPriceValue(priceValue.usdtValue) }}
           </p>
           <p class="text-h4 grey--text">
             Total USDT Value
@@ -117,7 +117,7 @@
             class="data-item"
           >
             <span class="text-h4">Token Value</span>
-            <span class="text-h4 font-weight-bold">$50</span>
+            <span class="text-h4 font-weight-bold">{{ detail.tokenId }}</span>
           </div>
           <div
             class="data-item"
@@ -129,7 +129,7 @@
             class="data-item"
           >
             <span class="text-h4">Borrow USDT</span>
-            <span class="text-h4 font-weight-bold">{{ detail.usdt }}</span>
+            <span class="text-h4 font-weight-bold">{{ detail.total }}</span>
           </div>
           <v-btn
             rounded
@@ -137,6 +137,7 @@
             height="60"
             color="primary"
             class="mt-10"
+            @click="borrowNft"
           >
             Borrow
           </v-btn>
@@ -148,13 +149,27 @@
       />
       <my-item-modal
         :show-modal="showItemModal"
+        :token-data="tokenData"
         @de-borrow="deBorrow"
         @close-item-modal="closeItemModal"
       />
     </v-card>
+    <v-alert
+      :type="alert.type"
+      :value="alert.show"
+    >
+      {{ alert.value }}
+    </v-alert>
   </v-container>
 </template>
 <script>
+  import Web3 from 'web3'
+
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSNFT from '@/abi/ARKSNFT.json'
+  import { nftAddress, mainAddress } from '@/abi/contractdata'
+  import { getPriceValue } from '@/utils/tools'
+
   import MyPositionModal from './components/MyPositionModal'
   import MyItemModal from './components/MyItemModal'
 
@@ -170,12 +185,46 @@
         showItemModal: false,
         detail: {
           src: '',
-          usdt: '0.0',
+          tokenId: '',
+          total: '0.0',
           interest: '0.0%',
         },
+        priceValue: {
+          totalValue: 0,
+          nftValue: 0,
+          usdtValue: 0,
+        },
+        alert: {
+          type: 'success',
+          show: false,
+          value: '',
+        },
+        fromAddress: '',
+        nftContract: null,
+        mainContract: null,
+        tokenData: [],
+        tokenId: '',
+      }
+    },
+    async mounted () {
+      if (window.ethereum) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.fromAddress = await web3.eth.getAccounts()
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.nftContract = new web3.eth.Contract(
+          ARKSNFT,
+          nftAddress,
+        )
+        this.getValue()
+        this.getNftInfo()
+        this.getBroNftInfo()
       }
     },
     methods: {
+      getPriceValue: getPriceValue,
       openPositionModal () {
         this.showPositionModal = true
       },
@@ -189,9 +238,57 @@
         this.showItemModal = false
       },
       deBorrow (param) {
-        // const { src, usdt, interest } = param
-        Object.assign(this.detail, param)
+        const { tokenId, interest, total } = param
+        this.detail.tokenId = tokenId
+        this.detail.interest = interest
+        this.detail.total = total
+        this.detail.src = 'nft.png'
         this.showItemModal = false
+      },
+      borrowNft () {
+        // 写操作
+        this.mainContract.methods.depositeNFT(nftAddress, Number(this.detail.tokenId)).call().then(res => {
+          this.alert.show = true
+          this.alert.value = '租借成功'
+          console.log(res, this.alert, '7')
+        })
+      },
+      getValue () {
+        this.mainContract.methods.getVaultInfo().call().then(res => {
+          this.priceValue.totalValue = res[0] || 0
+          this.priceValue.nftValue = res[1] || 0
+          this.priceValue.usdtValue = res[2] || 0
+          console.log(res, '1')
+        })
+      },
+      getNftInfo () {
+        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+          const dataToken = res
+          // const tempUrl = []
+          dataToken.forEach(item => {
+            this.mainContract.methods.getTokenIdInfoPreCollateral(item, this.fromAddress[0]).call().then(resl => {
+              this.tokenData.push({
+                tokenId: item,
+                interest: resl[0],
+                total: resl[1],
+              })
+              console.log(resl, '3')
+            })
+          })
+          this.tokenId = res || []
+          console.log(res, '2')
+        })
+      },
+      getBroNftInfo () {
+        // this.mainContract.methods.getAddressCollateral(this.fromAddress[0]).call().then(res => {
+        //   console.log(res, '9999')
+        //   // res.forEach(item => {
+        //   //   this.broNftInfo.push({
+        //   //     tokenId: item[0],
+        //   //     total: res[1],
+        //   //   })
+        //   // })
+        // })
       },
     },
   }
