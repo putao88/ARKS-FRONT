@@ -12,6 +12,7 @@ export default new Vuex.Store({
     drawer: null,
     connected: false,
     address: '',
+    isLoggedIn: false,
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     SET_ADDRESS (state, payload) {
       state.address = payload
     },
+    SET_IS_LOGGED_IN (state, payload) {
+      state.isLoggedIn = payload
+    }
   },
   actions: {
 
