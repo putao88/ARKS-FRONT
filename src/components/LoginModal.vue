@@ -25,7 +25,7 @@
                 rounded
                 v-on:click="checkInviteCode"
               >
-                deposit
+                GO!
               </v-btn>
             </div>
           </div>
