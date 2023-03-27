@@ -3,7 +3,7 @@
     <v-dialog v-model="showModal" width="450" :persistent="true">
       <v-card>
         <v-card-title class="text-left white--text primary pb-4">
-          <span class="text-h3"> Input invite code </span>
+          <span class="text-h3"> Enter invite code </span>
         </v-card-title>
 
         <v-card-text>
@@ -15,12 +15,11 @@
               <div class="wp-50 mr-8">
                 <v-text-field
                   v-model="inviteCode"
-                  class="mb-4 mt-4"
+                  class="mb-4"
                   persistent-hint
                 />
               </div>
               <v-btn
-                class="mt-4"
                 color="primary"
                 rounded
                 v-on:click="checkInviteCode"
@@ -58,7 +57,7 @@ export default {
       if (this.inviteCode === 'arkstothemoon') {
         this.SET_IS_LOGGED_IN(true)
       } else {
-        alert('wrong invite code')
+        alert('wrong invitation code')
       }
     }
   },
