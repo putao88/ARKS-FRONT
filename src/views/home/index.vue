@@ -41,7 +41,7 @@
             color="primary"
             icon="mdi-twitter"
             title="Assets Amount"
-            value="31"
+            value="19"
             sub-icon="mdi-clock"
             sub-text="Just Updated"
           />
@@ -87,9 +87,9 @@
             color="primary"
             icon="mdi-poll"
             title="Assets(USD)"
-            value="$2,135,37"
+            value="6,731,098"
             sub-icon="mdi-tag"
-            sub-text="Tracked from Google"
+            sub-text="Last 24 Hours"
           />
         </v-col>
 

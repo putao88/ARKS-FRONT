@@ -95,14 +95,14 @@
             </v-list-item>
             <v-list-item-content>
               <v-list-item-title class="text-h2 font-weight-bold">
-                $2,135,397
+                coming soon
               </v-list-item-title>
               <v-list-item-subtitle class="text-h3">
                 U.S. Treasuries Pool
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>coming soon</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -112,7 +112,7 @@
                     size="18"
                   />
                 </span>
-                <span>7.63%</span>
+                <span>4.32%</span>
               </p>
             </v-list-item-content>
 
@@ -150,14 +150,14 @@
             </v-list-item>
             <v-list-item-content>
               <v-list-item-title class="text-h2 font-weight-bold">
-                $2,135,397
+                $6,731,098
               </v-list-item-title>
               <v-list-item-subtitle class="text-h3">
                 ARKS Global Real Estate NFT Pool
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>$506,471</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -206,14 +206,14 @@
             </v-list-item>
             <v-list-item-content>
               <v-list-item-title class="text-h2 font-weight-bold">
-                $2,135,397
+                coming soon
               </v-list-item-title>
               <v-list-item-subtitle class="text-h3">
                 ARKS Structured Credit NFT Pool
               </v-list-item-subtitle>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>Total Sold Value</span>
-                <span>$71,634</span>
+                <span>coming soon</span>
               </p>
               <p class="text-h4 my-2 d-flex justify-space-between">
                 <span>
@@ -223,7 +223,7 @@
                     size="18"
                   />
                 </span>
-                <span>7.63%</span>
+                <span>15-60%</span>
               </p>
             </v-list-item-content>
 

@@ -201,7 +201,6 @@
               <div class="wp-50 mr-8">
                 <v-text-field
                   v-model="referralsValue"
-                  disabled="true"
                 />
               </div>
               <v-btn
@@ -454,7 +453,7 @@
       return {
         tab: null,
         liquidityTab: 'Widthdrew',
-        referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
+        referralsValue: null,
         hint: 'Balance',
         headers: [
           { text: 'Address', align: 'start', sortable: false, value: 'Address', class: 'primary--text' },
