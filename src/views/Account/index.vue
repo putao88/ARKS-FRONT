@@ -200,7 +200,7 @@
             >
               <div class="wp-50 mr-8">
                 <v-text-field
-                  v-model="referralsValue"
+                  v-model="myReferrals"
                   disabled="true"
                 />
               </div>
@@ -208,7 +208,7 @@
                 width="100px"
                 color="primary"
                 rounded
-                @click="copy(referralsValue)"
+                @click="copy(myReferrals)"
               >
                 COPY
               </v-btn>
@@ -361,7 +361,7 @@
                 >
                   <div class="wp-50 mr-8">
                     <v-text-field
-                      v-model="referralsValue"
+                      v-model="depositVal"
                       class="mb-4 mt-4"
                       :hint="hint"
                       persistent-hint
@@ -407,7 +407,7 @@
                 >
                   <div class="wp-50 mr-8">
                     <v-text-field
-                      v-model="referralsValue"
+                      v-model="widthdrewVal"
                       class="mb-4 mt-4"
                       :hint="hint"
                       persistent-hint
@@ -463,7 +463,9 @@
       return {
         tab: null,
         liquidityTab: 'Widthdrew',
-        referralsValue: 'https://arkslabs.io&ref=0x68E..5894',
+        myReferrals: 'https://app.arkslabs.io/',
+        depositVal: null,
+        widthdrewVal: null,
         hint: 'Balance',
         headers: [
           { text: 'Address', align: 'start', sortable: false, value: 'Address', class: 'primary--text' },
@@ -537,6 +539,7 @@
         this.getAssets()
         this.getReferral()
         this.getLiquidity()
+        this.myReferrals = `https://app.arkslabs.io/&ref=${this.fromAddress[0]}`
       }
       this.init()
     },
