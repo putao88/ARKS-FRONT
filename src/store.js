@@ -13,7 +13,7 @@ export default new Vuex.Store({
     barImage: null,
     drawer: null,
     address: '',
-    isLoggedIn: true,
+    isLoggedIn: false,
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
