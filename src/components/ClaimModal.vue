@@ -94,7 +94,6 @@
         )
         this.getData()
       }
-      this.init()
     },
     methods: {
       getPriceValue: getPriceValue,

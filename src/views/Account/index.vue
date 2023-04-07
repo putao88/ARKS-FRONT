@@ -369,7 +369,7 @@
                     <v-text-field
                       v-model="depositVal"
                       class="mb-4 mt-4"
-                      :hint="hint"
+                      :hint="depositHint"
                       persistent-hint
                     />
                   </div>
@@ -377,6 +377,7 @@
                     class="mt-4"
                     color="primary"
                     rounded
+                    @click="depositBalance"
                   >
                     deposit
                   </v-btn>
@@ -397,7 +398,7 @@
                     <v-text-field
                       v-model="widthdrewVal"
                       class="mb-4 mt-4"
-                      :hint="hint"
+                      :hint="widthdrewHint"
                       persistent-hint
                     />
                   </div>
@@ -405,6 +406,7 @@
                     class="mt-4"
                     color="primary"
                     rounded
+                    @click="widthdrewBalance"
                   >
                     widthdrew
                   </v-btn>
@@ -444,7 +446,8 @@
 
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
-  import { mainAddress, nftAddress } from '@/abi/contractdata'
+  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { mainAddress, nftAddress, testUSDTAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import { copy } from '@/utils/common'
   import { Base64 } from 'js-base64'
@@ -457,7 +460,8 @@
         myReferrals: 'https://app.arkslabs.io',
         depositVal: null,
         widthdrewVal: null,
-        hint: 'Balance',
+        widthdrewHint: 'Balance',
+        depositHint: 'Balance',
         headers: [
           { text: 'Address', align: 'start', sortable: false, value: 'Address', class: 'primary--text' },
           { text: 'Date', value: 'Date', class: 'primary--text' },
@@ -531,20 +535,20 @@
           ARKSNFT,
           nftAddress,
         )
+        this.testContract = new web3.eth.Contract(
+          ARKSTestUSDT,
+          testUSDTAddress,
+        )
         this.getAssets()
         this.getReferral()
         this.getLiquidity()
         this.myReferrals = `https://app.arkslabs.io?ref=${this.address}`
       }
-      this.init()
+      this.openTab()
     },
     methods: {
       getPriceValue: getPriceValue,
       copy: copy,
-      init () {
-        this.hint = `Balance: ${97}`
-        this.openTab()
-      },
       openTab () {
         const tab = this.$route.query.tab
         if (tab) {
@@ -588,7 +592,7 @@
         })
       },
       getLastRewardRate () {
-        this.mainContract.methods.getLastRewardRate(this.address).call().then(res => {
+        this.mainContract.methods.getLastRewardRate().call().then(res => {
           this.apr = res * 12 / 100
         })
       },
@@ -641,6 +645,8 @@
       },
       getLiquidity () {
         this.getAddressInfoLiquidity()
+        this.getDepositBalance()
+        this.getWidthdrewBalance()
       },
       getAddressInfoLiquidity () {
         this.mainContract.methods.getAddressInfoLiquidity(this.address).call().then(res => {
@@ -648,6 +654,26 @@
           this.liquidity.token = res[0]
           this.liquidity.value = res[1]
           this.liquidity.yield = res[2]
+        })
+      },
+      getDepositBalance () {
+        this.testContract.methods.balanceOf(this.address).call().then(res => {
+          this.depositHint = `Balance: ${getPriceValue(res)}`
+        })
+      },
+      getWidthdrewBalance () {
+        this.testContract.methods.balanceOf(this.address).call().then(res => {
+          this.widthdrewHint = `Balance: ${getPriceValue(res)}`
+        })
+      },
+      depositBalance () {
+        this.mainContract.methods.depositeUSDT(this.depositVal).call().then(res => {
+          this.getDepositBalance()
+        })
+      },
+      widthdrewBalance () {
+        this.mainContract.methods.withdrawUSDT(this.widthdrewVal).call().then(res => {
+          this.getWidthdrewBalance()
         })
       },
       claimInterest () {
