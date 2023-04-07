@@ -185,6 +185,7 @@
 
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
   import { mainAddress, testUSDTAddress, nftAddress } from '@/abi/contractdata'
@@ -197,7 +198,6 @@
     },
     data () {
       return {
-        fromAddress: null,
         isApproved: true,
         typeItems: [
           { text: 50, value: '0-50' },
@@ -214,10 +214,12 @@
         nftAddress: nftAddress,
       }
     },
+    computed: {
+      ...mapState(['address']),
+    },
     async mounted () {
-      if (window.ethereum) {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.mainContract = new web3.eth.Contract(
           ARKSMain,
           mainAddress,
@@ -234,7 +236,7 @@
         this.$router.push('/account')
       },
       Approve () {
-        if (window.ethereum) {
+        if (this.address) {
           this.testContract.methods.approve(mainAddress, maxUnit256()).call().then(res => {
             console.log(res, 'approve')
             this.isApproved = true
@@ -258,7 +260,7 @@
         }
       },
       getDetail () {
-        this.testContract.methods.allowance(this.fromAddress[0], mainAddress).call().then(res => {
+        this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
           console.log(res, 'allowance')
           // if (res > maxUnit256() / 2) {
           //   this.isApproved = true
@@ -266,7 +268,7 @@
           //   this.isApproved = false
           // }
         })
-        // this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+        // this.mainContract.methods.getAddressInfoMain(this.address).call().then(res => {
         //   console.log(res, '1')
         // })
       },

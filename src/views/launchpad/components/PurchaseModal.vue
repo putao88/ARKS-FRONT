@@ -145,6 +145,7 @@
 
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
@@ -174,7 +175,6 @@
     },
     data () {
       return {
-        fromAddress: null,
         show: true,
         showExplain: true,
         planLength: 3,
@@ -201,10 +201,12 @@
         totalPayment: 0,
       }
     },
-    async mounted () {
-      if (window.ethereum) {
+    computed: {
+      ...mapState(['address']),
+    },
+    mounted () {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.mainContract = new web3.eth.Contract(
           ARKSMain,
           mainAddress,
@@ -221,7 +223,7 @@
         this.$emit('close-purchase-modal')
       },
       getBuyPlanDownPayment () {
-        this.mainContract.methods.getBuyPlanDownPayment(this.fromAddress[0], this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
+        this.mainContract.methods.getBuyPlanDownPayment(this.address, this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
           console.log(res, 'getBuyPlanDownPayment')
           this.firstPlanDown = new BigNumber(res)
           this.downPaymentItems = [
@@ -232,7 +234,7 @@
         })
       },
       getBuyPlanInterestRate () {
-        this.mainContract.methods.getBuyPlanInterestRate(this.fromAddress[0], this.type.split('-')[0], this.amount, this.downPayment, this.planLength).call().then(res => {
+        this.mainContract.methods.getBuyPlanInterestRate(this.address, this.type.split('-')[0], this.amount, this.downPayment, this.planLength).call().then(res => {
           console.log(res, 'getBuyPlanInterestRate')
           this.interestRate = new BigNumber(res).dividedBy(100).toFormat()
           this.originalPayment = this.type.split('-')[1] * 1 * this.amount
