@@ -247,6 +247,7 @@
 
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
@@ -260,7 +261,6 @@
       return {
         mainContract: null,
         testContract: null,
-        fromAddress: '',
         myAssetsValue: 0,
         myAssetsAmount: 0,
         myClaimedValue: 0,
@@ -269,10 +269,12 @@
         ndTotalSoldValue: 0,
       }
     },
-    async mounted () {
-      if (window.ethereum) {
+    computed: {
+      ...mapState(['address']),
+    },
+    mounted () {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.mainContract = new web3.eth.Contract(
           ARKSMain,
           mainAddress,
@@ -283,7 +285,6 @@
         )
         this.getLaunch()
         this.getPoolTotal()
-        // this.getDetail()
       }
     },
     methods: {
@@ -294,7 +295,7 @@
         this.$router.push('/launchpad-detail')
       },
       getLaunch () {
-        this.mainContract.methods.getAddressInfoMain(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressInfoMain(this.address).call().then(res => {
           this.myAssetsValue = getPriceValue(res[0])
           this.myAssetsAmount = res[1]
           this.myClaimedValue = getPriceValue(res[2])

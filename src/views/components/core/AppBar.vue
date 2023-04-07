@@ -57,13 +57,13 @@
     </v-btn>
 
     <v-btn
-      v-if="!connected"
+      v-if="!address"
       class="ml-2"
       min-width="0"
       text
       rounded
       color="primary"
-      @click="openWeb3Modal"
+      @click="connectMetamask"
     >
       <div class="wallet-icon-wrap">
         <v-icon size="20">
@@ -131,11 +131,11 @@
 
 <script>
 // Utilities
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState, mapMutations, mapActions } from 'vuex'
   import ClaimModal from '@/components/ClaimModal'
   import LoginModal from '@/components/LoginModal'
 
-  import { chain, configureChains, createClient, disconnect, watchAccount } from '@wagmi/core'
+  import { chain, configureChains, createClient, disconnect } from '@wagmi/core'
   import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'
 
@@ -184,24 +184,24 @@
     }),
 
     computed: {
-      ...mapState(['drawer', 'connected', 'address', 'isLoggedIn']),
+      ...mapState(['drawer', 'address', 'isLoggedIn']),
     },
     mounted: function () {
-      watchAccount(account => {
-        if (account.isConnected) {
-          this.setConnected(true)
-          this.setAddress(account.address)
-        } else {
-          this.setConnected(false)
-          this.setAddress('')
-        }
-      })
+      // watchAccount(account => {
+      //   if (account.isConnected) {
+      //     this.setAddress(account.address)
+      //   } else {
+      //     this.setAddress('')
+      //   }
+      // })
     },
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
-        setConnected: 'SET_CONNECTED',
         setAddress: 'SET_ADDRESS',
+      }),
+      ...mapActions({
+        connectWeb3: 'connectWeb3',
       }),
       goBack () {
         this.$router.go(-1)
@@ -209,7 +209,7 @@
       menuHandle (method) {
         if (method === 'Disconnect') {
           disconnect()
-          this.setConnected(false)
+          this.setAddress('')
         } else {
           this.$router.push('/launchpad')
         }
@@ -223,6 +223,9 @@
 
       openWeb3Modal () {
         web3Modal.openModal()
+      },
+      connectMetamask () {
+        this.connectWeb3()
       },
     },
   }

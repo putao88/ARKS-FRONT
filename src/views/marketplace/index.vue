@@ -146,6 +146,7 @@
 </template>
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
 
   // import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
@@ -171,10 +172,12 @@
         nftContract: null,
       }
     },
+    computed: {
+      ...mapState(['address']),
+    },
     async mounted () {
-      if (window.ethereum) {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.nftContract = new web3.eth.Contract(
           ARKSNFT,
           nftAddress,
@@ -193,7 +196,7 @@
         this.showItemModal = false
       },
       getTokenInfo () {
-        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {

@@ -97,6 +97,7 @@
 <script>
   import SellModal from '@/components/SellModal'
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
 
   // import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
@@ -113,7 +114,6 @@
         type: Boolean,
         default: false,
         nftContract: null,
-        fromAddress: '',
         targetTokenId: '',
       },
     },
@@ -125,10 +125,12 @@
         showSellModall: false,
       }
     },
+    computed: {
+      ...mapState(['address']),
+    },
     async mounted () {
-      if (window.ethereum) {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.nftContract = new web3.eth.Contract(
           ARKSNFT,
           nftAddress,
@@ -158,17 +160,17 @@
       },
       getApproved () {
         // 获取授权权限
-        // this.nftContract.methods.isApprovedForAll(this.fromAddress).call()
+        // this.nftContract.methods.isApprovedForAll(this.address).call()
       },
       setApproved () {
         // 授权的操作(address operator, bool _approved)(ARKS: Marketplace的合约地址，true)
-        // this.nftContract.methods.isApprovedForAll(this.fromAddress, true).call().then(res => {
+        // this.nftContract.methods.isApprovedForAll(this.address, true).call().then(res => {
         //   console.log(res, '1')
         // })
       },
       getCellShop () {
-        console.log(this.fromAddress[0])
-        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+        console.log(this.address)
+        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
           this.tokenId = res || []
           console.log(res, '2')
         })

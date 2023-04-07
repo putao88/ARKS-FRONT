@@ -164,6 +164,7 @@
 </template>
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
 
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
@@ -199,17 +200,18 @@
           show: false,
           value: '',
         },
-        fromAddress: '',
         nftContract: null,
         mainContract: null,
         tokenData: [],
         tokenId: '',
       }
     },
+    computed: {
+      ...mapState(['address']),
+    },
     async mounted () {
-      if (window.ethereum) {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.mainContract = new web3.eth.Contract(
           ARKSMain,
           mainAddress,
@@ -262,11 +264,11 @@
         })
       },
       getNftInfo () {
-        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {
-            this.mainContract.methods.getTokenIdInfoPreCollateral(item, this.fromAddress[0]).call().then(resl => {
+            this.mainContract.methods.getTokenIdInfoPreCollateral(item, this.address).call().then(resl => {
               this.tokenData.push({
                 tokenId: item,
                 interest: resl[0],
@@ -280,7 +282,7 @@
         })
       },
       getBroNftInfo () {
-        // this.mainContract.methods.getAddressCollateral(this.fromAddress[0]).call().then(res => {
+        // this.mainContract.methods.getAddressCollateral(this.address).call().then(res => {
         //   console.log(res, '9999')
         //   // res.forEach(item => {
         //   //   this.broNftInfo.push({

@@ -450,6 +450,7 @@
 
 <script>
   import Web3 from 'web3'
+  import { mapState } from 'vuex'
 
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
@@ -520,14 +521,15 @@
         dataUrl: [],
         mainContract: null,
         nftContract: null,
-        fromAddress: '',
         // web3: null,
       }
     },
+    computed: {
+      ...mapState(['address']),
+    },
     async mounted () {
-      if (window.ethereum) {
+      if (this.address) {
         const web3 = new Web3(window.web3.currentProvider)
-        this.fromAddress = await web3.eth.getAccounts()
         this.mainContract = new web3.eth.Contract(
           ARKSMain,
           mainAddress,
@@ -539,7 +541,7 @@
         this.getAssets()
         this.getReferral()
         this.getLiquidity()
-        this.myReferrals = `https://app.arkslabs.io/&ref=${this.fromAddress[0]}`
+        this.myReferrals = `https://app.arkslabs.io/&ref=${this.address}`
       }
       this.init()
     },
@@ -562,10 +564,10 @@
         }
       },
       getAssets () {
-        this.mainContract.methods.getAddressUnclaimedRewardRent(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressUnclaimedRewardRent(this.address).call().then(res => {
           this.interestValue = res
         })
-        this.nftContract.methods.tokensOfOwner(this.fromAddress[0]).call().then(res => {
+        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {
@@ -578,16 +580,16 @@
         })
       },
       getReferral () {
-        this.mainContract.methods.getAddressUnclaimedRewardRef(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressUnclaimedRewardRef(this.address).call().then(res => {
           this.rewardValue = res
         })
-        this.mainContract.methods.getAddressInfoRef(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressInfoRef(this.address).call().then(res => {
           this.referrals.value = res[0]
           this.referrals.level = res[1]
           this.referrals.rate = res[2]
           this.referrals.reward = res[3]
         })
-        this.mainContract.methods.getAddressInfoRefDetails(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressInfoRefDetails(this.address).call().then(res => {
           if (res.length) {
             this.desserts = []
             const temp = []
@@ -613,7 +615,7 @@
         })
       },
       getLiquidity () {
-        this.mainContract.methods.getAddressInfoLiquidity(this.fromAddress[0]).call().then(res => {
+        this.mainContract.methods.getAddressInfoLiquidity(this.address).call().then(res => {
           console.log(res, '6')
           this.liquidity.token = res[0]
           this.liquidity.value = res[1]
