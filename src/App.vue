@@ -9,6 +9,10 @@
       console.log('registerWeb3 Action dispatched from app.vue')
       this.$store.dispatch('getLoginAddress')
     },
+    mounted () {
+      const refAddress = this.$route.query.ref
+      if (refAddress) window.localStorage.setItem('refAddress', refAddress)
+    },
   }
 </script>
 <style lang="scss">

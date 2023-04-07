@@ -65,6 +65,7 @@
                 color="primary"
                 dark
                 rounded
+                @click="claimInterest"
               >
                 Claim
               </v-btn>
@@ -88,7 +89,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                $9,346
+                ${{ getPriceValue(assetsValue) }}
               </p>
               <p class="text-h4 grey--text">
                 Assets Value
@@ -103,7 +104,7 @@
               :class="{'border-lg-lr': ['lg', 'xl'].includes($vuetify.breakpoint.name)}"
             >
               <p class="text-h2 mb-1">
-                7.36%
+                {{ apr }}%
               </p>
               <p class="text-h4 grey--text">
                 APR
@@ -117,7 +118,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                $1.95/d
+                ${{ dailyReturn }}/d
               </p>
               <p class="text-h4 grey--text">
                 Daily Return
@@ -132,10 +133,14 @@
                 sm="12"
                 lg="3"
               >
-                <v-card class="rounded-lg pointer">
+                <v-card
+                  elevation="0"
+                  class="rounded-lg pointer"
+                >
                   <v-img
                     class="white--text align-end"
-                    height="220px"
+                    min-height="250px"
+                    :aspect-ratio="29/50"
                     :src="i"
                   />
                 </v-card>
@@ -175,6 +180,7 @@
                 width="200px"
                 color="primary"
                 rounded
+                @click="claimRewardRef"
               >
                 Claim
               </v-btn>
@@ -375,24 +381,6 @@
                     deposit
                   </v-btn>
                 </v-col>
-                <template
-                  v-for="i in 8"
-                >
-                  <v-col
-                    :key="i"
-                    cols="12"
-                    sm="12"
-                    lg="3"
-                  >
-                    <v-card class="rounded-lg pointer">
-                      <v-img
-                        class="white--text align-end"
-                        height="220px"
-                        src="@/assets/img/nft.png"
-                      />
-                    </v-card>
-                  </v-col>
-                </template>
               </v-row>
             </v-tab-item>
             <v-tab-item
@@ -421,27 +409,29 @@
                     widthdrew
                   </v-btn>
                 </v-col>
-                <template
-                  v-for="i in 8"
-                >
-                  <v-col
-                    :key="i"
-                    cols="12"
-                    sm="12"
-                    lg="3"
-                  >
-                    <v-card class="rounded-lg pointer">
-                      <v-img
-                        class="white--text align-end"
-                        height="220px"
-                        src="@/assets/img/nft.png"
-                      />
-                    </v-card>
-                  </v-col>
-                </template>
               </v-row>
             </v-tab-item>
           </v-tabs-items>
+          <v-row>
+            <template
+              v-for="i in 8"
+            >
+              <v-col
+                :key="i"
+                cols="12"
+                sm="12"
+                lg="3"
+              >
+                <v-card class="rounded-lg pointer">
+                  <v-img
+                    class="white--text align-end"
+                    height="220px"
+                    src="@/assets/img/nft.png"
+                  />
+                </v-card>
+              </v-col>
+            </template>
+          </v-row>
         </v-tab-item>
       </v-tabs-items>
     </v-card>
@@ -454,7 +444,7 @@
 
   import ARKSMain from '@/abi/ARKSMain.json'
   import ARKSNFT from '@/abi/ARKSNFT.json'
-  import { mainAddress, nftAddress } from '../../abi/contractdata'
+  import { mainAddress, nftAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import { copy } from '@/utils/common'
   import { Base64 } from 'js-base64'
@@ -464,7 +454,7 @@
       return {
         tab: null,
         liquidityTab: 'Widthdrew',
-        myReferrals: 'https://app.arkslabs.io/',
+        myReferrals: 'https://app.arkslabs.io',
         depositVal: null,
         widthdrewVal: null,
         hint: 'Balance',
@@ -506,6 +496,9 @@
           },
         ],
         interestValue: 0,
+        assetsValue: 0,
+        apr: 0,
+        dailyReturn: 0,
         rewardValue: 0,
         referrals: {
           value: 0,
@@ -541,7 +534,7 @@
         this.getAssets()
         this.getReferral()
         this.getLiquidity()
-        this.myReferrals = `https://app.arkslabs.io/&ref=${this.address}`
+        this.myReferrals = `https://app.arkslabs.io?ref=${this.address}`
       }
       this.init()
     },
@@ -563,10 +556,19 @@
           }
         }
       },
-      getAssets () {
+      async getAssets () {
+        this.getAddressUnclaimedRewardRent()
+        this.tokensOfOwner()
+        await this.getAddressTotalValue()
+        await this.getLastRewardRate()
+        this.getDailyReturn()
+      },
+      getAddressUnclaimedRewardRent () {
         this.mainContract.methods.getAddressUnclaimedRewardRent(this.address).call().then(res => {
           this.interestValue = res
         })
+      },
+      tokensOfOwner () {
         this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
           const dataToken = res
           // const tempUrl = []
@@ -574,21 +576,44 @@
             this.nftContract.methods.tokenURI(item).call().then(res => {
               const data = res.split('data:application/json;base64,')[1]
               const obj = JSON.parse(Base64.decode(data))
+              console.log(obj.image)
               this.dataUrl.push(obj.image)
             })
           })
         })
       },
+      getAddressTotalValue () {
+        this.mainContract.methods.getAddressTotalValue(this.address).call().then(res => {
+          this.assetsValue = res
+        })
+      },
+      getLastRewardRate () {
+        this.mainContract.methods.getLastRewardRate(this.address).call().then(res => {
+          this.apr = res * 12 / 100
+        })
+      },
+      getDailyReturn () {
+        this.dailyReturn = this.assetsValue * (this.apr / 100) / 30
+      },
       getReferral () {
+        this.getAddressUnclaimedRewardRef()
+        this.getAddressInfoRef()
+        this.getAddressInfoRefDetails()
+      },
+      getAddressUnclaimedRewardRef () {
         this.mainContract.methods.getAddressUnclaimedRewardRef(this.address).call().then(res => {
           this.rewardValue = res
         })
+      },
+      getAddressInfoRef () {
         this.mainContract.methods.getAddressInfoRef(this.address).call().then(res => {
           this.referrals.value = res[0]
           this.referrals.level = res[1]
           this.referrals.rate = res[2]
           this.referrals.reward = res[3]
         })
+      },
+      getAddressInfoRefDetails () {
         this.mainContract.methods.getAddressInfoRefDetails(this.address).call().then(res => {
           if (res.length) {
             this.desserts = []
@@ -615,11 +640,24 @@
         })
       },
       getLiquidity () {
+        this.getAddressInfoLiquidity()
+      },
+      getAddressInfoLiquidity () {
         this.mainContract.methods.getAddressInfoLiquidity(this.address).call().then(res => {
           console.log(res, '6')
           this.liquidity.token = res[0]
           this.liquidity.value = res[1]
           this.liquidity.yield = res[2]
+        })
+      },
+      claimInterest () {
+        this.mainContract.methods.claimRewardRent().call().then(res => {
+          this.getAddressUnclaimedRewardRent()
+        })
+      },
+      claimRewardRef () {
+        this.mainContract.methods.claimRewardRef().call().then(res => {
+          this.getAddressUnclaimedRewardRef()
         })
       },
     },

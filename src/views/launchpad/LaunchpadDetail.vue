@@ -89,20 +89,11 @@
             </p> -->
           </div>
           <v-btn
-            v-if="isApproved"
             class="primary rounded-pill"
             width="100%"
             @click="openBuyModal"
           >
             Buy
-          </v-btn>
-          <v-btn
-            v-else
-            class="primary rounded-pill"
-            width="100%"
-            @click="Approve"
-          >
-            Approve
           </v-btn>
         </v-col>
       </v-row>
@@ -190,7 +181,6 @@
   import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
   import { mainAddress, testUSDTAddress, nftAddress } from '@/abi/contractdata'
   import PurchaseModal from './components/PurchaseModal'
-  import { maxUnit256 } from '@/utils/tools'
   export default {
     name: 'LaunchpadDetail',
     components: {
@@ -198,7 +188,6 @@
     },
     data () {
       return {
-        isApproved: true,
         typeItems: [
           { text: 50, value: '0-50' },
           { text: 100, value: '1-100' },
@@ -228,20 +217,11 @@
           ARKSTestUSDT,
           testUSDTAddress,
         )
-        this.getDetail()
       }
     },
     methods: {
       toAccount () {
         this.$router.push('/account')
-      },
-      Approve () {
-        if (this.address) {
-          this.testContract.methods.approve(mainAddress, maxUnit256()).call().then(res => {
-            console.log(res, 'approve')
-            this.isApproved = true
-          })
-        }
       },
       openBuyModal () {
         this.showPurchaseModall = true
@@ -258,19 +238,6 @@
         if (this.amount < 5) {
           this.amount++
         }
-      },
-      getDetail () {
-        this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
-          console.log(res, 'allowance')
-          // if (res > maxUnit256() / 2) {
-          //   this.isApproved = true
-          // } else {
-          //   this.isApproved = false
-          // }
-        })
-        // this.mainContract.methods.getAddressInfoMain(this.address).call().then(res => {
-        //   console.log(res, '1')
-        // })
       },
     },
   }

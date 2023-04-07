@@ -130,12 +130,21 @@
             </v-expand-transition>
           </v-card>
           <v-btn
+            v-if="isApproved"
             width="100%"
             color="primary"
             rounded
             @click="buyWithPlan"
           >
             BUY
+          </v-btn>
+          <v-btn
+            v-else
+            class="primary rounded-pill"
+            width="100%"
+            @click="Approve"
+          >
+            APPROVE
           </v-btn>
         </v-card-text>
       </v-card>
@@ -151,6 +160,7 @@
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
   import Tooltips from '@/components/Tooltips'
   import BigNumber from 'bignumber.js'
+  import { MaxUint256 } from '@/utils/figure'
 
   export default {
     name: 'PurchaseModal',
@@ -165,8 +175,8 @@
         default: null,
       },
       type: {
-        type: Number,
-        default: 1,
+        type: String,
+        default: '',
       },
       amount: {
         type: Number,
@@ -176,6 +186,7 @@
     data () {
       return {
         show: true,
+        isApproved: false,
         showExplain: true,
         planLength: 3,
         planLengthEnum: {
@@ -215,12 +226,23 @@
           ARKSTestUSDT,
           testUSDTAddress,
         )
+        this.getAllowance()
         this.getBuyPlanDownPayment()
       }
     },
     methods: {
       closeDailog () {
         this.$emit('close-purchase-modal')
+      },
+      getAllowance () {
+        this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
+          console.log(res, 'allowance')
+          if (res > MaxUint256 / 2) {
+            this.isApproved = true
+          } else {
+            this.isApproved = false
+          }
+        })
       },
       getBuyPlanDownPayment () {
         this.mainContract.methods.getBuyPlanDownPayment(this.address, this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
@@ -257,8 +279,16 @@
       downPaymentChange (val) {
         this.getBuyPlanInterestRate()
       },
+      Approve () {
+        if (this.address) {
+          this.testContract.methods.approve(mainAddress, MaxUint256).call().then(res => {
+            console.log(res, 'approve')
+            this.isApproved = true
+          })
+        }
+      },
       buyWithPlan () {
-        const addressRef = '0x99C5a8c52b70ef656bc0aaaeb8b747d59a3b8E9D'
+        const addressRef = window.localStorage.getItem('refAddress') || '0'
         this.mainContract.methods.buyWithPlan(this.type.split('-')[0], this.amount, this.planLength, this.downPayment, addressRef).call().then(res => {
           console.log(res, 'buyWithPlan')
         })
