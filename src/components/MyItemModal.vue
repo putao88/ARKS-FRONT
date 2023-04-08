@@ -59,7 +59,9 @@
             </v-col>
           </v-row>
           <v-row>
-            <template v-for="(item, index) in tokenId">
+            <template
+              v-for="(i, index) in dataUrl"
+            >
               <v-col
                 :key="index"
                 cols="12"
@@ -72,8 +74,9 @@
                 >
                   <v-img
                     class="white--text align-end"
-                    height="200px"
-                    src="@/assets/img/nft.png"
+                    min-height="125px"
+                    :aspect-ratio="29/50"
+                    :src="i"
                   />
                   <div class="card-bottom-div">
                     <span>Price:</span>
@@ -103,6 +106,7 @@
   import ARKSNFT from '@/abi/ARKSNFT.json'
   import { nftAddress } from '@/abi/contractdata'
   // import { getPriceValue } from '@/utils/tools'
+  import { Base64 } from 'js-base64'
 
   export default {
     name: 'MyItemModal',
@@ -121,7 +125,7 @@
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
-        tokenId: new Array(8),
+        dataUrl: [],
         showSellModall: false,
       }
     },
@@ -138,7 +142,7 @@
         const res = await this.getApproved()
         if (res) {
           // 已授权
-          this.getCellShop()
+          this.getTokenInfo()
         } else {
           // 未授权
         }
@@ -168,11 +172,16 @@
         //   console.log(res, '1')
         // })
       },
-      getCellShop () {
-        console.log(this.address)
+      getTokenInfo () {
         this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
-          this.tokenId = res || []
-          console.log(res, '2')
+          const dataToken = res
+          dataToken.forEach(item => {
+            this.nftContract.methods.tokenURI(item).call().then(res => {
+              const data = res.split('data:application/json;base64,')[1]
+              const obj = JSON.parse(Base64.decode(data))
+              this.dataUrl.push(obj.image)
+            })
+          })
         })
       },
       setCellShop (price) {

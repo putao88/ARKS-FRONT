@@ -207,7 +207,7 @@
               <div class="wp-50 mr-8">
                 <v-text-field
                   v-model="myReferrals"
-                  disabled="true"
+                  :disabled="true"
                 />
               </div>
               <v-btn
@@ -469,36 +469,7 @@
           { text: 'Rate', value: 'Rate', class: 'primary--text' },
           { text: 'Rewards', value: 'Rewards', class: 'primary--text' },
         ],
-        desserts: [
-          {
-            Address: 'Frozen Yogurt',
-            Date: '2022-09-11',
-            Value: '159 USDT',
-            Rate: '10%',
-            Rewards: '6 USDT',
-          },
-          {
-            Address: 'Frozen Yogurt',
-            Date: '2022-09-11',
-            Value: '159 USDT',
-            Rate: '10%',
-            Rewards: '6 USDT',
-          },
-          {
-            Address: 'Frozen Yogurt',
-            Date: '2022-09-11',
-            Value: '159 USDT',
-            Rate: '10%',
-            Rewards: '6 USDT',
-          },
-          {
-            Address: 'Frozen Yogurt',
-            Date: '2022-09-11',
-            Value: '159 USDT',
-            Rate: '10%',
-            Rewards: '6 USDT',
-          },
-        ],
+        desserts: [],
         interestValue: 0,
         assetsValue: 0,
         apr: 0,
@@ -619,6 +590,7 @@
       },
       getAddressInfoRefDetails () {
         this.mainContract.methods.getAddressInfoRefDetails(this.address).call().then(res => {
+          console.log('result', res)
           if (res.length) {
             this.desserts = []
             const temp = []
