@@ -32,7 +32,7 @@
           contain
         >
           <v-img
-            src="@/assets/img/logo.png"
+            src="@/assets/logo.svg"
           />
         </v-list-item-avatar>
 
