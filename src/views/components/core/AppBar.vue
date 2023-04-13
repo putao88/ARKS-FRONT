@@ -116,7 +116,7 @@
 
 <script>
 // Utilities
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ClaimModal from '@/components/ClaimModal'
 import LoginModal from '@/components/LoginModal'
 import { web3modal } from '@/utils/web3ModalConnector'
@@ -171,9 +171,6 @@ export default {
       setDrawer: 'SET_DRAWER',
       setAddress: 'SET_ADDRESS',
     }),
-    ...mapActions({
-      connectWeb3: 'connectWeb3',
-    }),
     goBack() {
       this.$router.go(-1)
     },
@@ -194,9 +191,6 @@ export default {
 
     openWeb3Modal() {
       web3modal.openModal()
-    },
-    connectMetamask() {
-      this.connectWeb3()
     },
     async writeContractTest() {
       const config = await prepareWriteContract({

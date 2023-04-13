@@ -14,6 +14,13 @@ export default new Vuex.Store({
     drawer: null,
     address: '',
     isLoggedIn: false,
+    snackbar: {
+      visible: false,
+      text: 'Tips',
+      color: 'success',
+      top: true,
+      timeout: 2000,
+    }
   },
   mutations: {
     SET_BAR_IMAGE (state, payload) {
@@ -27,6 +34,10 @@ export default new Vuex.Store({
     },
     SET_IS_LOGGED_IN (state, payload) {
       state.isLoggedIn = payload
+    },
+    SET_SNACKBAR (state, payload) {
+      const copySnackbar = state.snackbar
+      state.snackbar = Object.assign(copySnackbar, payload)
     },
   },
   actions: {

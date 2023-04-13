@@ -1,10 +1,18 @@
 <template>
   <div>
-    <v-dialog v-model="showModal" width="500" :persistent="true">
+    <v-dialog
+      v-model="showModal"
+      width="500"
+      :persistent="true"
+    >
       <v-card class="rounded-lg">
         <v-card-title class="text-left white--text primary pb-4">
           <span class="text-h3"> Confirm Purchase </span>
-          <v-icon size="20" color="white" @click="closeDailog">
+          <v-icon
+            size="20"
+            color="white"
+            @click="closeDailog"
+          >
             mdi-close
           </v-icon>
         </v-card-title>
@@ -32,7 +40,10 @@
             <v-expand-transition>
               <div v-show="show">
                 <v-divider />
-                <div class="mt-2" style="font-size: 14px">
+                <div
+                  class="mt-2"
+                  style="font-size: 14px"
+                >
                   <div class="d-flex justify-space-between">
                     <span class="d-flex align-center">
                       <span class="mr-1">Original Purchase Price</span>
@@ -111,7 +122,10 @@
             <v-expand-transition>
               <div v-show="showExplain">
                 <v-divider />
-                <div class="mt-2" style="font-size: 14px">
+                <div
+                  class="mt-2"
+                  style="font-size: 14px"
+                >
                   Unlock the potential of ARKS-NFTs with just one down payment.
                   Enjoy exclusive rights to NFT earnings, offset or eliminate
                   interest costs, and watch your investment thrive. Act now for
@@ -144,158 +158,202 @@
 </template>
 
 <script>
-import Web3 from 'web3'
-import { mapState } from 'vuex'
-import ARKSMain from '@/abi/ARKSMain.json'
-import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
-import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
-import Tooltips from '@/components/Tooltips'
-import BigNumber from 'bignumber.js'
-import { MaxUint256 } from '@/utils/figure'
+  import Web3 from 'web3'
+  import { mapState, mapMutations } from 'vuex'
+  import ARKSMain from '@/abi/ARKSMain.json'
+  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
+  import Tooltips from '@/components/Tooltips'
+  import BigNumber from 'bignumber.js'
+  import { MaxUint256 } from '@/utils/figure'
 
-import { writeContract, prepareWriteContract } from '@wagmi/core'
+  import { writeContract, prepareWriteContract } from '@wagmi/core'
 
-export default {
-  name: 'PurchaseModal',
-  components: { Tooltips },
-  props: {
-    showModal: {
-      type: Boolean,
-      default: false,
-    },
-    cardDetail: {
-      type: Object,
-      default: null,
-    },
-    type: {
-      type: String,
-      default: '',
-    },
-    amount: {
-      type: Number,
-      default: 1,
-    },
-  },
-  data() {
-    return {
-      show: true,
-      isApproved: false,
-      showExplain: true,
-      planLength: 3,
-      planLengthEnum: {
-        0: 'None',
-        3: '3 month',
-        5: '5 month',
-        8: '8 month',
+  export default {
+    name: 'PurchaseModal',
+    components: { Tooltips },
+    props: {
+      showModal: {
+        type: Boolean,
+        default: false,
       },
-      planLengthItems: [
-        { text: 'Make full payment at once', value: 0 },
-        { text: '3 month', value: 3 },
-        { text: '5 month', value: 5 },
-        { text: '8 month', value: 8 },
-      ],
-      downPayment: null,
-      downPaymentItems: [],
-      firstPlanDown: 0,
-      originalPayment: 0,
-      interestFee: 0,
-      interestRate: 0,
-      downPaymentAmount: 0,
-      monthlyPayment: 0,
-      totalPayment: 0,
-    }
-  },
-  computed: {
-    ...mapState(['address']),
-  },
-  mounted() {
-    if (this.address) {
-      const web3 = new Web3(window.web3.currentProvider)
-      this.mainContract = new web3.eth.Contract(
-        ARKSMain,
-        mainAddress,
-      )
-      this.testContract = new web3.eth.Contract(
-        ARKSTestUSDT,
-        testUSDTAddress,
-      )
-      this.getAllowance()
-      this.getBuyPlanDownPayment()
-    }
-  },
-  methods: {
-    closeDailog() {
-      this.$emit('close-purchase-modal')
+      cardDetail: {
+        type: Object,
+        default: null,
+      },
+      type: {
+        type: String,
+        default: '',
+      },
+      amount: {
+        type: Number,
+        default: 1,
+      },
     },
-    getAllowance() {
-      this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
-        console.log(res, 'allowance')
-        if (res > MaxUint256 / 2) {
-          this.isApproved = true
-        } else {
-          this.isApproved = false
-        }
-      })
+    data () {
+      return {
+        show: true,
+        isApproved: false,
+        showExplain: true,
+        planLength: 3,
+        planLengthEnum: {
+          0: 'None',
+          3: '3 month',
+          5: '5 month',
+          8: '8 month',
+        },
+        planLengthItems: [
+          { text: 'Make full payment at once', value: 0 },
+          { text: '3 month', value: 3 },
+          { text: '5 month', value: 5 },
+          { text: '8 month', value: 8 },
+        ],
+        downPayment: null,
+        downPaymentItems: [],
+        firstPlanDown: 0,
+        originalPayment: 0,
+        interestFee: 0,
+        interestRate: 0,
+        downPaymentAmount: 0,
+        monthlyPayment: 0,
+        totalPayment: 0,
+      }
     },
-    getBuyPlanDownPayment() {
-      this.mainContract.methods.getBuyPlanDownPayment(this.address, this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
-        console.log(res, 'getBuyPlanDownPayment')
-        this.firstPlanDown = new BigNumber(res)
-        this.downPaymentItems = [
-          { text: `${this.firstPlanDown}%`, value: res },
-          { text: `${this.firstPlanDown.plus(10)}%`, value: `${this.firstPlanDown.plus(10)}` },
-          { text: `${this.firstPlanDown.plus(20)}%`, value: `${this.firstPlanDown.plus(20)}` },
-        ]
-      })
+    computed: {
+      ...mapState(['address']),
     },
-    getBuyPlanInterestRate() {
-      this.mainContract.methods.getBuyPlanInterestRate(this.address, this.type.split('-')[0], this.amount, this.downPayment, this.planLength).call().then(res => {
-        console.log(res, 'getBuyPlanInterestRate')
-        this.interestRate = new BigNumber(res).dividedBy(100).toFormat()
-        this.originalPayment = this.type.split('-')[1] * 1 * this.amount
-        this.interestFee = this.type.split('-')[1] * 1 * this.amount * this.interestRate / 100
-        this.downPaymentAmount = this.type.split('-')[1] * 1 * this.amount * this.downPayment / 100
-        this.monthlyPayment = (this.type.split('-')[1] * 1 * this.amount * (1 + this.interestRate / 100 - this.firstPlanDown / 100) / this.planLength).toFixed(2)
-        this.totalPayment = this.type.split('-')[1] * 1 * this.amount * (1 + this.interestRate / 100)
-      })
-    },
-    planLengthChange(val) {
-      if (val === 0) {
-        this.downPaymentItems = [
-          { text: '100%', value: 1 },
-        ]
-      } else {
+    mounted () {
+      if (this.address) {
+        const web3 = new Web3(window.web3.currentProvider)
+        this.mainContract = new web3.eth.Contract(
+          ARKSMain,
+          mainAddress,
+        )
+        this.testContract = new web3.eth.Contract(
+          ARKSTestUSDT,
+          testUSDTAddress,
+        )
+        this.getAllowance()
         this.getBuyPlanDownPayment()
       }
-      this.downPayment = null
     },
-    downPaymentChange(val) {
-      this.getBuyPlanInterestRate()
-    },
-    async Approve() {
-      if (this.address) {
-        // this.testContract.methods.approve(mainAddress, MaxUint256).call().then(res => {
-        //   console.log(res, 'approve')
-        //   this.isApproved = true
-        // })
-        const config = await prepareWriteContract({
-          address: testUSDTAddress,
-          abi: ARKSTestUSDT,
-          functionName: 'approve',
-          args: [mainAddress,MaxUint256]
+    methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
+      closeDailog () {
+        this.$emit('close-purchase-modal')
+      },
+      getAllowance () {
+        this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
+          console.log(res, 'allowance')
+          if (res > MaxUint256 / 2) {
+            this.isApproved = true
+          } else {
+            this.isApproved = false
+          }
         })
-        const data = await writeContract(config)
-        console.log('contract return:', data)
-      }
+      },
+      getBuyPlanDownPayment () {
+        this.mainContract.methods.getBuyPlanDownPayment(this.address, this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
+          console.log(res, 'getBuyPlanDownPayment')
+          this.firstPlanDown = new BigNumber(res)
+          this.downPaymentItems = [
+            { text: `${this.firstPlanDown}%`, value: res },
+            { text: `${this.firstPlanDown.plus(10)}%`, value: `${this.firstPlanDown.plus(10)}` },
+            { text: `${this.firstPlanDown.plus(20)}%`, value: `${this.firstPlanDown.plus(20)}` },
+          ]
+        })
+      },
+      getBuyPlanInterestRate () {
+        this.mainContract.methods.getBuyPlanInterestRate(this.address, this.type.split('-')[0], this.amount, this.downPayment, this.planLength).call().then(res => {
+          console.log(res, 'getBuyPlanInterestRate')
+          this.interestRate = new BigNumber(res).dividedBy(100).toFormat()
+          this.originalPayment = this.type.split('-')[1] * 1 * this.amount
+          this.interestFee = this.type.split('-')[1] * 1 * this.amount * this.interestRate / 100
+          this.downPaymentAmount = this.type.split('-')[1] * 1 * this.amount * this.downPayment / 100
+          this.monthlyPayment = (this.type.split('-')[1] * 1 * this.amount * (1 + this.interestRate / 100 - this.firstPlanDown / 100) / this.planLength).toFixed(2)
+          this.totalPayment = this.type.split('-')[1] * 1 * this.amount * (1 + this.interestRate / 100)
+        })
+      },
+      planLengthChange (val) {
+        if (val === 0) {
+          this.downPaymentItems = [
+            { text: '100%', value: 1 },
+          ]
+        } else {
+          this.getBuyPlanDownPayment()
+        }
+        this.downPayment = null
+      },
+      downPaymentChange (val) {
+        this.getBuyPlanInterestRate()
+      },
+      async Approve () {
+        if (this.address) {
+          // this.testContract.methods.approve(mainAddress, MaxUint256).send({
+          //   from: this.address
+          // }).then(res => {
+          //   console.log(res, 'approve')
+          //   this.isApproved = true
+          // })
+          const config = await prepareWriteContract({
+            address: testUSDTAddress,
+            abi: ARKSTestUSDT,
+            functionName: 'approve',
+            args: [mainAddress, MaxUint256],
+          })
+          writeContract(config).then(res => {
+            this.isApproved = true
+          }).catch(err => {
+            this.setSnackbar({
+              visible: true,
+              text: err.message,
+              color: 'error',
+              timeout: 2000,
+            })
+          })
+        }
+      },
+      async buyWithPlan () {
+        const addressRef = window.localStorage.getItem('refAddress') || this.address || '0' 
+        const type = Number(this.type.split('-')[0])
+        // this.mainContract.methods.buyWithPlan(type, this.amount, this.planLength, this.downPayment, addressRef).send({
+        //     from: this.address
+        // }).then(res => {
+        //   console.log(res, 'buyWithPlan')
+        // })
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: ARKSMain,
+            functionName: 'buyWithPlan',
+            args: [type, this.amount, this.planLength, this.downPayment, addressRef],
+          })
+          writeContract(config).then(res => {
+            console.log(res, 'buyWithPlan')
+            this.setSnackbar({
+              visible: true,
+              text: res.message,
+            })
+            this.closeDailog()
+          }).catch(err => {
+            this.setSnackbar({
+              visible: true,
+              color: 'error',
+              text: err.message,
+            })
+          })
+        } catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
+      },
     },
-    buyWithPlan() {
-      const addressRef = window.localStorage.getItem('refAddress') || '0'
-      this.mainContract.methods.buyWithPlan(this.type.split('-')[0], this.amount, this.planLength, this.downPayment, addressRef).call().then(res => {
-        console.log(res, 'buyWithPlan')
-      })
-    },
-  },
-}
+  }
 </script>
 <style lang="scss" scoped>
 .text-field-wrap {

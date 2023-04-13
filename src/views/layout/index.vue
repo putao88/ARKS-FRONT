@@ -6,6 +6,7 @@
 
     <dashboard-core-view />
 
+    <snackbar-modal />
     <!-- <dashboard-core-settings /> -->
   </v-app>
 </template>
@@ -19,6 +20,7 @@
       DashboardCoreDrawer: () => import('../components/core/Drawer'),
       // DashboardCoreSettings: () => import('../components/core/Settings'),
       DashboardCoreView: () => import('../components/core/View'),
+      SnackbarModal: () => import('../components/Snackbar'),
     },
 
     data: () => ({
