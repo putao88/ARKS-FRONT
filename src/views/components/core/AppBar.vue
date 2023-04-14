@@ -32,18 +32,6 @@
       text
       rounded
       color="primary"
-      @click="writeContractTest"
-    >
-      <v-icon large> mdi-bitcoin </v-icon>
-      <span class="primary--text font-weight-bold">test</span>
-    </v-btn>
-
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      rounded
-      color="primary"
       @click="openClaimModal"
     >
       <v-icon large> mdi-bitcoin </v-icon>
@@ -121,10 +109,7 @@ import ClaimModal from '@/components/ClaimModal'
 import LoginModal from '@/components/LoginModal'
 import { web3modal } from '@/utils/web3ModalConnector'
 
-import { watchAccount, disconnect, writeContract, prepareWriteContract } from '@wagmi/core'
-import testAbi from '@/abi/testAbi.json'
-import { testAddress } from '@/abi/contractdata'
-console.log(testAbi)
+import { watchAccount, disconnect} from '@wagmi/core'
 
 export default {
   name: 'DashboardCoreAppBar',
@@ -191,16 +176,6 @@ export default {
 
     openWeb3Modal() {
       web3modal.openModal()
-    },
-    async writeContractTest() {
-      const config = await prepareWriteContract({
-        address: testAddress,
-        abi: testAbi,
-        functionName: 'setAddress',
-        args:[100]
-      })
-      const data = await writeContract(config)
-      console.log('contract return:', data)
     },
   },
 }
