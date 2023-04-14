@@ -316,8 +316,9 @@
         }
       },
       async buyWithPlan () {
-        const addressRef = window.localStorage.getItem('refAddress') || this.address || '0' 
+        const addressRef = window.localStorage.getItem('refAddress') || this.address || '000000000000000000000000000000000000000000'
         const type = Number(this.type.split('-')[0])
+        console.log('type', type)
         // this.mainContract.methods.buyWithPlan(type, this.amount, this.planLength, this.downPayment, addressRef).send({
         //     from: this.address
         // }).then(res => {
