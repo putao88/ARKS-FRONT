@@ -441,12 +441,11 @@
 </template>
 
 <script>
-  import Web3 from 'web3'
-  import { mapState } from 'vuex'
-
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSNFT from '@/abi/ARKSNFT.json'
-  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
+  import { mapState, mapMutations } from 'vuex'
+  import mainABI from '@/abi/mainABI.json'
+  import nftABI from '@/abi/nftABI.json'
+  import testusdtABI from '@/abi/testusdtABI.json'
   import { mainAddress, nftAddress, testUSDTAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import { copy } from '@/utils/common'
@@ -487,9 +486,6 @@
           yield: 0,
         },
         dataUrl: [],
-        mainContract: null,
-        nftContract: null,
-        // web3: null,
       }
     },
     computed: {
@@ -497,19 +493,6 @@
     },
     async mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.nftContract = new web3.eth.Contract(
-          ARKSNFT,
-          nftAddress,
-        )
-        this.testContract = new web3.eth.Contract(
-          ARKSTestUSDT,
-          testUSDTAddress,
-        )
         this.getAssets()
         this.getReferral()
         this.getLiquidity()
@@ -518,6 +501,9 @@
       this.openTab()
     },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
       getPriceValue: getPriceValue,
       copy: copy,
       openTab () {
@@ -539,16 +525,33 @@
         this.getDailyReturn()
       },
       getAddressUnclaimedRewardRent () {
-        this.mainContract.methods.getAddressUnclaimedRewardRent(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressUnclaimedRewardRent',
+          args: [this.address]
+        }).then(res => {
           this.interestValue = res
         })
       },
       tokensOfOwner () {
-        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
+        readContract({
+          address: nftAddress,
+          abi: nftABI,
+          functionName: 'tokensOfOwner',
+          args: [this.address]
+        }).then(res => {
+          console.log('tokensOfOwner:', res)
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {
-            this.nftContract.methods.tokenURI(item).call().then(res => {
+            readContract({
+              address: nftAddress,
+              abi: nftABI,
+              functionName: 'tokenURI',
+              args: [item]
+            }).then(res => {
+              console.log('tokenURI:', res)
               const data = res.split('data:application/json;base64,')[1]
               const obj = JSON.parse(Base64.decode(data))
               console.log(obj.image)
@@ -558,12 +561,20 @@
         })
       },
       getAddressTotalValue () {
-        this.mainContract.methods.getAddressTotalValue(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressTotalValue',
+        }).then(res => {
           this.assetsValue = res
         })
       },
       getLastRewardRate () {
-        this.mainContract.methods.getLastRewardRate().call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getLastRewardRate',
+        }).then(res => {
           this.apr = res * 12 / 100
         })
       },
@@ -576,12 +587,20 @@
         this.getAddressInfoRefDetails()
       },
       getAddressUnclaimedRewardRef () {
-        this.mainContract.methods.getAddressUnclaimedRewardRef(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressUnclaimedRewardRef',
+        }).then(res => {
           this.rewardValue = res
         })
       },
       getAddressInfoRef () {
-        this.mainContract.methods.getAddressInfoRef(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressInfoRef',
+        }).then(res => {
           this.referrals.value = res[0]
           this.referrals.level = res[1]
           this.referrals.rate = res[2]
@@ -589,7 +608,11 @@
         })
       },
       getAddressInfoRefDetails () {
-        this.mainContract.methods.getAddressInfoRefDetails(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressInfoRefDetails',
+        }).then(res => {
           console.log('result', res)
           if (res.length) {
             this.desserts = []
@@ -621,7 +644,11 @@
         this.getWidthdrewBalance()
       },
       getAddressInfoLiquidity () {
-        this.mainContract.methods.getAddressInfoLiquidity(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressInfoLiquidity',
+        }).then(res => {
           console.log(res, '6')
           this.liquidity.token = res[0]
           this.liquidity.value = res[1]
@@ -629,34 +656,98 @@
         })
       },
       getDepositBalance () {
-        this.testContract.methods.balanceOf(this.address).call().then(res => {
+        readContract({
+          address: testUSDTAddress,
+          abi: testusdtABI,
+          functionName: 'balanceOf',
+        }).then(res => {
           this.depositHint = `Balance: ${getPriceValue(res)}`
         })
       },
       getWidthdrewBalance () {
-        this.testContract.methods.balanceOf(this.address).call().then(res => {
+        readContract({
+          address: testUSDTAddress,
+          abi: testusdtABI,
+          functionName: 'balanceOf',
+        }).then(res => {
           this.widthdrewHint = `Balance: ${getPriceValue(res)}`
         })
       },
-      depositBalance () {
-        this.mainContract.methods.depositeUSDT(this.depositVal).call().then(res => {
-          this.getDepositBalance()
-        })
+      async depositBalance () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'depositeUSDT',
+            args: [this.depositVal],
+          })
+          writeContract(config).then(res => {
+            this.getDepositBalance()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
-      widthdrewBalance () {
-        this.mainContract.methods.withdrawUSDT(this.widthdrewVal).call().then(res => {
-          this.getWidthdrewBalance()
-        })
+     async widthdrewBalance () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'withdrawUSDT',
+            args: [this.widthdrewVal],
+          })
+          writeContract(config).then(res => {
+            this.getWidthdrewBalance()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
-      claimInterest () {
-        this.mainContract.methods.claimRewardRent().call().then(res => {
-          this.getAddressUnclaimedRewardRent()
-        })
+      async claimInterest () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'claimRewardRent',
+            args: [],
+          })
+          writeContract(config).then(res => {
+            this.getAddressUnclaimedRewardRent()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
-      claimRewardRef () {
-        this.mainContract.methods.claimRewardRef().call().then(res => {
-          this.getAddressUnclaimedRewardRef()
-        })
+      async claimRewardRef () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'claimRewardRef',
+            args: [],
+          })
+          writeContract(config).then(res => {
+            this.getAddressUnclaimedRewardRef()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
     },
   }

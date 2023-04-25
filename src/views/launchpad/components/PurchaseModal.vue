@@ -158,16 +158,14 @@
 </template>
 
 <script>
-  import Web3 from 'web3'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
   import { mapState, mapMutations } from 'vuex'
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import mainABI from '@/abi/mainABI.json'
+  import testusdtABI from '@/abi/testusdtABI.json'
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
   import Tooltips from '@/components/Tooltips'
   import BigNumber from 'bignumber.js'
   import { MaxUint256 } from '@/utils/figure'
-
-  import { writeContract, prepareWriteContract } from '@wagmi/core'
 
   export default {
     name: 'PurchaseModal',
@@ -224,15 +222,6 @@
     },
     mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.testContract = new web3.eth.Contract(
-          ARKSTestUSDT,
-          testUSDTAddress,
-        )
         this.getAllowance()
         this.getBuyPlanDownPayment()
       }
@@ -245,7 +234,12 @@
         this.$emit('close-purchase-modal')
       },
       getAllowance () {
-        this.testContract.methods.allowance(this.address, mainAddress).call().then(res => {
+        readContract({
+          address: testUSDTAddress,
+          abi: testusdtABI,
+          functionName: 'allowance',
+          args: [this.address, mainAddress]
+        }).then(res => {
           console.log(res, 'allowance')
           if (res > MaxUint256 / 2) {
             this.isApproved = true
@@ -255,7 +249,13 @@
         })
       },
       getBuyPlanDownPayment () {
-        this.mainContract.methods.getBuyPlanDownPayment(this.address, this.type.split('-')[0], this.amount, this.planLength).call().then(res => {
+        console.log(this.address, this.type.split('-')[0], this.amount, this.planLength)
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getBuyPlanDownPayment',
+          args: [this.address, this.type.split('-')[0], this.amount, this.planLength]
+        }).then(res => {
           console.log(res, 'getBuyPlanDownPayment')
           this.firstPlanDown = new BigNumber(res)
           this.downPaymentItems = [
@@ -266,7 +266,12 @@
         })
       },
       getBuyPlanInterestRate () {
-        this.mainContract.methods.getBuyPlanInterestRate(this.address, this.type.split('-')[0], this.amount, this.downPayment, this.planLength).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getBuyPlanInterestRate',
+          args: [this.address, this.type.split('-')[0], this.amount, this.downPayment, this.planLength]
+        }).then(res => {
           console.log(res, 'getBuyPlanInterestRate')
           this.interestRate = new BigNumber(res).dividedBy(100).toFormat()
           this.originalPayment = this.type.split('-')[1] * 1 * this.amount
@@ -299,7 +304,7 @@
           // })
           const config = await prepareWriteContract({
             address: testUSDTAddress,
-            abi: ARKSTestUSDT,
+            abi: testusdtABI,
             functionName: 'approve',
             args: [mainAddress, MaxUint256],
           })
@@ -327,7 +332,7 @@
         try {
           const config = await prepareWriteContract({
             address: mainAddress,
-            abi: ARKSMain,
+            abi: mainABI,
             functionName: 'buyWithPlan',
             args: [type, this.amount, this.planLength, this.downPayment, addressRef],
           })
@@ -338,12 +343,6 @@
               text: res.message,
             })
             this.closeDailog()
-          }).catch(err => {
-            this.setSnackbar({
-              visible: true,
-              color: 'error',
-              text: err.message,
-            })
           })
         } catch (err) {
           this.setSnackbar({

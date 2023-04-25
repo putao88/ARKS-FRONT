@@ -175,12 +175,9 @@
 </template>
 
 <script>
-  import Web3 from 'web3'
   import { mapState } from 'vuex'
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
-  import { mainAddress, testUSDTAddress, nftAddress } from '@/abi/contractdata'
   import PurchaseModal from './components/PurchaseModal'
+  import { nftAddress } from '@/abi/contractdata'
   export default {
     name: 'LaunchpadDetail',
     components: {
@@ -205,19 +202,6 @@
     },
     computed: {
       ...mapState(['address']),
-    },
-    async mounted () {
-      if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.testContract = new web3.eth.Contract(
-          ARKSTestUSDT,
-          testUSDTAddress,
-        )
-      }
     },
     methods: {
       toAccount () {

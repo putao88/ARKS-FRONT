@@ -57,12 +57,10 @@
 </template>
 
 <script>
-  import Web3 from 'web3'
-  import { mapState } from 'vuex'
-
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSNFT from '@/abi/ARKSNFT.json'
-  import { mainAddress, nftAddress } from '@/abi/contractdata'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
+  import { mapState, mapMutations } from 'vuex'
+  import mainABI from '@/abi/mainABI.json'
+  import { mainAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   export default {
     name: 'ClaimModal',
@@ -83,40 +81,71 @@
     },
     async mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.nftContract = new web3.eth.Contract(
-          ARKSNFT,
-          nftAddress,
-        )
         this.getData()
       }
     },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
       getPriceValue: getPriceValue,
       closeDailog () {
         this.$emit('close-claim-modal')
       },
       getData () {
-        this.mainContract.methods.getAddressUnclaimedRewardRent(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressUnclaimedRewardRent',
+          args: [this.address]
+        }).then(res => {
           this.interestValue = res
         })
-        this.mainContract.methods.getAddressUnclaimedRewardRef(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressUnclaimedRewardRef',
+        }).then(res => {
           this.rewardValue = res
         })
       },
-      claimInterest () {
-        this.mainContract.methods.claimRewardRent().call().then(res => {
-          this.getData()
-        })
+      async claimInterest () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'claimRewardRent',
+            args: [],
+          })
+          writeContract(config).then(res => {
+            this.getData()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
-      claimRewardRef () {
-        this.mainContract.methods.claimRewardRef().call().then(res => {
-          this.getData()
-        })
+      async claimRewardRef () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'claimRewardRef',
+            args: [],
+          })
+          writeContract(config).then(res => {
+            this.getData()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
     },
   }

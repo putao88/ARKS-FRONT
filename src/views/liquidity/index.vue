@@ -154,20 +154,14 @@
         @close-item-modal="closeItemModal"
       />
     </v-card>
-    <v-alert
-      :type="alert.type"
-      :value="alert.show"
-    >
-      {{ alert.value }}
-    </v-alert>
   </v-container>
 </template>
 <script>
-  import Web3 from 'web3'
-  import { mapState } from 'vuex'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
+  import { mapState, mapMutations } from 'vuex'
 
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSNFT from '@/abi/ARKSNFT.json'
+  import mainABI from '@/abi/mainABI.json'
+  import nftABI from '@/abi/nftABI.json'
   import { nftAddress, mainAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
 
@@ -195,13 +189,6 @@
           nftValue: 0,
           usdtValue: 0,
         },
-        alert: {
-          type: 'success',
-          show: false,
-          value: '',
-        },
-        nftContract: null,
-        mainContract: null,
         tokenData: [],
         tokenId: '',
       }
@@ -211,21 +198,15 @@
     },
     async mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.nftContract = new web3.eth.Contract(
-          ARKSNFT,
-          nftAddress,
-        )
         this.getValue()
         this.getNftInfo()
         this.getBroNftInfo()
       }
     },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
       getPriceValue: getPriceValue,
       openPositionModal () {
         this.showPositionModal = true
@@ -247,28 +228,56 @@
         this.detail.src = 'nft.png'
         this.showItemModal = false
       },
-      borrowNft () {
-        // 写操作
-        this.mainContract.methods.depositeNFT(nftAddress, Number(this.detail.tokenId)).call().then(res => {
-          this.alert.show = true
-          this.alert.value = '租借成功'
-          console.log(res, this.alert, '7')
-        })
+      async borrowNft () {
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'depositeNFT',
+            args: [nftAddress, Number(this.detail.tokenId)],
+          })
+          writeContract(config).then(res => {
+            this.setSnackbar({
+              visible: true,
+              color: 'success',
+              text: 'borrow success!',
+            })
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
       getValue () {
-        this.mainContract.methods.getVaultInfo().call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getVaultInfo',
+        }).then(res => {
           this.priceValue.totalValue = res[0] || 0
           this.priceValue.nftValue = res[1] || 0
           this.priceValue.usdtValue = res[2] || 0
-          console.log(res, '1')
         })
       },
       getNftInfo () {
-        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
+        readContract({
+          address: nftAddress,
+          abi: nftABI,
+          functionName: 'tokensOfOwner',
+          args: [this.address]
+        }).then(res => {
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {
-            this.mainContract.methods.getTokenIdInfoPreCollateral(item, this.address).call().then(resl => {
+            readContract({
+              address: mainAddress,
+              abi: mainABI,
+              functionName: 'getTokenIdInfoPreCollateral',
+              args: [item, this.address]
+            }).then(res => {
               this.tokenData.push({
                 tokenId: item,
                 interest: resl[0],
@@ -282,15 +291,20 @@
         })
       },
       getBroNftInfo () {
-        // this.mainContract.methods.getAddressCollateral(this.address).call().then(res => {
-        //   console.log(res, '9999')
-        //   // res.forEach(item => {
-        //   //   this.broNftInfo.push({
-        //   //     tokenId: item[0],
-        //   //     total: res[1],
-        //   //   })
-        //   // })
-        // })
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressCollateral',
+          args: [this.address]
+        }).then(res => {
+          console.log(res, '9999')
+          res.forEach(item => {
+            this.broNftInfo.push({
+              tokenId: item[0],
+              total: res[1],
+            })
+          })
+        })
       },
     },
   }

@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber,  constants} from "ethers";
 
 const NegativeOne = BigNumber.from(-1);
 const Zero = BigNumber.from(0);
@@ -12,6 +12,7 @@ const MaxUint256 = BigNumber.from(
 const MinInt256 = BigNumber.from(
   "-0x8000000000000000000000000000000000000000000000000000000000000000"
 );
+// const MaxInt256 = constants.MaxUint256
 const MaxInt256 = BigNumber.from(
   "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 );

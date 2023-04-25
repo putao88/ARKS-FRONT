@@ -145,11 +145,11 @@
   </v-container>
 </template>
 <script>
-  import Web3 from 'web3'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
   import { mapState } from 'vuex'
 
-  // import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSNFT from '@/abi/ARKSNFT.json'
+  // import mainABI from '@/abi/mainABI.json'
+  import nftABI from '@/abi/nftABI.json'
   import { nftAddress } from '@/abi/contractdata'
 
   import MyItemModal from '@/components/MyItemModal'
@@ -169,7 +169,6 @@
         liabilityVal: 'No Liabilities',
         showItemModal: false,
         dataUrl: [],
-        nftContract: null,
       }
     },
     computed: {
@@ -177,11 +176,6 @@
     },
     async mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.nftContract = new web3.eth.Contract(
-          ARKSNFT,
-          nftAddress,
-        )
         this.getTokenInfo()
       }
     },
@@ -196,11 +190,21 @@
         this.showItemModal = false
       },
       getTokenInfo () {
-        this.nftContract.methods.tokensOfOwner(this.address).call().then(res => {
+        readContract({
+          address: nftAddress,
+          abi: nftABI,
+          functionName: 'tokensOfOwner',
+          args: [this.address]
+        }).then(res => {
           const dataToken = res
           // const tempUrl = []
           dataToken.forEach(item => {
-            this.nftContract.methods.tokenURI(item).call().then(res => {
+            readContract({
+              address: nftAddress,
+              abi: nftABI,
+              functionName: 'tokenURI',
+              args: [item]
+            }).then(res => {
               const data = res.split('data:application/json;base64,')[1]
               const obj = JSON.parse(Base64.decode(data))
               this.dataUrl.push(obj.image)

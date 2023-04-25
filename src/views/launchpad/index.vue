@@ -246,10 +246,10 @@
 </template>
 
 <script>
-  import Web3 from 'web3'
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
   import { mapState } from 'vuex'
-  import ARKSMain from '@/abi/ARKSMain.json'
-  import ARKSTestUSDT from '@/abi/ARKSTestUSDT.json'
+  import mainABI from '@/abi/mainABI.json'
+  import testusdtABI from '@/abi/testusdtABI.json'
   import { mainAddress, testUSDTAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import Tooltips from '@/components/Tooltips'
@@ -259,8 +259,6 @@
     components: { Tooltips },
     data () {
       return {
-        mainContract: null,
-        testContract: null,
         myAssetsValue: 0,
         myAssetsAmount: 0,
         myClaimedValue: 0,
@@ -274,15 +272,6 @@
     },
     mounted () {
       if (this.address) {
-        const web3 = new Web3(window.web3.currentProvider)
-        this.mainContract = new web3.eth.Contract(
-          ARKSMain,
-          mainAddress,
-        )
-        this.testContract = new web3.eth.Contract(
-          ARKSTestUSDT,
-          testUSDTAddress,
-        )
         this.getLaunch()
         this.getPoolTotal()
       }
@@ -295,20 +284,41 @@
         this.$router.push('/launchpad-detail')
       },
       getLaunch () {
-        this.mainContract.methods.getAddressInfoMain(this.address).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getAddressInfoMain',
+          args: [this.address]
+        }).then(res => {
+          console.log('getAddressInfoMain:', res)
           this.myAssetsValue = getPriceValue(res[0])
           this.myAssetsAmount = res[1]
           this.myClaimedValue = getPriceValue(res[2])
         })
       },
       getPoolTotal () {
-        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getPoolTotalValue',
+          args: [0]
+        }).then(res => {
           this.poolTotalSoldValue = getPriceValue(res)
         })
-        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getPoolTotalValue',
+          args: [1]
+        }).then(res => {
           this.raTotalSoldValue = getPriceValue(res)
         })
-        this.mainContract.methods.getPoolTotalValue(0).call().then(res => {
+        readContract({
+          address: mainAddress,
+          abi: mainABI,
+          functionName: 'getPoolTotalValue',
+          args: [2]
+        }).then(res => {
           this.ndTotalSoldValue = getPriceValue(res)
         })
       },
