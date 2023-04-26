@@ -105,6 +105,7 @@
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressUnclaimedRewardRef',
+          args: [this.address]
         }).then(res => {
           this.rewardValue = res
         })

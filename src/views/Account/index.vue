@@ -89,7 +89,7 @@
               class="text-center"
             >
               <p class="text-h2 mb-1">
-                ${{ getPriceValue(assetsValue) }}
+                ${{ assetsValue }}
               </p>
               <p class="text-h4 grey--text">
                 Assets Value
@@ -446,10 +446,12 @@
   import mainABI from '@/abi/mainABI.json'
   import nftABI from '@/abi/nftABI.json'
   import testusdtABI from '@/abi/testusdtABI.json'
-  import { mainAddress, nftAddress, testUSDTAddress } from '@/abi/contractdata'
+  import vaulttokenABI from '@/abi/vaulttokenABI.json'
+  import { mainAddress, nftAddress, testUSDTAddress, vaultTokenAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
   import { copy } from '@/utils/common'
   import { Base64 } from 'js-base64'
+  import BigNumber from 'bignumber.js'
   export default {
     name: 'Account',
     data () {
@@ -510,7 +512,6 @@
         const tab = this.$route.query.tab
         if (tab) {
           const tabArray = tab.split('-')
-          console.log(tabArray)
           this.tab = tabArray[0]
           if (tabArray[0] === 'Liquidity' && tabArray.length > 1) {
             this.liquidityTab = tabArray[1]
@@ -531,6 +532,7 @@
           functionName: 'getAddressUnclaimedRewardRent',
           args: [this.address]
         }).then(res => {
+          console.log('getAddressUnclaimedRewardRent:', res)
           this.interestValue = res
         })
       },
@@ -561,25 +563,34 @@
         })
       },
       getAddressTotalValue () {
-        readContract({
-          address: mainAddress,
-          abi: mainABI,
-          functionName: 'getAddressTotalValue',
-        }).then(res => {
-          this.assetsValue = res
+        return new Promise((resolve, reject) => {
+          readContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'getAddressTotalValue',
+            args: [this.address]
+          }).then(res => {
+            console.log('getAddressTotalValue:', res)
+            this.assetsValue = getPriceValue(res)
+            resolve(true)
+          })
         })
       },
       getLastRewardRate () {
-        readContract({
-          address: mainAddress,
-          abi: mainABI,
-          functionName: 'getLastRewardRate',
-        }).then(res => {
-          this.apr = res * 12 / 100
+        return new Promise((resolve, reject) => {
+          readContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'getLastRewardRate',
+          }).then(res => {
+            console.log('getLastRewardRate:', res)
+            this.apr = res * 12 / 100
+            resolve(true)
+          })
         })
       },
       getDailyReturn () {
-        this.dailyReturn = this.assetsValue * (this.apr / 100) / 30
+        this.dailyReturn = new BigNumber(this.assetsValue).times(new BigNumber(this.apr).dividedBy(100)).dividedBy(30).toFormat()
       },
       getReferral () {
         this.getAddressUnclaimedRewardRef()
@@ -591,7 +602,9 @@
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressUnclaimedRewardRef',
+          args: [this.address]
         }).then(res => {
+          console.log('getAddressUnclaimedRewardRef:', res)
           this.rewardValue = res
         })
       },
@@ -600,7 +613,9 @@
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressInfoRef',
+          args: [this.address]
         }).then(res => {
+          console.log('getAddressInfoRef:', res)
           this.referrals.value = res[0]
           this.referrals.level = res[1]
           this.referrals.rate = res[2]
@@ -612,8 +627,9 @@
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressInfoRefDetails',
+          args: [this.address]
         }).then(res => {
-          console.log('result', res)
+          console.log('getAddressInfoRefDetails', res)
           if (res.length) {
             this.desserts = []
             const temp = []
@@ -635,7 +651,6 @@
             })
             this.desserts = temp
           }
-          console.log(res, '5')
         })
       },
       getLiquidity () {
@@ -648,8 +663,9 @@
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressInfoLiquidity',
+          args: [this.address]
         }).then(res => {
-          console.log(res, '6')
+          console.log('getAddressInfoLiquidity', res)
           this.liquidity.token = res[0]
           this.liquidity.value = res[1]
           this.liquidity.yield = res[2]
@@ -660,16 +676,20 @@
           address: testUSDTAddress,
           abi: testusdtABI,
           functionName: 'balanceOf',
+          args: [this.address]
         }).then(res => {
+          console.log('balanceOf:', res)
           this.depositHint = `Balance: ${getPriceValue(res)}`
         })
       },
       getWidthdrewBalance () {
         readContract({
-          address: testUSDTAddress,
-          abi: testusdtABI,
+          address: vaultTokenAddress,
+          abi: vaulttokenABI,
           functionName: 'balanceOf',
+          args: [this.address]
         }).then(res => {
+          console.log('balanceOf:', res)
           this.widthdrewHint = `Balance: ${getPriceValue(res)}`
         })
       },
@@ -682,6 +702,7 @@
             args: [this.depositVal],
           })
           writeContract(config).then(res => {
+            console.log('depositeUSDT:', res)
             this.getDepositBalance()
           })
         }  catch (err) {
@@ -701,6 +722,7 @@
             args: [this.widthdrewVal],
           })
           writeContract(config).then(res => {
+            console.log('withdrawUSDT:', res)
             this.getWidthdrewBalance()
           })
         }  catch (err) {
@@ -720,6 +742,7 @@
             args: [],
           })
           writeContract(config).then(res => {
+            console.log('claimRewardRent:', res)
             this.getAddressUnclaimedRewardRent()
           })
         }  catch (err) {
@@ -739,6 +762,7 @@
             args: [],
           })
           writeContract(config).then(res => {
+            console.log('claimRewardRef:', res)
             this.getAddressUnclaimedRewardRef()
           })
         }  catch (err) {

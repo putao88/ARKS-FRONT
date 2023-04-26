@@ -158,7 +158,8 @@
 </template>
 
 <script>
-  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
+  import { readContract, prepareWriteContract, writeContract, fetchSigner } from '@wagmi/core'
+  import { polygon } from "@wagmi/core/chains";
   import { mapState, mapMutations } from 'vuex'
   import mainABI from '@/abi/mainABI.json'
   import testusdtABI from '@/abi/testusdtABI.json'
@@ -206,7 +207,7 @@
           { text: '5 month', value: 5 },
           { text: '8 month', value: 8 },
         ],
-        downPayment: null,
+        downPayment: 0,
         downPaymentItems: [],
         firstPlanDown: 0,
         originalPayment: 0,
@@ -240,20 +241,23 @@
           functionName: 'allowance',
           args: [this.address, mainAddress]
         }).then(res => {
-          console.log(res, 'allowance')
-          if (res > MaxUint256 / 2) {
+          console.log('allowance:', res.toString())
+          if (res.toString() > MaxUint256 / 2) {
             this.isApproved = true
           } else {
             this.isApproved = false
           }
         })
       },
-      getBuyPlanDownPayment () {
+      async getBuyPlanDownPayment () {
+        const signer = await fetchSigner()
+        console.log('signer:', signer, polygon.id)
         console.log(this.address, this.type.split('-')[0], this.amount, this.planLength)
         readContract({
           address: mainAddress,
           abi: mainABI,
           functionName: 'getBuyPlanDownPayment',
+          chainId: polygon.id,
           args: [this.address, this.type.split('-')[0], this.amount, this.planLength]
         }).then(res => {
           console.log(res, 'getBuyPlanDownPayment')
@@ -264,6 +268,28 @@
             { text: `${this.firstPlanDown.plus(20)}%`, value: `${this.firstPlanDown.plus(20)}` },
           ]
         })
+          // const config = await prepareWriteContract({
+          //   address: mainAddress,
+          //   abi: mainABI,
+          //   functionName: 'getBuyPlanDownPayment',
+          //   args: [this.address, this.type.split('-')[0], this.amount, this.planLength]
+          // })
+          // writeContract(config).then(res => {
+          //   console.log(res, 'getBuyPlanDownPayment')
+          //   this.firstPlanDown = new BigNumber(res)
+          //   this.downPaymentItems = [
+          //     { text: `${this.firstPlanDown}%`, value: res },
+          //     { text: `${this.firstPlanDown.plus(10)}%`, value: `${this.firstPlanDown.plus(10)}` },
+          //     { text: `${this.firstPlanDown.plus(20)}%`, value: `${this.firstPlanDown.plus(20)}` },
+          //   ]
+          // }).catch(err => {
+          //   this.setSnackbar({
+          //     visible: true,
+          //     text: err.message,
+          //     color: 'error',
+          //     timeout: 2000,
+          //   })
+          // })
       },
       getBuyPlanInterestRate () {
         readContract({
@@ -289,7 +315,7 @@
         } else {
           this.getBuyPlanDownPayment()
         }
-        this.downPayment = null
+        this.downPayment = 0
       },
       downPaymentChange (val) {
         this.getBuyPlanInterestRate()
@@ -309,6 +335,7 @@
             args: [mainAddress, MaxUint256],
           })
           writeContract(config).then(res => {
+            console.log('approve:', res)
             this.isApproved = true
           }).catch(err => {
             this.setSnackbar({
@@ -323,7 +350,7 @@
       async buyWithPlan () {
         const addressRef = window.localStorage.getItem('refAddress') || this.address || '000000000000000000000000000000000000000000'
         const type = Number(this.type.split('-')[0])
-        console.log('type', type)
+        console.log('buyWithPlan param:', type, this.amount, this.planLength, this.downPayment, addressRef)
         // this.mainContract.methods.buyWithPlan(type, this.amount, this.planLength, this.downPayment, addressRef).send({
         //     from: this.address
         // }).then(res => {
@@ -337,14 +364,16 @@
             args: [type, this.amount, this.planLength, this.downPayment, addressRef],
           })
           writeContract(config).then(res => {
-            console.log(res, 'buyWithPlan')
+            console.log('buyWithPlan:', res)
             this.setSnackbar({
               visible: true,
-              text: res.message,
+              color: 'success',
+              text: 'Buy success!',
             })
             this.closeDailog()
           })
         } catch (err) {
+          console.log(err)
           this.setSnackbar({
             visible: true,
             color: 'error',

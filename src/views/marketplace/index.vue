@@ -148,9 +148,9 @@
   import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
   import { mapState } from 'vuex'
 
-  // import mainABI from '@/abi/mainABI.json'
+  import marketplaceABI from '@/abi/marketplaceABI.json'
   import nftABI from '@/abi/nftABI.json'
-  import { nftAddress } from '@/abi/contractdata'
+  import { nftAddress, marketplaceAddress } from '@/abi/contractdata'
 
   import MyItemModal from '@/components/MyItemModal'
   import { Base64 } from 'js-base64'
@@ -176,6 +176,7 @@
     },
     async mounted () {
       if (this.address) {
+        this.getMarketplaceInfo()
         this.getTokenInfo()
       }
     },
@@ -188,6 +189,17 @@
       },
       closeItemModal () {
         this.showItemModal = false
+      },
+      getMarketplaceInfo() {
+        readContract({
+          address: marketplaceAddress,
+          abi: marketplaceABI,
+          functionName: 'getMarketplaceInfo',
+          args: [this.address]
+        }).then(res => {
+          console.log('getMarketplaceInfo:', res)
+          this.depositHint = `Balance: ${getPriceValue(res)}`
+        })
       },
       getTokenInfo () {
         readContract({
