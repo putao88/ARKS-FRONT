@@ -93,7 +93,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <template v-for="(item, index) in dataUrl">
+        <template v-for="(item, index) in marketplaceItems">
           <v-col
             :key="index"
             cols="12"
@@ -127,8 +127,9 @@
               <v-img
                 class="white--text align-end"
                 height="200px"
-                :src="item"
+                src="@/assets/img/nft.png"
               />
+                <!-- :src="item" -->
               <div class="card-bottom-div">
                 <span>Price:</span>
                 <span>98.00</span>
@@ -168,7 +169,7 @@
         liabilityConditions: ['Liability', 'No Liabilities'],
         liabilityVal: 'No Liabilities',
         showItemModal: false,
-        dataUrl: [],
+        marketplaceItems: new Array(8),
       }
     },
     computed: {
@@ -219,7 +220,7 @@
             }).then(res => {
               const data = res.split('data:application/json;base64,')[1]
               const obj = JSON.parse(Base64.decode(data))
-              this.dataUrl.push(obj.image)
+              this.marketplaceItems.push(obj.image)
             })
           })
         })
