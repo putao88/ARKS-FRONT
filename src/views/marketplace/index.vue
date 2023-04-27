@@ -142,18 +142,21 @@
     <my-item-modal
       :show-modal="showItemModal"
       @close-item-modal="closeItemModal"
+      @set-approved="setApproved"
+      :is-approved="isApproved"
+      :data-url="dataUrl"
     />
   </v-container>
 </template>
 <script>
   import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
-  import { mapState } from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
 
   import marketplaceABI from '@/abi/marketplaceABI.json'
   import nftABI from '@/abi/nftABI.json'
   import { nftAddress, marketplaceAddress } from '@/abi/contractdata'
 
-  import MyItemModal from '@/components/MyItemModal'
+  import MyItemModal from './components/MyItemModal'
   import { Base64 } from 'js-base64'
   export default {
     name: 'Marketplace',
@@ -170,23 +173,29 @@
         liabilityVal: 'No Liabilities',
         showItemModal: false,
         marketplaceItems: new Array(8),
+        isApproved: false,
+        dataUrl: [],
       }
     },
     computed: {
       ...mapState(['address']),
     },
-    async mounted () {
+    mounted () {
       if (this.address) {
         this.getMarketplaceInfo()
-        this.getTokenInfo()
+        this.getMarketplaceItems()
       }
     },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
       filterData (tab) {
         this.active = tab
       },
       openItemModal () {
         this.showItemModal = true
+        this.openMyNftModal()
       },
       closeItemModal () {
         this.showItemModal = false
@@ -202,7 +211,7 @@
           this.depositHint = `Balance: ${getPriceValue(res)}`
         })
       },
-      getTokenInfo () {
+      getMarketplaceItems () {
         readContract({
           address: nftAddress,
           abi: nftABI,
@@ -222,6 +231,82 @@
               const obj = JSON.parse(Base64.decode(data))
               this.marketplaceItems.push(obj.image)
             })
+          })
+        })
+      },
+      async openMyNftModal() {
+        if (this.address) {
+          await this.getApproved()
+          if (this.isApproved) {
+            // 已授权
+            this.getTokenInfo()
+          } else {
+            // 未授权
+          }
+        }
+      },
+      getApproved () {
+        // 获取授权权限
+        return new Promise((resolve, reject) =>{
+          readContract({
+            address: nftAddress,
+            abi: nftABI,
+            functionName: 'isApprovedForAll',
+            args: [this.address, marketplaceAddress]
+          }).then(res => {
+            console.log('isApprovedForAll', res)
+            this.isApproved = res
+            resolve(true)
+          }).catch(err => {
+            this.setSnackbar({
+              visible: true,
+              text: err.message,
+              color: 'error',
+              timeout: 2000,
+            })
+            resolve(false)
+          })
+        })
+      },
+      async setApproved () {
+        const config = await prepareWriteContract({
+          address: nftAddress,
+          abi: nftABI,
+          functionName: 'setApprovalForAll',
+          args: [this.address, true],
+        })
+        writeContract(config).then(res => {
+          console.log('setApprovalForAll:', res)
+          this.isApproved = true
+        }).catch(err => {
+          this.setSnackbar({
+            visible: true,
+            text: err.message,
+            color: 'error',
+            timeout: 2000,
+          })
+        })
+      },
+      getTokenInfo () {
+        readContract({
+          address: nftAddress,
+          abi: nftABI,
+          functionName: 'tokensOfOwner',
+          args: [this.address]
+        }).then(res => {
+          const dataToken = res
+          dataToken.forEach(item => {
+            readContract({
+              address: nftAddress,
+              abi: nftABI,
+              functionName: 'tokenURI',
+              args: [item]
+            }).then(res => {
+              const data = res.split('data:application/json;base64,')[1]
+              const obj = JSON.parse(Base64.decode(data))
+              this.dataUrl.push(obj.image)
+            })
+            
           })
         })
       },

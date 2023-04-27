@@ -146,12 +146,13 @@
       <my-position-modal
         :show-modal="showPositionModal"
         @close-position-modal="closePositionModal"
+        :bro-nft-info="broNftInfo"
       />
       <my-item-modal
         :show-modal="showItemModal"
-        :token-data="tokenData"
-        @de-borrow="deBorrow"
+        :token-data="myNftData"
         @close-item-modal="closeItemModal"
+        @click-nft-call-back="clickNftCallBack"
       />
     </v-card>
   </v-container>
@@ -164,6 +165,7 @@
   import nftABI from '@/abi/nftABI.json'
   import { nftAddress, mainAddress } from '@/abi/contractdata'
   import { getPriceValue } from '@/utils/tools'
+  import { Base64 } from 'js-base64'
 
   import MyPositionModal from './components/MyPositionModal'
   import MyItemModal from './components/MyItemModal'
@@ -189,8 +191,8 @@
           nftValue: 0,
           usdtValue: 0,
         },
-        tokenData: [],
-        tokenId: '',
+        myNftData: [],
+        broNftInfo:[],
       }
     },
     computed: {
@@ -199,8 +201,6 @@
     async mounted () {
       if (this.address) {
         this.getValue()
-        this.getNftInfo()
-        this.getBroNftInfo()
       }
     },
     methods: {
@@ -210,22 +210,24 @@
       getPriceValue: getPriceValue,
       openPositionModal () {
         this.showPositionModal = true
+        this.getBroNftInfo()
       },
       closePositionModal () {
         this.showPositionModal = false
       },
       openItemModal () {
         this.showItemModal = true
+        this.getOwnNftInfo()
       },
       closeItemModal () {
         this.showItemModal = false
       },
-      deBorrow (param) {
-        const { tokenId, interest, total } = param
+      clickNftCallBack (param) {
+        const { tokenId, interest, total, src } = param
         this.detail.tokenId = tokenId
         this.detail.interest = interest
         this.detail.total = total
-        this.detail.src = 'nft.png'
+        this.detail.src = src
         this.showItemModal = false
       },
       async borrowNft () {
@@ -257,53 +259,81 @@
           abi: mainABI,
           functionName: 'getVaultInfo',
         }).then(res => {
-          this.priceValue.totalValue = res[0] || 0
-          this.priceValue.nftValue = res[1] || 0
-          this.priceValue.usdtValue = res[2] || 0
+          console.log('getVaultInfo:', res[0].toString(), res[1].toString(),res[2].toString(),res[3].toString(),)
+          this.priceValue = {
+            totalValue: res[0] || 0,
+            nftValue: res[1] || 0,
+            usdtValue: res[2] || 0,
+          }
+
         })
       },
-      getNftInfo () {
+      getOwnNftInfo () {
         readContract({
           address: nftAddress,
           abi: nftABI,
           functionName: 'tokensOfOwner',
           args: [this.address]
         }).then(res => {
+          console.log('tokensOfOwner:', res)
           const dataToken = res
-          // const tempUrl = []
-          dataToken.forEach(item => {
-            readContract({
+          const myNftList = []
+          dataToken.forEach(async item => {
+            const preCollateral = await readContract({
               address: mainAddress,
               abi: mainABI,
               functionName: 'getTokenIdInfoPreCollateral',
               args: [item, this.address]
-            }).then(res => {
-              this.tokenData.push({
-                tokenId: item,
-                interest: resl[0],
-                total: resl[1],
-              })
-              console.log(resl, '3')
+            })
+            console.log('getTokenIdInfoPreCollateral:', preCollateral)
+            const imgUrlJson = await readContract({
+              address: nftAddress,
+              abi: nftABI,
+              functionName: 'tokenURI',
+              args: [item]
+            })
+            console.log('tokenURI:', imgUrlJson)
+            const imgUrl = imgUrlJson ? JSON.parse(Base64.decode(
+              imgUrlJson.split('data:application/json;base64,')[1])
+            ) : ''
+            myNftList.push({
+              tokenId: item,
+              interest: preCollateral[0],
+              total: preCollateral[1],
+              src: imgUrl
             })
           })
-          this.tokenId = res || []
-          console.log(res, '2')
+          this.myNftData = myNftList
         })
       },
       getBroNftInfo () {
+        let myBroNftList = []
         readContract({
           address: mainAddress,
           abi: mainABI,
           functionName: 'getAddressCollateral',
           args: [this.address]
-        }).then(res => {
-          console.log(res, '9999')
-          res.forEach(item => {
-            this.broNftInfo.push({
-              tokenId: item[0],
-              total: res[1],
+        }).then(async res => {
+          console.log('getAddressCollateral', res)
+          const dataToken = res
+           dataToken.forEach(async item => {
+            const imgUrlJson = await readContract({
+              address: nftAddress,
+              abi: nftABI,
+              functionName: 'tokenURI',
+              args: [item]
+            })
+            console.log('tokenURI:', imgUrlJson)
+            const imgUrl = imgUrlJson ? JSON.parse(Base64.decode(
+              imgUrlJson.split('data:application/json;base64,')[1])
+            ) : ''
+            myBroNftList.push({
+              tokenId: item,
+              price: item || 0,
+              src: imgUrl
             })
           })
+          this.broNftInfo = myBroNftList
         })
       },
     },

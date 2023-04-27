@@ -20,7 +20,7 @@
         </v-card-title>
         <v-card-text class="item-content-wrap">
           <v-row class="my-4">
-            <template v-for="(item, index) in cardInfo">
+            <template v-for="(item, index) in broNftInfo">
               <v-col
                 :key="index"
                 cols="12"
@@ -28,12 +28,18 @@
               >
                 <v-card class="rounded-lg">
                   <v-card-text>
-                    <v-img
+                    <!-- <v-img
                       class="white--text align-end rounded-lg mb-4"
                       height="150px"
                       src="@/assets/img/nft.png"
+                    /> -->
+                    <v-img
+                      class="white--text align-end white--text align-end rounded-lg mb-4"
+                      min-height="250px"
+                      :aspect-ratio="29/50"
+                      :src="item.src"
                     />
-                    <div
+                    <!-- <div
                       class="data-item"
                     >
                       <span>interest:</span>
@@ -43,7 +49,13 @@
                       class="data-item"
                     >
                       <span>Total:</span>
-                      <span class="font-weight-bold">32.5</span>
+                      <span class="font-weight-bold">{{ getPriceValue(item.total) }}</span>
+                    </div> -->
+                    <div
+                      class="data-item"
+                    >
+                      <span>Price:</span>
+                      <span class="font-weight-bold">{{ getPriceValue(item.price) }}</span>
                     </div>
                     <v-btn
                       width="100%"
@@ -51,8 +63,9 @@
                       color="primary"
                       class="mt-2"
                       rounded
+                      @click="deBorrow(item)"
                     >
-                      Borrow
+                      DEborrow
                     </v-btn>
                   </v-card-text>
                 </v-card>
@@ -66,6 +79,15 @@
 </template>
 
 <script>
+  import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
+  import { mapState, mapMutations } from 'vuex'
+  import mainABI from '@/abi/mainABI.json'
+  import nftABI from '@/abi/nftABI.json'
+  import { nftAddress, mainAddress } from '@/abi/contractdata'
+
+  import { getPriceValue } from '@/utils/tools'
+
+
   export default {
     name: 'MyPositionModal',
     props: {
@@ -73,15 +95,47 @@
         type: Boolean,
         default: false,
       },
+      broNftInfo: {
+        type: Array,
+        default: [],
+      }
     },
     data () {
       return {
-        cardInfo: new Array(8),
       }
     },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
+      getPriceValue: getPriceValue,
       closeDailog () {
         this.$emit('close-position-modal')
+      },
+      async deBorrow (param) {
+        const { tokenId, interest, total } = param
+        try {
+          const config = await prepareWriteContract({
+            address: mainAddress,
+            abi: mainABI,
+            functionName: 'withdrawNFT',
+            args: [nftAddress, Number(tokenId)],
+          })
+          writeContract(config).then(res => {
+            this.setSnackbar({
+              visible: true,
+              color: 'success',
+              text: 'Deborrow success!',
+            })
+            this.closeDailog()
+          })
+        }  catch (err) {
+          this.setSnackbar({
+            visible: true,
+            color: 'error',
+            text: err.message,
+          })
+        }
       },
     },
   }

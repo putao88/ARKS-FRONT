@@ -19,7 +19,16 @@
           </v-icon>
         </v-card-title>
         <v-card-text class="item-content-wrap">
+          <v-btn
+            v-if="!isApproved"
+            class="primary rounded-pill"
+            width="100%"
+            @click="setApproved"
+          >
+            APPROVE
+          </v-btn>
           <v-row
+            v-else
             class="pa-4"
             justify="space-between"
           >
@@ -99,12 +108,12 @@
 
 <script>
   import { readContract, prepareWriteContract, writeContract } from '@wagmi/core'
-  import SellModal from '@/components/SellModal'
-  import { mapState } from 'vuex'
-  // import mainABI from '@/abi/mainABI.json'
+  import SellModal from './SellModal'
+  import { mapState, mapMutations } from 'vuex'
+  import marketplaceABI from '@/abi/marketplaceABI.json'
   import nftABI from '@/abi/nftABI.json'
-  import { nftAddress } from '@/abi/contractdata'
-  // import { getPriceValue } from '@/utils/tools'
+  import { nftAddress, marketplaceAddress } from '@/abi/contractdata'
+  import { getPriceValue } from '@/utils/tools'
   import { Base64 } from 'js-base64'
 
   export default {
@@ -116,32 +125,32 @@
       showModal: {
         type: Boolean,
         default: false,
-        targetTokenId: '',
       },
+      isApproved: {
+        type: Boolean,
+        default: false,
+      },
+      dataUrl: {
+        type: Array,
+        default: [],
+      },
+
     },
     data () {
       return {
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
-        dataUrl: [],
         showSellModall: false,
+        targetTokenId: '',
       }
     },
     computed: {
       ...mapState(['address']),
     },
-    async mounted () {
-      if (this.address) {
-        const res = await this.getApproved()
-        if (res) {
-          // 已授权
-          this.getTokenInfo()
-        } else {
-          // 未授权
-        }
-      }
-    },
     methods: {
+      ...mapMutations({
+        setSnackbar: 'SET_SNACKBAR',
+      }),
       filterData (tab) {
         this.active = tab
       },
@@ -155,46 +164,27 @@
       closeSellModal () {
         this.showSellModall = false
       },
-      getApproved () {
-        // 获取授权权限
-        // this.nftContract.methods.isApprovedForAll(this.address).call()
-      },
       setApproved () {
-        // 授权的操作(address operator, bool _approved)(ARKS: Marketplace的合约地址，true)
-        // this.nftContract.methods.isApprovedForAll(this.address, true).call().then(res => {
-        //   console.log(res, '1')
-        // })
+        this.$emit('set-approved')
       },
-      getTokenInfo () {
-        readContract({
-          address: nftAddress,
-          abi: nftABI,
-          functionName: 'tokensOfOwner',
-          args: [this.address]
-        }).then(res => {
-          const dataToken = res
-          dataToken.forEach(item => {
-            readContract({
-              address: nftAddress,
-              abi: nftABI,
-              functionName: 'tokenURI',
-              args: [item]
-            }).then(res => {
-              const data = res.split('data:application/json;base64,')[1]
-              const obj = JSON.parse(Base64.decode(data))
-              this.dataUrl.push(obj.image)
-            })
-            
+      async setCellShop (price) {
+        const config = await prepareWriteContract({
+          address: marketplaceAddress,
+          abi: marketplaceABI,
+          functionName: 'createMarketItem',
+          args: [nftAddress, this.targetTokenId, price],
+        })
+        writeContract(config).then(res => {
+          console.log('createMarketItem:', res)
+          this.showSellModall = false
+        }).catch(err => {
+          this.setSnackbar({
+            visible: true,
+            text: err.message,
+            color: 'error',
+            timeout: 2000,
           })
         })
-      },
-      setCellShop (price) {
-        // var p = String(price)
-        // p = p.replace('.', '').length
-        // var pri = price
-        // Marketplace.createMarketItem.call(nftAddress, this.targetTokenId, price).then(resl => {
-        //   console.log(res, '3')
-        // })
       },
     },
   }

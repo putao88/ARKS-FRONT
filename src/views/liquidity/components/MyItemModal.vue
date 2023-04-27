@@ -67,13 +67,19 @@
               >
                 <v-card
                   class="rounded-lg"
-                  @click="deBorrow(item)"
+                  @click="clickNft(item)"
                 >
                   <v-card-text>
-                    <v-img
+                    <!-- <v-img
                       class="white--text align-end rounded-lg mb-4"
                       height="150px"
                       src="@/assets/img/nft.png"
+                    /> -->
+                    <v-img
+                      class="white--text align-end white--text align-end rounded-lg mb-4"
+                      min-height="250px"
+                      :aspect-ratio="29/50"
+                      :src="item.src"
                     />
                     <div
                       class="data-item"
@@ -95,22 +101,14 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <sell-modal
-      :show-modal="showSellModall"
-      @close-sell-modal="closeSellModal"
-    />
   </div>
 </template>
 
 <script>
-  import SellModal from '@/components/SellModal'
   import { getPriceValue } from '@/utils/tools'
 
   export default {
     name: 'MyItemModal',
-    components: {
-      SellModal,
-    },
     props: {
       showModal: {
         type: Boolean,
@@ -128,7 +126,6 @@
         active: 'RWA',
         sortConditions: ['Highest Price', 'Lowest Price', 'Highest Value', 'Lowest Value'],
         // cardInfo: new Array(8),
-        showSellModall: false,
       }
     },
     methods: {
@@ -139,14 +136,8 @@
       closeDailog () {
         this.$emit('close-item-modal')
       },
-      openSellModal () {
-        this.showSellModall = true
-      },
-      closeSellModal () {
-        this.showSellModall = false
-      },
-      deBorrow (value) {
-        this.$emit('de-borrow', value)
+      clickNft (value) {
+        this.$emit('click-nft-call-back', value)
       },
     },
   }

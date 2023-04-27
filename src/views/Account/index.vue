@@ -545,7 +545,7 @@
         }).then(res => {
           console.log('tokensOfOwner:', res)
           const dataToken = res
-          // const tempUrl = []
+          const myNftList = []
           dataToken.forEach(item => {
             readContract({
               address: nftAddress,
@@ -557,9 +557,10 @@
               const data = res.split('data:application/json;base64,')[1]
               const obj = JSON.parse(Base64.decode(data))
               console.log(obj.image)
-              this.dataUrl.push(obj.image)
+              myNftList.push(obj.image)
             })
           })
+          this.dataUrl = myNftList
         })
       },
       getAddressTotalValue () {
